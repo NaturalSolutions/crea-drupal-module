@@ -1,0 +1,337 @@
+<?php 
+
+define('EXTERNAL_DATABASES', serialize(array('geonaturedb', 'usershubdb')));
+
+module_load_include('inc', 'crea_users', 'queries/common');
+module_load_include('inc', 'crea_users', 'queries/geonature');
+
+module_load_include('inc', 'crea_users', 'includes/saisir');
+module_load_include('inc', 'crea_users', 'includes/synthese');
+module_load_include('inc', 'crea_users', 'includes/user');
+
+function crea_users_menu(){
+	$items = array();
+	
+	$items['users/organism'] = array(
+		'title' => 'Autocomplete for organism',
+		'page callback' => 'crea_organism_autocomplete_callback',
+		'page arguments' => array(2),
+		'access callback' => true,
+		'type' => MENU_CALLBACK,
+		'file' => 'includes/autocomplete.inc',
+	);
+	
+	$items['fauna_flora_protocol_interface'] = array(
+		'title' => 'Enter a Fauna / Flora observation',
+		'page callback' => 'crea_saisir_protocole_faune_flore',
+		'access callback' => 'crea_user_logged_in',
+		'type' => MENU_CALLBACK,
+	);
+
+    $items['fauna_flora_protocol_interface/edit/%'] = array(
+        'title' => 'Modify a Fauna / Flora observation',
+        'page callback' => 'crea_saisir_protocole_faune_flore',
+        'page arguments' => array(2),
+        'access callback' => 'crea_user_logged_in',
+        'type' => MENU_CALLBACK,
+    );
+	
+	$items['user/%user/fauna_flora_synthesis'] = array(
+		'title' => 'Fauna / Flora synthesis',
+		'page callback' => 'crea_synthese_protocole_faune_flore',
+		'page arguments' => array(1),
+		'access callback' => 'crea_user_logged_in',
+		'access arguments' => array(1),
+		'type' => MENU_CALLBACK,
+	);
+	
+	return $items;
+}
+
+function crea_user_logged_in($userLogged = null){
+	global $user;
+
+	if (isset($userLogged)
+	&& $userLogged !== null){
+		if ($user->uid !== $userLogged->uid){
+			return false;
+		}
+	}
+
+	if (isset($user->uid)
+	&& array_key_exists(2, $user->roles)){
+		return true;
+	}
+	else{
+		return false;
+	}
+	
+}
+
+/**
+ * Implements hook_theme().
+ */
+function crea_users_theme(){
+	return array(
+		'crea_saisir_faune_flore_map' => array(
+			'render element' => 'elements',
+		),
+		'crea_synthese_faune_flore_map' => array(
+			'render element' => 'elements',
+		),
+	);
+}
+
+
+/**
+ * Implements hook_user_presave
+ */
+function crea_users_user_presave(&$edit, $account, $category){
+	$fields = array('first_name', 'last_name', 'postal_code', 'city', 'organism', 'user_type', 'crea_member', 'receive_newsletter');
+	
+	foreach ($fields AS $field){
+		if (isset($edit[$field])){
+			$account->data['profile'][$field] = filter_xss($edit[$field]);
+		}
+	}
+}
+
+/**
+ * Implements hook_user_insert
+ */
+function crea_users_user_insert(&$edit, $account, $category){
+	// enregistrer l'utilisateur dans usershub
+	if ( isset($edit['password_saved'])
+	&& isset($edit['name'])
+	&& isset($edit['mail']) ){
+		
+		$name = filter_xss($edit['name']);
+		$mail = filter_xss($edit['mail']);
+		
+		foreach (unserialize(EXTERNAL_DATABASES) AS $bdd){
+			$userExists = verifyIfUserExistsInExternalBDD($bdd, $name, $mail);
+			
+			if (is_array($userExists)
+			&& empty($userExists)){
+				$pass = md5(filter_xss($edit['password_saved']));
+				$first_name = isset($edit['first_name']) ? filter_xss($edit['first_name']) : '';
+				$last_name = isset($edit['last_name']) ? filter_xss($edit['last_name']) : '';
+				
+				if (isset($edit['organism'])){
+					
+					$organism = verifyIfOrganismExistsInExternalBDD($bdd, filter_xss($edit['organism']));
+					if (empty($organism)){
+						// On crée un organisme
+						$db_data = Database::getConnection($bdd,'default');
+							
+						$sql = "INSERT INTO utilisateurs.bib_organismes (nom_organisme)
+		            VALUES('".$edit['organism']."')";
+						$res = $db_data->query($sql);
+						
+						$organism = verifyIfOrganismExistsInExternalBDD($bdd, filter_xss($edit['organism']));
+						if (!empty($organism)){
+							$organism = current($organism);
+						}
+						db_set_active();
+					}
+					else{
+						$organism = current($organism);
+					}
+				}
+				
+				if (isset($edit['crea_member'])){
+					$crea_member = filter_xss($edit['crea_member']);
+				}
+				else{
+					$crea_member = false;
+				}
+				
+			
+				insertUserInExternalBDD($bdd, $last_name, $first_name, $name, $mail, $pass, 99, "Autres", 5);
+				
+				// ajout des droits dans cor_roles et core_role_droit_application
+				$userExists = verifyIfUserExistsInExternalBDD($bdd, $name, $mail);
+				if (is_array($userExists)
+				&& !empty($userExists)){
+					$userExists = current($userExists);
+					
+					$db_data = Database::getConnection($bdd,'default');
+					
+					$id_groupe = 1000009;
+					
+					$sql = "INSERT INTO utilisateurs.cor_roles (id_role_groupe, id_role_utilisateur)
+	            	VALUES(:id_role_groupe, :id_role_utilisateur)";
+					$res = $db_data->query($sql, array(
+						':id_role_groupe' => $id_groupe,
+						':id_role_utilisateur' => $userExists->id_role,
+					));
+					
+					$sql = "INSERT INTO utilisateurs.cor_role_droit_application (id_role, id_droit, id_application)
+		            VALUES(:id_role, :id_droit, :id_application)";
+					$res = $db_data->query($sql, array(
+						':id_role' => $userExists->id_role,
+						':id_droit' => 0, // aucun droit dans geonature
+						':id_application' => 14,
+					));
+					db_set_active();
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Implements hook_user_update
+ */
+function crea_users_user_update(&$edit, $account, $category) {
+  if (isset($account->original)
+  && is_object($account->original)) {
+    $is_blocked = false;
+    $original_account = $account->original;
+
+    // cas où le compte est bloqué
+    if ($original_account->status != $account->status && $account->status == 0) {
+      $is_blocked = true;
+    }
+
+    foreach (unserialize(EXTERNAL_DATABASES) AS $bdd){
+      $options = array('identifiant' => $account->name, 'email' => $account->mail);
+
+      if (isset($edit['password_saved'])
+      && $edit['password_saved'] != ''){
+        $pass = md5(filter_xss($edit['password_saved']));
+        $options['pass'] = $pass;
+      }
+      updateUserInExternalBDD($bdd, $original_account->name, $original_account->mail, $options, $is_blocked);
+    }
+  }
+}
+
+/**
+ * Implements hook_user_delete
+ */
+function crea_users_user_delete($account) {
+	foreach (unserialize(EXTERNAL_DATABASES) AS $bdd){
+		$userExists = verifyIfUserExistsInExternalBDD($bdd, $account->name, $account->mail);
+		
+		if (is_array($userExists)
+		&& !empty($userExists)){
+			$userExists = current($userExists);
+			deleteUserInExternalBDD($bdd, $userExists->id_role);
+		}
+	}
+	
+}
+
+function crea_saisir_protocole_faune_flore(){
+	global $language, $conf;
+	
+	/*drupal_add_js(drupal_get_path('module', 'jquery_update').'/replace/ui/ui/minified/jquery.ui.datepicker.min.js');
+	if($language->language == "fr"){
+		drupal_add_js(drupal_get_path('module', 'jquery_update').'/replace/ui/ui/i18n/jquery.ui.datepicker-fr.js');
+	}*/
+
+	$mapOptions = array();
+	$mapOptions['map_lat'] = '45.9';
+	$mapOptions['map_long'] = '6.95';
+	$mapOptions['map_zoom'] = '10';
+	
+	$map_infos = array(
+		'mapOptions' => $mapOptions,
+    'IGNkey' => $conf['domain_ign_key']
+	);
+	drupal_add_js(array('CreaCartographieMap' => $map_infos), 'setting');
+	drupal_add_js('http://maps.google.com/maps/api/js?sensor=false');
+	drupal_add_js(drupal_get_path('theme', 'crea').'/js/leaflet/leaflet.js');
+	drupal_add_js(drupal_get_path('module', 'crea_users').'/js/crea_map.js');
+	
+	drupal_add_css(drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.css');
+	
+	return theme('crea_saisir_faune_flore_map', array(
+		'form' => drupal_get_form('crea_users_saisir_faune_flore_form')
+	));
+}
+
+function crea_synthese_protocole_faune_flore(){
+	global $language, $user, $conf;
+
+    // on liste les différentes observations
+    // on checke si on a du POST du formulaire
+    $pGroups = array();
+    $pDate = null;
+		$pTaxon = null;
+    foreach($_POST as $var => $value){
+        if(substr($var, 0, 6) == 'groups'){
+            $pGroups = $value;
+        }elseif (substr($var, 0, 7) == 'date_ff'){
+            $pDate['choice'] = $value;
+        }elseif (substr($var, 0, 9) == 'date_from'){
+            $pDate['from'] = $value['date'];
+        }elseif (substr($var, 0, 7) == 'date_to'){
+            $pDate['to'] = $value['date'];
+        }elseif (substr($var, 0, 5) == 'taxon'){
+					if($value != 'notaxon'){
+						$pTaxon = $value;
+					}
+				}
+    }
+
+    $geonatuser = verifyIfUserExistsInExternalBDD('geonaturedb', $user->name, $user->mail);
+    if (is_array($geonatuser)
+    && !empty($geonatuser)){
+			if($pTaxon != null){
+				$observations_js = crea_load_observations(null, $pDate, null, $pTaxon);
+			}else {
+				if (count($pGroups) == 0) {
+					$observations_js = crea_load_observations(null, $pDate, $user, null);
+				} else {
+					$observations_js = crea_load_observations($pGroups, $pDate, $user, $pTaxon);
+				}
+			}
+    }
+    else{
+    	$observations_js = array();
+    }
+    
+    // traductions
+		$crealng_js = array(
+			'drupal_lng' => $language->language,
+			'author' => t('Author', array(), array('context' => 'CREA_LNG')),
+			'nbobs' => t('Species observations', array(), array('context' => 'CREA_LNG')),
+			'lastobs' => t('Last observation', array(), array('context' => 'CREA_LNG')),
+			'view' => t('View on', array(), array('context' => 'CREA_LNG')),
+		);
+
+    $mapOptions = array();
+    $mapOptions['map_lat'] = '45.9';
+    $mapOptions['map_long'] = '6.95';
+    $mapOptions['map_zoom'] = '10';
+
+    $map_infos = array(
+        'observations' => $observations_js,
+        'crealng' => $crealng_js,
+        'mapOptions' => $mapOptions,
+        'IGNkey' => $conf['domain_ign_key'],
+				'group_amphibien' => variable_get('geonature_group_amphibien', 1),
+			'group_mammiferes' => variable_get('geonature_group_mammiferes', 11),
+			'group_oiseaux' => variable_get('geonature_group_oiseaux', 12),
+			'group_reptiles' => variable_get('geonature_group_reptiles', 14),
+			'group_flore' => variable_get('geonature_group_flore', 1003)
+    );
+    
+	drupal_add_js(array('CreaFauneFloreMap' => $map_infos), 'setting');
+	drupal_add_js(drupal_get_path('theme', 'crea').'/js/leaflet/leaflet.js');
+	//drupal_add_js('http://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js');
+	//drupal_add_js('http://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js');
+	drupal_add_js(drupal_get_path('module', 'crea_cartographie').'/js/crea_map_ff.js');
+	
+	//drupal_add_css('http://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css');
+	//drupal_add_css('http://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css');
+	drupal_add_css(drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.css');
+
+	return theme('crea_synthese_faune_flore_map', array(
+		'observations' => $observations_js,
+		'form' => drupal_get_form('crea_contact_fauneflore_form')
+	));
+
+}

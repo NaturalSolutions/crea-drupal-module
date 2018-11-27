@@ -1,0 +1,4 @@
+name = CREA BDD Etudes
+description = Module permettant de visualiser les BDD Etudes
+core = 7.x
+package = CREA

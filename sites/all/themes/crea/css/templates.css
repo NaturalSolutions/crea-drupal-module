@@ -1,0 +1,217 @@
+.bg-light-grey {
+  background-color: #eeefec;
+  padding: 15px;
+}
+.bg-light-yellow{
+  background-color: #f8f8f1;
+  padding: 15px;
+}
+.bg-light-green{
+  background-color: #f5f6ef;
+  padding: 15px;
+}
+.bg-dark-grey{
+  background-color: #303336;
+  padding: 15px;
+  color:#cccc33;
+}
+.bg-dark-grey em{
+  font-size: 1.286em;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+}
+
+.blue-text{
+  color: #fbb900;
+}
+
+.green-text,
+a.green-text{
+  color: #cccc33;
+}
+
+.crea-button{
+  padding: 5px 0 5px 20px;
+  border: 1px solid white;
+  text-transform: uppercase;
+  margin: 20px 0;
+  display: inline-block;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.500em;
+}
+.crea-button:after{
+  font-family: "Glyphicons Halflings";
+  content: "\e072";
+  margin: 0 10px;
+  position: relative;
+  top: 0px;
+  font-size: 0.69em;
+}
+.crea-button.blue-button-link{
+  color: white !important;
+  background-color: #fbb900;
+}
+.crea-button.blue-button-link:hover,
+.crea-button.blue-button-link:focus{
+  color: black !important;
+  text-decoration: none;
+}
+
+.crea-button.green-button-link{
+  color: white !important;
+  background-color: #cccc33;
+}
+.crea-button.green-button-link:hover,
+.crea-button.green-button-link:focus{
+  color: black !important;
+  text-decoration: none;
+}
+.crea-button.green-button-link.full{
+  width: 100%;
+  text-align: center;
+}
+
+.crea-encart-titre{
+  background-color: #666666;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.714em;
+}
+ul.crea-menu-tourisme{
+  list-style-type: none;
+  width:100%;
+  padding:0;
+  color:#000;
+}
+ul.crea-menu-tourisme .light{
+  background-color: #f8f8f1;
+}
+ul.crea-menu-tourisme .dark{
+  background-color: #f3f3e7;
+}
+ul.crea-menu-tourisme li{
+  text-transform: uppercase;
+  background: url("../images/arrow.png") 15px no-repeat;
+  padding: 7px 0 5px 30px;
+}
+
+ul.crea-menu-tourisme a{
+  color:#000 !important;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+ul.crea-menu-tourisme a:hover{
+  border-bottom: 1px solid #ccc;
+  text-decoration: none;
+}
+h2.titre-tourisme{
+  margin-top: 9px;
+  color:#303336;
+  background: url("../images/arrow.png") 0px 8px no-repeat;
+  padding: 0px 0 5px 15px;
+  font-size: 1.857em;
+  text-transform: uppercase;
+}
+h2.titre-tourisme:after{
+  content: "";
+  display: block;;
+  width: 2em;
+  margin-top: 12px;
+  margin-left: -15px;
+  border-bottom: 1px solid #ccc;
+}
+
+h3.tourisme{
+  color: #cccc33;
+  text-transform: uppercase;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  text-decoration: underline;
+  font-size: 1.429em;
+}
+h3.tourisme:before{
+  width: 10px;
+  text-align: right;
+  margin-right: 10px;
+  display: inline-block;
+  font: normal normal normal 8px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f111";
+}
+blockquote{
+  border-left: none;
+}
+blockquote:before,
+blockquote:after {
+  display: inline-block;
+  font: normal normal normal 30px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #f5f7e8;
+}
+blockquote:before {
+  content: "\f10d";
+}
+blockquote:after{
+  content: "\f10e";
+  float:right;
+}
+
+.crea-button-pdf-link{
+  background: url(../images/bg-pdf-link.png) no-repeat;
+  width: 300px;
+  height: 64px;
+  padding: 15px 80px 15px 15px;
+}
+.crea-button-pdf-link.blue{
+  background: url(../images/bg-pdf-link-blue.png) no-repeat;
+}
+.crea-button-pdf-link a{
+  color: white !important;
+  text-transform: uppercase;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.429em;
+  line-height: 1em;
+}
+.crea-button-pdf-link a:hover,
+.crea-button-pdf-link a:focus{
+  color: black !important;
+  text-decoration: none;
+}
+.crea-button-pdf-link a:after{
+  font-family: "Glyphicons Halflings";
+  content: "\e072";
+  margin: 0 10px;
+  position: relative;
+  top: 0px;
+  font-size: 0.69em;
+}
+.page-node article .container a.crea-top-link{
+  color: #999999;
+  font-size: 0.8em;
+  text-decoration: underline;
+  float:right;
+}
+
+.date_agenda:before{
+  content: "•";
+  padding-right: 10px;
+  font-size: 1.143em;
+}
+.date_agenda,
+.date_agenda a{
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  font-size: 1.143em;
+  margin-left: -5px;
+  color: black !important;
+}
+.date_agenda a{
+  text-decoration: underline;
+  font-size: 1em;
+}
+.date_agenda a:hover,
+.date_agenda a:focus{
+  color: #fbb900;
+}

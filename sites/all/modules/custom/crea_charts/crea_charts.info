@@ -1,0 +1,4 @@
+name = Crea Charts
+description = module permettant de gérer les différents graphiques de températures
+core = 7.x
+package = CREA

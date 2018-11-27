@@ -1,0 +1,6 @@
+<?php 
+
+function crea_users_install(){
+	variable_set('user_register', 1);
+	variable_set('user_email_verification', 0);
+}

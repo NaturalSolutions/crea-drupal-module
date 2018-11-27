@@ -1,0 +1,868 @@
+<?php
+
+module_load_include('inc', 'crea_backoffice', 'includes/wysiwyg');
+module_load_include('inc', 'crea_backoffice', 'includes/variables');
+
+class creaDump{
+	static function debug($elem){
+		echo '<pre>';print_r($elem);echo '</pre>';
+	}
+	static function lock($elem){
+		self::debug($elem);
+		die();
+	}
+}
+
+
+/**
+ *  Implements hook_language_init()
+ */
+function crea_backoffice_language_init(){
+	global $conf, $language;
+	
+	if (isset($language->prefix)
+	&& isset($conf['site_frontpage_' . $language->prefix])){
+		$conf['site_frontpage'] = $conf['site_frontpage_' . $language->prefix];
+	}
+	
+	if (isset($conf['domain_favicon'])){
+		$conf['theme_crea_settings']['default_favicon'] = false;
+		$conf['theme_crea_settings']['favicon_path'] = '/' . $conf['domain_favicon'];
+	}
+	
+	if (isset($conf['domain_logo'])){
+		$conf['theme_crea_settings']['default_logo'] = false;
+		$conf['theme_crea_settings']['logo_path'] = '/' . $conf['domain_logo'];
+	}
+
+  if (isset($conf['domain_slogan'])){
+    $conf['site_slogan'] = $conf['domain_slogan'];
+
+  }
+
+  $_domain = domain_get_domain();
+  $site_slogan = domain_conf_variable_get($_domain['domain_id'], 'site_slogan');
+  if ($site_slogan && $site_slogan !== null){
+    $conf['site_slogan'] = $site_slogan;
+  }
+}
+
+/**
+ *  Implements hook_init()
+ */
+function crea_backoffice_init(){	
+	global $conf;
+	
+	if (isset($conf['domain_css'])
+	&& !path_is_admin(current_path())){
+		drupal_add_css($conf['domain_css'], array('group' => CSS_THEME, 'weight' => 9999));
+	}
+
+  drupal_add_css(drupal_get_path('module', 'crea_backoffice') . '/css/backoffice.css', array('group' => CSS_THEME, 'weight' => 9999));
+}
+
+/**
+ *  Implements hook_custom_theme()
+ */
+function crea_backoffice_custom_theme(){
+	global $conf;
+	if (isset($conf['domain_theme'])
+		&& !path_is_admin(current_path())){
+		return $conf['domain_theme'];
+	}
+}
+
+	/**
+ * Implements hook_menu().
+ */
+function crea_backoffice_menu()
+{
+    $items = array();
+    $items['admin/crea_backoffice'] = array(
+        'title' => t('CREA Back office', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'crea_backoffice_dummy',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_CALLBACK
+    );
+
+    $items['admin/crea_backoffice/variable'] = array(
+        'title' => t('Variables', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'crea_backoffice_variables',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/variable/edit/%'] = array(
+        'title' => t('Edit variable', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('variable_edit_form', 4),
+        'access callback' => "crea_backoffice_admin_access",
+        'access arguments' => array(4),
+    );
+
+    $items['admin/crea_backoffice/tools'] = array(
+        'title' => t('Tools', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'crea_backoffice_tools',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/synchro_temp'] = array(
+        'title' => t('Temperatures synchro', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_backoffice_synchrotemp_form'),
+        'access callback' => "crea_backoffice_admin_access",
+        'file' => 'includes/synchro_temp.inc',
+        'type' => MENU_LOCAL_TASK
+    );
+    
+    $items['admin/crea_backoffice/tools/addthis_basic'] = array(
+		'title' => t('AddThis basic settings', array(), array('context' => 'CREA_LNG')),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('addthis_admin_settings_form'),
+    	'access arguments' => array(AddThis::PERMISSION_ADMINISTER_ADDTHIS),
+		'file' => AddThis::ADMIN_INCLUDE_FILE,
+    	'file path' => drupal_get_path('module', 'addthis'),
+		'type' => MENU_LOCAL_TASK,
+    	'weight' => 1
+    );
+    
+    $items['admin/crea_backoffice/tools/addthis_advanced'] = array(
+    	'title' => t('AddThis advanced settings', array(), array('context' => 'CREA_LNG')),
+    	'page callback' => 'drupal_get_form',
+    	'page arguments' => array('addthis_admin_settings_advanced_form'),
+    	'access arguments' => array(AddThis::PERMISSION_ADMINISTER_ADDTHIS),
+    	'file' => AddThis::ADMIN_INCLUDE_FILE,
+    	'file path' => drupal_get_path('module', 'addthis'),
+    	'type' => MENU_LOCAL_TASK,
+    	'weight' => 2
+    );
+    
+    $items['admin/crea_backoffice/pffs'] = array(
+    		'title' => t('Fauna / Flora protocol', array(), array('context' => 'CREA_LNG')),
+    		'page callback' => 'crea_backoffice_dummy',
+    		'access callback' => "crea_backoffice_admin_access",
+    		'type' => MENU_LOCAL_TASK
+    );
+    
+    $items['admin/crea_backoffice/pffs/taxons'] = array(
+		'title' => t('List of taxons'),
+    	'page callback' => 'drupal_get_form',
+    	'page arguments' => array('crea_backoffice_taxons_form'),
+    	'access callback' => "crea_backoffice_admin_access",
+    	'file' => 'includes/taxons.inc',
+    	'type' => MENU_LOCAL_TASK
+    );
+    
+    $items['admin/crea_backoffice/pffs/validate_pffs_submissions'] = array(
+		'title' => t('Validate the Fauna / Flora submissions'),
+		'page callback' => 'drupal_get_form',
+    		'page arguments' => array('crea_backoffice_validate_pffs_submissions_form'),
+		'access callback' => "crea_backoffice_admin_access",
+		'file' => 'includes/validate_fauna_flora_submissions.inc',
+		'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/export_members'] = array(
+        'title' => t('Export members', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_backoffice_export_members_form'),
+        'access callback' => "crea_backoffice_admin_access",
+        'file' => 'includes/export_members.inc',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/export_protocoles_perso'] = array(
+        'title' => t('Export protocoles', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_backoffice_export_protocoles_form'),
+        'access callback' => "crea_backoffice_admin_access",
+        'file' => 'includes/export_protocoles.inc',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/requetes_sqlite'] = array(
+        'title' => t('SQLITE Requests', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'crea_backoffice_sqlite',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/requetes_sqlite/reqdeletedatastation'] = array(
+        'title' => t('Détruire des données d une station pour une période donnée', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_backoffice_sqlite_reqdeletedatastation_form'),
+        'access callback' => "crea_backoffice_admin_access",
+        'file' => 'includes/requetes_sqlite.inc',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    $items['admin/crea_backoffice/tools/requetes_sqlite/reqchangestation'] = array(
+        'title' => t('Changer une station par une autre pour une période donnée', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_backoffice_sqlite_reqchangestation_form'),
+        'access callback' => "crea_backoffice_admin_access",
+        'file' => 'includes/requetes_sqlite.inc',
+        'access callback' => "crea_backoffice_admin_access",
+        'type' => MENU_LOCAL_TASK
+    );
+
+    return $items;
+}
+
+function crea_backoffice_admin_access()
+{
+    global $user;
+    if(in_array('manager',$user->roles) || in_array('administrator',$user->roles)){
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
+/*
+ * Ecran d accueil du CREA back office
+ */
+function crea_backoffice_dummy(){
+    return '<p>'.t('Please select a tab', array(), array('context' => 'CREA_LNG')).'</p>';
+}
+
+/**
+ * Page tools
+ */
+function crea_backoffice_tools() {
+    $content = '';
+    $content .= '<p>'.t('Tools list', array(), array('context' => 'CREA_LNG')).'</p>';
+    $content .= '<p><b>'.l( t('Export members', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/export_members').'</b></p>';
+    $content .= '<p><b>'.l( t('Export protocoles', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/export_protocoles_perso').'</b></p>';
+    $content .= '<p><b>'.l( t('SQLITE Requests', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/requetes_sqlite').'</b></p>';
+    $content .= '<p><b>'.l( t('Temperatures synchro', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/synchro_temp').'</b></p>';
+    return $content;
+}
+
+function crea_backoffice_variables() {
+    $content = '';
+    $content .= '<p>'.t('Variables list', array(), array('context' => 'CREA_LNG')).'</p>';
+    $content .= '<p>'.l( t('Help text for Fauna/Flora Live page', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/help_text_ff').'</p>';
+    $content .= '<p>'.l( t('URL for webcam', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/accueil_mb_live_webcam_url').'</p>';
+	  $content .= '<p>'.l( t('Text for tourism levels', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/tourism_levels').'</p>';
+	if (module_exists('crea_cookies')) {
+      $content .= '<p>' . l(t('COOKIES : textes long', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/info_cookies') . '</p>';
+        $content .= '<p>' . l(t('COOKIES : accept', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/info_cookies_accept') . '</p>';
+        $content .= '<p>' . l(t('COOKIES : refuse', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/variable/edit/info_cookies_refuse') . '</p>';
+    }
+  $content .= '<p>'.l( t('Flash info utilisateur', array(), array('context' => 'CREA_LNG')), 'admin/structure/block/manage/crea_design/atlas_flash_info/configure', array('query' => array('destination' => 'admin/crea_backoffice/variable'))).'</p>';
+  $content .= '<p>'.l( t('Texte autres protocoles', array(), array('context' => 'CREA_LNG')), 'admin/structure/block/manage/crea_design/atlas_others_protocols/configure', array('query' => array('destination' => 'admin/crea_backoffice/variable'))).'</p>';
+    return $content;
+}
+
+function crea_backoffice_synchro_temp(){
+
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function crea_backoffice_page_alter(&$page) {
+    if (isset($page['page_top']['toolbar'])) {
+        // If the toolbar is available, add a pre-render function to display the
+        // current shortcuts in the toolbar drawer.
+        $page['page_top']['toolbar']['#pre_render'][] = 'crea_backoffice_toolbar_pre_render';
+    }
+}
+
+/**
+ * Pre-render function for adding shortcuts to the toolbar drawer.
+ */
+function crea_backoffice_toolbar_pre_render($toolbar) {
+    global $user,$base_url,$language;
+    // correct link for hello "user"
+    $toolbar['toolbar_user']['#links']['account']['href'] = $base_url.'/'.$language->prefix.'/user/'.$user->uid.'/edit/';
+
+    return $toolbar;
+}
+
+
+function crea_backoffice_theme() {
+    return array(
+        'crea_slider_before_after' => array(
+            'template' => 'templates/display_slider',
+            'variables' => array('content_slider' => NULL)
+        ),
+        'crea_timeline' => array(
+            'template' => 'templates/display_timeline',
+            'variables' => array('content_timeline' => NULL)
+        ),
+        'crea_modulekmz' => array(
+            'template' => 'templates/display_modulekmz',
+            'variables' => array('content_modulekmz' => NULL)
+        ),
+    	'crea_backoffice_template_1_column' => array(
+    		'template' => 'templates/ckeditor/1_column'
+    	),
+    	'crea_backoffice_template_2_columns' => array(
+            'template' => 'templates/ckeditor/2_columns'
+        ),
+    	'crea_backoffice_template_2_columns_66_33' => array(
+    		'template' => 'templates/ckeditor/2_columns_66_33'
+    	),
+    	'crea_backoffice_template_2_columns_33_66' => array(
+    		'template' => 'templates/ckeditor/2_columns_33_66'
+    	),
+    	'crea_backoffice_template_3_columns' => array(
+    		'template' => 'templates/ckeditor/3_columns'
+    	),
+			'crea_backoffice_template_4_columns' => array(
+				'template' => 'templates/ckeditor/4_columns'
+			),
+      'crea_backoffice_template_trombinoscope' => array(
+        'template' => 'templates/ckeditor/trombinoscope'
+      ),
+        'crea_backoffice_template_partners' => array(
+            'template' => 'templates/ckeditor/partners'
+        ),
+    );
+}
+
+function crea_backoffice_form_alter(&$form, &$form_state, $form_id){
+	switch($form_id){
+		case 'menu_overview_form':
+			foreach ($form AS $key => $value){
+				if (isset($value['#item'])){
+					$menu_title = $form[$key]['#item']['title'];
+					$menu_language = $form[$key]['#item']['language'];
+					$menu_title_replaced = $menu_title . ' (' . $menu_language . ')';
+					
+					$form[$key]['title']['#markup'] = str_replace($menu_title, $menu_title_replaced, $form[$key]['title']['#markup']);
+				}
+			}
+			
+		break;
+		case 'menu_edit_item':
+			if (isset($form['original_item']['#value']['menu_name'])){
+				$menu_name = $form['original_item']['#value']['menu_name'];
+				
+				if ('main-menu' == $menu_name
+        		|| 'main-footer' == $menu_name){
+					if (isset($form['i18n']['language']['#options']['und'])){
+						unset($form['i18n']['language']['#options']['und']);
+					}
+				}
+			}
+
+			// ajout d'un champ pour mettre des classes CSS
+      $form['options']['custom_classes'] = array(
+        '#title' => t('CSS classes'),
+        '#description' => t('Add CSS classes to the menu link'),
+        '#type' => 'textfield',
+        '#default_value' => isset($form['options']['#value']['custom_classes']) ? filter_xss($form['options']['#value']['custom_classes']) : '',
+      );
+
+      $form['#validate'][] = 'crea_menu_item_form_validate';
+      $form['#submit'][] = 'crea_menu_item_form_submit';
+
+		break;
+		case 'domain_conf_form':
+		  if (isset($form['Site configuration']['site_slogan']['#type'])){
+        $form['Site configuration']['site_slogan']['#type'] = 'textarea';
+      }
+
+			$language_list = language_list();
+			$theme_list = list_themes();
+			$theme_list_options = array();
+			foreach ($theme_list AS $key => $theme_info){
+				$theme_list_options[$key] = $theme_info->name;
+			}
+
+			//creaDump::lock($form);
+			$settings = array();
+			if (isset($form['domain_id']['#value'])){
+				$data = db_query("SELECT settings FROM {domain_conf} WHERE domain_id = :domain_id", array(':domain_id' => $form['domain_id']['#value']))->fetchField();
+				if (!empty($data)) {
+					$settings = domain_unserialize($data);
+				}
+			}			
+			
+			foreach ($language_list AS $lang){
+				
+				$form['Site configuration']['site_frontpage_' . $lang->prefix] = array(
+					'#title' => t('Site frontpage for the language') . ' "' . $lang->name . '"',
+					'#type' => $form['Site configuration']['site_frontpage']['#type'],
+					'#size' => $form['Site configuration']['site_frontpage']['#size'],
+					'#maxlength' => $form['Site configuration']['site_frontpage']['#maxlength'],
+					'#description' => $form['Site configuration']['site_frontpage']['#description'],
+					'#field_prefix' => $form['Site configuration']['site_frontpage']['#field_prefix'],
+					'#default_value' => isset($settings['site_frontpage_' . $lang->prefix]) ? $settings['site_frontpage_' . $lang->prefix] : ''
+				);
+			}
+			
+			unset($form['Site configuration']['site_frontpage']);
+			
+			$form['Site configuration']['domain_css'] = array(
+				'#type' => 'textfield',
+				'#title' => t('css stylesheet url'),
+				'#size' => 40,
+				'#required' => FALSE,
+				'#default_value' => isset($settings['domain_css']) ? $settings['domain_css'] : '',
+				'#description' => t('The url of a custom css stylesheet for this domain'),
+				'#weight' => 1
+			);
+			$form['Site configuration']['domain_theme'] = array(
+				'#type' => 'select',
+				'#title' => t('theme for this domain'),
+				'#options' => $theme_list_options,
+				'#required' => FALSE,
+				'#default_value' => isset($settings['domain_theme']) ? $settings['domain_theme'] : '',
+				'#description' => t('Select the theme used for this domain'),
+				'#weight' => 2
+			);
+			$form['Site configuration']['domain_logo'] = array(
+				'#type' => 'textfield',
+				'#title' => t('logo url'),
+				'#size' => 40,
+				'#required' => FALSE,
+				'#default_value' => isset($settings['domain_logo']) ? $settings['domain_logo'] : '',
+				'#description' => t('The url of the domain\'s logo'),
+				'#weight' => 3
+			);
+			$form['Site configuration']['domain_favicon'] = array(
+				'#type' => 'textfield',
+				'#title' => t('favicon url'),
+				'#size' => 40,
+				'#required' => FALSE,
+				'#default_value' => isset($settings['domain_favicon']) ? $settings['domain_favicon'] : '',
+				'#description' => t('The url of the domain\'s favicon'),
+				'#weight' => 4
+			);
+      $form['Site configuration']['domain_ign_key'] = array(
+        '#type' => 'textfield',
+        '#title' => t('IGN key'),
+        '#size' => 40,
+        '#required' => FALSE,
+        '#default_value' => isset($settings['domain_ign_key']) ? $settings['domain_ign_key'] : '',
+        '#description' => t('IGN key generated by the website http://professionnels.ign.fr/'),
+        '#weight' => 5
+      );
+		break;
+    case 'panels_edit_display_form':
+    case 'user_login':
+    case 'user_register_form':
+    case 'user_pass':
+      $form['#attributes']['class'][] = 'container';
+      break;
+	}
+	
+	//activate DnD library for blocks
+	//if ($form['#id'] == 'block-add-block-form' || $form['#id'] == 'block-admin-configure') {
+	  if (isset($form['settings']['body_field']) || isset($form['settings']['text_body'])) {
+	    $form['settings']['body_field']['body']['#dnd-enabled'] = TRUE;
+	    $form['settings']['body_field']['body']['#dnd-settings'] = array('drop_selector' => '#edit-body-value .drop');
+	    $form['settings']['body_field']['body']['mee'] = array(
+	        '#prefix' => '<div class="mee-wrap-editor-library">',
+	        '#suffix' => '</div>',
+	        '#attached' => array(
+	            'css' => array(drupal_get_path('module', 'mee') . '/css/mee.css'),
+	            'js' => array(drupal_get_path('module', 'mee')  . '/mee.js'),
+	            'library' => array(
+	             array('dnd', 'library'),
+	            ),
+	        ),
+	        '#element_validate' => array('crea_backoffice_field_text_validate'),
+	        '#weight' => 0.5,
+	        'resource_manager' => array(
+	            '#theme' => 'mee_resource_manager',
+	        ),
+	    );
+	
+	    $sas = scald_rendered_to_sas($form['settings']['body_field']['body']['#default_value']);
+	    $scald_included = scald_included($sas);
+	    $sids = array_unique($scald_included);
+	    $form['settings']['body_field']['body']['#default_value'] = scald_sas_to_rendered($form['settings']['body_field']['body']['#default_value']);
+	  }
+	//}
+}
+
+/**
+ * Place scald atom into posted values.
+ *
+ * @param array $element
+ * @param array $form_state
+ */
+function crea_backoffice_field_text_validate($element, &$form_state) {
+  if(isset($form_state['field'])) {
+    foreach ($form_state['field'] as $field_name => $values) {
+      foreach ($values as $langcode => $data) {
+        if (isset($form_state['values'][$field_name][$langcode]) && is_array($form_state['values'][$field_name][$langcode]) && isset($form_state['values'][$field_name][$langcode][0]['mee']) && isset($form_state['input'][$field_name][$langcode][0]['mee'])) {
+          $form_state['values'][$field_name][$langcode][0]['mee'] = $form_state['input'][$field_name][$langcode][0]['mee'];
+        }
+      }
+    }
+  }
+}
+
+function crea_menu_item_form_validate($form, &$form_state){
+  if(isset($form_state['values']['custom_classes'])){
+    $form_state['values']['options']['custom_classes'] = $form_state['values']['custom_classes'];
+  }
+}
+function crea_menu_item_form_submit($form, &$form_state){
+  //creaDump::lock($form_state);
+}
+/**
+ * Implements hook_image_default_styles().
+ */
+function crea_backoffice_image_default_styles() {
+    $styles = array();
+
+    // Default image preset for slider before after
+    $styles['slider_before_after'] = array(
+        'effects' => array(
+            array(
+                'name' => 'image_scale_and_crop',
+                'data' => array('width' => 1040, 'height' => 800),
+                'weight' => 0,
+            ),
+        ),
+    );
+
+    // Default image preset for timeline pics
+    $styles['timeline_pic'] = array(
+        'effects' => array(
+            array(
+                'name' => 'image_scale_and_crop',
+                'data' => array('width' => 250, 'height' => 250),
+                'weight' => 0,
+            ),
+        ),
+    );
+
+    return $styles;
+}
+
+/**
+ * Implements hook_variable_info().
+ */
+function crea_backoffice_variable_info($options)
+{
+    $variables['accueil_mb_live_webcam_url'] = array(
+        'name' => 'accueil_mb_live_webcam_url',
+        'title' => t('URL for webcam'),
+        'default' => "",
+        'type' => 'string',
+        'access' => 'administer nodes',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+    $variables['tourism_levels'] = array(
+      'name' => 'tourism_levels',
+      'title' => t('Text for tourism levels'),
+      'default' => "",
+      'type' => 'text_format',
+      'access' => 'administer nodes',
+      'group' => 'crea_variable',
+      'localize' => TRUE
+    );
+	$variables['geonature_group_amphibien'] = array(
+		'name' => 'geonature_group_amphibien',
+		'title' => t('ID du groupe amphibien'),
+		'default' => "1",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_group_mammiferes'] = array(
+		'name' => 'geonature_group_mammiferes',
+		'title' => t('ID du groupe mammifères'),
+		'default' => "11",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_group_oiseaux'] = array(
+		'name' => 'geonature_group_oiseaux',
+		'title' => t('ID du groupe oiseaux'),
+		'default' => "12",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_group_reptiles'] = array(
+		'name' => 'geonature_group_reptiles',
+		'title' => t('ID du groupe reptiles'),
+		'default' => "14",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_group_flore'] = array(
+		'name' => 'geonature_group_flore',
+		'title' => t('ID du groupe flore'),
+		'default' => "1003",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_protocole_chocard'] = array(
+		'name' => 'geonature_protocole_chocard',
+		'title' => t('ID protocole chocard'),
+		'default' => "",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_protocole_grenouille'] = array(
+		'name' => 'geonature_protocole_grenouille',
+		'title' => t('ID protocole grenouille'),
+		'default' => "",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_protocole_mesange'] = array(
+		'name' => 'geonature_protocole_mesange',
+		'title' => t('ID protocole mésange'),
+		'default' => "",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+	$variables['geonature_protocole_ffs'] = array(
+		'name' => 'geonature_protocole_ffs',
+		'title' => t('ID protocole faune flore simplifiée'),
+		'default' => "",
+		'type' => 'text',
+		'access' => 'administer nodes',
+		'group' => 'crea_variable',
+		'localize' => FALSE
+	);
+  $variables['geonature_protocole_contactfaune'] = array(
+    'name' => 'geonature_protocole_contactfaune',
+    'title' => t('ID protocole contact faune'),
+    'default' => "",
+    'type' => 'text',
+    'access' => 'administer nodes',
+    'group' => 'crea_variable',
+    'localize' => FALSE
+  );
+  $variables['atlas_webcams_number'] = array(
+    'name' => 'atlas_webcams_number',
+    'title' => t('Number of webcams in the homepage block'),
+    'default' => 3,
+    'type' => 'string',
+    'access' => 'administer nodes',
+    'group' => 'crea_variable',
+    'localize' => FALSE
+  );
+
+  $variables['atlas_flash_info'] = array(
+    'name' => 'atlas_flash_info',
+    'title' => t('Number of webcams in the homepage block'),
+    'default' => 3,
+    'type' => 'string',
+    'access' => 'administer nodes',
+    'group' => 'crea_variable',
+    'localize' => FALSE
+  );
+
+    $variables['info_cookies'] = array(
+        'name' => 'info_cookies',
+        'title' => t('Text for cookies'),
+        'default' => "",
+        'type' => 'text',
+        'access' => 'administer nodes',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+    $variables['info_cookies_accept'] = array(
+        'name' => 'info_cookies_accept',
+        'title' => t('Text for accept cookies'),
+        'default' => "",
+        'type' => 'string',
+        'access' => 'administer nodes',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+    $variables['info_cookies_refuse'] = array(
+        'name' => 'info_cookies_refuse',
+        'title' => t('Text for refuse cookies'),
+        'default' => "",
+        'type' => 'string',
+        'access' => 'administer nodes',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+
+    return $variables;
+}
+
+/**
+ * Implements hook_ckeditor_settings_alter().
+ */
+function crea_backoffice_ckeditor_settings_alter(&$settings, $conf) {
+	global $base_url;
+	$cache_token = variable_get('css_js_query_string', '');
+	if ($cache_token != '') $cache_token = '?'.$cache_token;
+	$settings['stylesCombo_stylesSet'] = 'manager:' . $base_url . '/' . drupal_get_path('module', 'crea_backoffice') . '/js/wysiwyg_styles.js' . $cache_token;
+	$settings['contentsCss'][] = $base_url . '/' . drupal_get_path('module', 'crea_backoffice') . '/css/wysiwyg.css' . $cache_token;
+	$settings['contentsCss'][] = $base_url . '/' . drupal_get_path('module', 'ckeditor') . '/ckeditor/plugins/layoutmanager/css/style.css' . $cache_token;
+	$settings['contentsCss'][] = $base_url . '/' . drupal_get_path('module', 'ckeditor') . '/ckeditor/plugins/layoutmanager/css/bootstrap.css' . $cache_token;
+	$settings['contentsCss'][] = $base_url . '/' . drupal_get_path('module', 'crea_backoffice') . '/css/icons.css' . $cache_token;
+	
+	// load template file content
+	$data = array(
+		'crea_backoffice' => array(
+			'ckeditor_templates_images' => $base_url . '/' . drupal_get_path('module', 'crea_backoffice') . '/templates/ckeditor/images/',
+      'trombinoscope' => array(
+        'title' => t('trombinoscope'),
+        'template' => theme('crea_backoffice_template_trombinoscope'),
+        'image' => 'trombinoscope.gif'
+      ),
+            'partners' => array(
+                'title' => t('partners'),
+                'template' => theme('crea_backoffice_template_partners'),
+                'image' => 'partners.gif'
+            ),
+			'one_column' => array(
+				'title' => t('1 column'),
+				'description' => t('1 column template'),
+				'template' => theme('crea_backoffice_template_1_column'),
+				'image' => '1_column.gif'
+			),
+			'two_columns' => array(
+				'title' => t('2 columns'),
+				'description' => t('2 columns template'),
+				'template' => theme('crea_backoffice_template_2_columns'),
+				'image' => '2_columns.gif'
+			),
+			'two_columns_66_33' => array(
+				'title' => t('2 columns 66% / 33%'),
+				'description' => t('2 columns template with 66% / 33% width'),
+				'template' => theme('crea_backoffice_template_2_columns_66_33'),
+				'image' => '2_columns_66_33.gif'
+			),
+			'two_columns_33_66' => array(
+				'title' => t('2 columns 33% / 66%'),
+				'description' => t('2 columns template with 33% / 66% width'),
+				'template' => theme('crea_backoffice_template_2_columns_33_66'),
+				'image' => '2_columns_33_66.gif'
+			),
+			'three_columns' => array(
+				'title' => t('3 columns'),
+				'description' => t('3 columns template'),
+				'template' => theme('crea_backoffice_template_3_columns'),
+				'image' => '3_columns.gif'
+			),
+			'four_columns' => array(
+				'title' => t('4 columns'),
+				'description' => t('4 columns template'),
+				'template' => theme('crea_backoffice_template_4_columns'),
+				'image' => '4_columns.gif'
+			),
+		),
+	);
+	drupal_add_js($data, 'setting');
+	
+	$settings['customConfig'] = $base_url . '/' . drupal_get_path('module', 'crea_backoffice') . '/js/ckeditor.config.js';
+}
+
+/**
+ * Implements hook_domain_source_path_alter().
+ */
+function crea_backoffice_domain_source_path_alter(&$source, $path){
+	$atlas_paths = array('content/accueil-mb-live');
+	if (in_array($path, $atlas_paths)){
+		$source = domain_load(1);
+	}
+}
+
+function crea_backoffice_block_view_alter(&$data, $block) {
+  if (!empty($data['content'])) {
+    if (is_string($data['content'])) {
+      $data['content'] = scald_sas_to_rendered($data['content']);
+    }
+    elseif (isset($data['content']['#markup'])) {
+      $data['content']['#markup'] = scald_sas_to_rendered($data['content']['#markup']);
+    }
+  }
+}
+
+function crea_backoffice_block_get_title($delta) {
+	$block = db_query('SELECT title FROM {block} WHERE delta = :delta', array(':delta' => $delta))->fetchObject();
+	return $block->title ? $block->title : '';
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function crea_backoffice_views_api() {
+	return array(
+		'api' => 3,
+	);
+}
+
+/**
+ * Implements hook_views_default_views().
+ */
+function crea_backoffice_views_default_views() {
+	static $views;
+
+	if (isset($views)) {
+		return $views;
+	}
+
+	$files = file_scan_directory(drupal_get_path('module', 'crea_backoffice') . '/views', '/\.inc$/');
+	foreach ($files as $filepath => $file) {
+		include $filepath;
+		if (isset($view)) {
+			$views[$view->name] = $view;
+		}
+	}
+	return $views;
+}
+
+function crea_backoffice_scald_dnd_library_item_alter($atom, &$item) {
+  /*if (isset($item['meta']['legend'])){
+    $item['meta']['legend'] = '';
+  }*/
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function crea_backoffice_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
+ * @param $edit
+ * @param $account
+ * Permet de rediriger sur l'espace perso
+ */
+function crea_backoffice_user_login(&$edit, $account) {
+  $edit['redirect'] = 'atlas/account';
+}
+
+function crea_backoffice_admin_paths_alter(&$paths) {
+  $paths['user/*/edit'] = FALSE;
+}
+
+function crea_backoffice_sqlite() {
+    $content = '';
+    $content .= '<p>'.t('Requests list', array(), array('context' => 'CREA_LNG')).'</p>';
+    $content .= '<p><b>'.l( t('Détruire des données d une station pour une période donnée', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/requetes_sqlite/reqdeletedatastation').'</b></p>';
+    $content .= '<p><b>'.l( t('Changer le numéro d une station pour une période', array(), array('context' => 'CREA_LNG')), 'admin/crea_backoffice/tools/requetes_sqlite/reqchangestation').'</b></p>';
+    return $content;
+}

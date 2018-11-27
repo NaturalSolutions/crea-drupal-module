@@ -1,0 +1,10 @@
+name = CREA cartographie
+description = Provides an API to include OpenStreetMap in pages
+version = "7.x-0.1"
+core = "7.x"
+project = "CREA"
+package = CREA
+
+files[] = queries/map.inc
+
+dependencies[] = crea_backoffice

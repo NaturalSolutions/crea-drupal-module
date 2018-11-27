@@ -1,0 +1,7 @@
+<?php
+
+function crea_cookies_install(){
+  variable_set('info_cookies', "<p>En poursuivant votre navigation, vous acceptez le dépôt de cookies tiers destinés à vous proposer des vidéos, des boutons de partage, des remontées de contenus de plateformes sociales.</p>");
+  variable_set('info_cookies_accept', 'Accepter');
+  variable_set('info_cookies_refuse', 'Refuser');
+}

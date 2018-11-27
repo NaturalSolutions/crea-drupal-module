@@ -1,0 +1,29 @@
+.block-search-form{
+	display: inline-block;
+	margin-left: 3%;
+}
+#search-block-form{
+	[class*="column"] + [class*="column"]:last-child{
+		float: left;
+	}
+	.small-8{
+		width: 60%;
+	}
+	.small-4{
+		width: 40%;
+	}
+	div,
+	button{
+		display: inline-block;
+		margin: 0;
+	}
+	input{
+		margin: 0;
+	}
+	.form-text{
+		transition: none;
+	}
+	.form-text:focus{
+		width: 100%;
+	}
+}

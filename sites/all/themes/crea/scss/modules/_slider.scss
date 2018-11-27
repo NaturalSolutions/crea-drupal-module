@@ -1,0 +1,119 @@
+.orbit-slides-container li{
+	text-align: center;
+}
+.orbit-slides-container li > a{
+	background: white none repeat scroll 0 0;
+    display: block;
+    text-align: center;
+    display: block;
+    max-height: 500px;
+	overflow: hidden;
+}
+.orbit-slides-container li > a > img{
+	display: inline-block !important;
+}
+.orbit-container .orbit-slides-container img{
+	height: auto;
+	display: inline-block;
+}
+.orbit-container .orbit-prev,
+.orbit-container .orbit-next{
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 120px;
+	top: calc(50% - 120px);
+}
+.orbit-container .orbit-prev:hover,
+.orbit-container .orbit-next:hover{
+	background-color: rgba(0, 0, 0, 0.7);
+}
+.orbit-container .orbit-slides-container > * .orbit-caption{
+	padding-left: $section-padding-desktop;
+	padding-right: $section-padding-desktop;
+}
+@media #{$small-only} {
+	.orbit-container .orbit-slides-container > * .orbit-caption{
+		padding-left: $section-padding-mobile;
+    	padding-right: $section-padding-mobile;
+	}
+}
+
+.orbit-container .orbit-caption > *{
+	color: white;
+}
+.orbit-slide-number,
+.orbit-bullets-container{
+	display: none;
+}
+
+#slidercontainer{
+	margin: 0 auto;
+}
+
+#timeline{
+	width: 100% !important;
+}
+
+
+.block-crea-design-crea-slideshow .orbit-container .orbit-slides-container li{
+	text-align: left;
+}
+.block-crea-design-crea-slideshow .orbit-container .orbit-slides-container img{
+	width: 100%;
+	height: auto;
+}
+#modulekmz{
+  float:left;
+  width: 100%;
+}
+#modulekmz .slider{
+  margin-top : 15px;
+  margin-left : 10%;
+  width: 80%;
+}
+
+#crea-contact-fauneflore-form input[type="text"]{
+  display: inline;
+  width: auto;
+}
+#crea-contact-fauneflore-form input[type="radio"]{
+  margin:0;
+}
+#crea-contact-fauneflore-form label{
+  //margin: 5px 5px 0 0;
+}
+#crea-contact-fauneflore-form #edit-submit{
+  clear:both;
+}
+#crea-contact-fauneflore-form .description{
+  display:none;
+}
+#crea-contact-fauneflore-form .form-type-radios,
+#crea-contact-fauneflore-form #edit-date-ff{
+  float:left;
+  width:100%;
+}
+#crea-contact-fauneflore-form .form-item-date-ff .form-type-radio{
+  float:left;
+}
+
+.markerReptiles, .markerMammiferes, .markerAmphibiens, .markerOiseaux{
+  text-align:center;
+  color:#000;
+  margin-top: -15px;
+  margin-left: -15px;
+}
+.markerReptiles{
+  background:#8f0064;
+}
+.markerMammiferes{
+  background:#f24d00;
+}
+.markerAmphibiens{
+  background:#ed9a00;
+}
+.markerOiseaux{
+  background:#b0e002;
+}
+body .marker-cluster div{
+  margin:0;
+}

@@ -1,0 +1,25 @@
+header,
+.l-header-sub-region,
+.l-footer .block,
+.side-page,
+#toolbar,
+.button-group,
+.breadcrumbs{
+	display: none;
+}
+.l-footer .block:last-child{
+	display: block;
+}
+
+body,
+h1, h2, h3, h4, h5, h6,
+a,
+.crea_wysiwyg_title_1,
+.crea_wysiwyg_title_2,
+.crea_wysiwyg_title_3,
+.crea_wysiwyg_title_4,
+.crea_wysiwyg_summary,
+.crea_wysiwyg_highlight,
+.crea_wysiwyg_paragraph{
+	font-family: Tahoma, sans-serif !important;
+}

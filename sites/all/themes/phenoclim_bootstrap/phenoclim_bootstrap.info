@@ -1,0 +1,33 @@
+name = Phenoclim Bootstrap Sub-Theme of CREA bootstrap
+core = 7.x
+base theme = crea_bootstrap
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Regions
+;;;;;;;;;;;;;;;;;;;;;
+
+regions[sur_header]     = 'Page top'
+regions[header]         = 'Top Bar'
+regions[navigation]     = 'Navigation'
+regions[help]           = 'Help'
+regions[sur_content]    = 'Sur-Content'
+regions[content]        = 'Content'
+regions[sub_content]    = 'Sub-Content'
+regions[footer]         = 'Footer'
+regions[sub_footer]     = 'Page bottom'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Stylesheets
+;;;;;;;;;;;;;;;;;;;;;
+
+stylesheets[all][] = css/styles-phenoclim.css
+stylesheets[all][] = css/layout-phenoclim.css
+stylesheets[all][] = css/search-phenoclim.css
+stylesheets[all][] = css/menu-phenoclim.css
+stylesheets[all][] = css/icons-phenoclim.css
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Scripts
+;;;;;;;;;;;;;;;;;;;;;

@@ -1,0 +1,192 @@
+<?php
+
+function crea_bdd_etudes_menu() {
+
+    $items['listing-programs'] = array(
+        'page callback' => 'crea_bdd_etudes_list',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+    );
+
+    $items['listing-programs/detail/%/%'] = array(
+        'page callback' => 'crea_bdd_etudes_detail',
+        'page arguments' => array(2,3),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+    );
+
+    return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function crea_bdd_etudes_theme(){
+  return array(
+    'crea_bdd_etudes_list' => array(
+      'template' => 'templates/crea_bdd_etudes_list',
+    ),
+      'crea_bdd_etudes_detail' => array(
+          'template' => 'templates/crea_bdd_etudes_detail',
+      ),
+  );
+}
+
+function crea_bdd_etudes_form($form, &$form_state){
+
+    $form = array();
+
+    $form['keyword'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Mot clé'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit',array(), array('context' => 'CREA_LNG')),
+        '#attributes' => array('class' => array('crea-button orange-button-link'))
+    );
+    return $form;
+}
+
+function crea_bdd_etudes_form_submit($form, &$form_state){
+    $form_state['rebuild'] = TRUE;
+    return;
+}
+
+function crea_bdd_etudes_list(){
+
+    // on va récupérer le listing des différents programmes
+    $db_data = Database::getConnection('atlasmontblanc','default');
+
+    $sth = $db_data->select('prog', 'p')
+        ->fields('p', array('idprog', 'name_study', 'etude_fr', 'etude_uk', 'dis', 'ssdis'));
+
+    //$where = '';
+    if(isset($_POST['keyword']) && $_POST['keyword'] != ''){
+        $keyword = pg_escape_string($_POST['keyword']);
+        $sth->condition(db_or()->condition('name_study', '%'.$keyword.'%', 'LIKE')
+            ->condition('dis', '%'.$keyword.'%', 'LIKE')
+            ->condition('ssdis', '%'.$keyword.'%', 'LIKE')
+            ->condition('etude_fr', '%'.$keyword.'%', 'LIKE')
+            ->condition('etude_uk', '%'.$keyword.'%', 'LIKE')
+        );
+    }
+
+    $sth->orderBy('name_study');
+
+    $data = $sth->execute();
+
+    $res_prog = $data->fetchAll();
+
+    db_set_active();
+
+    $render_content = [];
+    $render_content["formulaire"] = drupal_get_form('crea_bdd_etudes_form');
+    $render_content["data_programmes"] = $res_prog;
+
+    return theme('crea_bdd_etudes_list', $render_content);
+}
+
+function crea_bdd_etudes_detail($id, $lng){
+
+    // on va récupérer les infos de la fiche
+    if(isset($id) && isset($lng)) {
+        $db_data = Database::getConnection('atlasmontblanc', 'default');
+
+        $sql_prog = 'SELECT *
+                      FROM prog
+                      WHERE idprog = '.$id.';';
+        $res_prog = $db_data->query($sql_prog)->fetchAssoc();
+
+        // on balance les variables qui vont bien au template
+        $render_content = [];
+        $render_content["titre"] = $res_prog['name_study'];
+        $render_content["soustitre"] = $res_prog['etude_'.$lng];
+        $render_content["description"] = $res_prog['texte_'.$lng];
+        $render_content["responsable"] = '';
+        // prog leader
+        if($res_prog['progleader'] != ''){
+            $sql_leader = 'SELECT *
+                      FROM chercheur
+                      WHERE idind = '.$res_prog['progleader'].';';
+            $res_leader = $db_data->query($sql_leader)->fetchAssoc();
+            $render_content["responsable"] = $res_leader['firstname'].' '.$res_leader['lastname'];
+        }
+        // laboratoires
+        $render_content["labos"] = array();
+        $labos = array();
+        for($i = 1; $i < 8; $i++){
+            if($res_prog['idlab'.$i] != ''){
+                $lab = array();
+                $sql_labo = 'SELECT *
+                          FROM labo
+                          WHERE idlab = '.$res_prog['idlab'.$i].';';
+                $res_labo = $db_data->query($sql_labo)->fetchAssoc();
+                $lab['sigle'] = $res_labo['sigle'];
+                $lab['lab'] = $res_labo['lab'];
+                $lab['town'] = $res_labo['town'];
+                $lab['country'] = $res_labo['country'];
+                $lab['web'] = $res_labo['web'];
+                array_push($labos, $lab);
+            }
+        }
+        $render_content["labos"] = $labos;
+        // autres infos du programme
+        $render_content["partenaires"] = $res_prog['partenaires'];
+        $domaines = explode(';', $res_prog['dis']);
+        $tabDomaines = array();
+        foreach($domaines as $d){
+            if($d != ''){
+                array_push($tabDomaines, $d);
+            }
+        }
+        $sousDomaines = explode(';', $res_prog['ssdis']);
+        $tabSousDomaines = array();
+        foreach($sousDomaines as $d){
+            if($d != ''){
+                array_push($tabSousDomaines, $d);
+            }
+        }
+        $render_content["domaines"] = implode(', ', $tabDomaines);
+        $render_content["sousdomaines"] = implode(', ', $tabSousDomaines);
+        // meta informations
+        $render_content["but"] = array();
+        $render_content["methode"] = array();
+        $render_content["parametre"] = array();
+        $render_content["location"] = array();
+        $sql_meta = 'SELECT *
+                          FROM meta
+                          WHERE idprog = '.$res_prog['idprog'].';';
+        $res_meta = $db_data->query($sql_meta)->fetchAll();
+        foreach($res_meta as $m){
+            $but = 'but_'.$lng;
+            if($m->$but != ''){
+                array_push($render_content["but"], $m->$but);
+            }
+            $methode = 'methode_'.$lng;
+            if($m->$methode != ''){
+                array_push($render_content["methode"], $m->$methode);
+            }
+            $parametre = 'parametre_'.$lng;
+            if($m->$parametre != ''){
+                array_push($render_content["parametre"], $m->$parametre);
+            }
+            $location = 'loc_nom_'.$lng;
+            if($m->$location != ''){
+                array_push($render_content["location"], array('loc' => $m->$location, 'commune' => str_replace('§', ', ', $m->commune)));
+            }
+        }
+        $render_content["start"] = $res_prog['debut'];
+        $render_content["siteweb"] = $res_prog['siteweb'];
+
+        db_set_active();
+
+        return theme('crea_bdd_etudes_detail', $render_content);
+    }
+}
+
+function cleanBDDEtudes($st){
+    $st = str_replace('\r\n', '<br/>', $st);
+    return $st;
+}

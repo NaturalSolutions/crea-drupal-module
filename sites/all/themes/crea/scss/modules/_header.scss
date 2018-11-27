@@ -1,0 +1,133 @@
+.l-header{
+	width: $section-width-desktop;
+	margin: 0 auto;
+
+	.l-header-region{
+		padding: 10px 0 0 0;
+		@media #{$small-only} {
+			.logo-wrapper{
+				text-align: center;	
+				padding-bottom: 10px;	
+				.logo{
+					width: 100px;
+				}
+			}
+		}
+		#site-name{
+			@media #{$small-only} {
+				text-align: center;
+			}
+			a{
+				color: $color-text;
+			}
+		}
+		.block-locale-language{
+
+			.block-title{
+				width: 1px; //hack Drupal
+			}
+
+			text-align: right;
+			.language-switcher-locale-url{
+			    list-style: none;
+			    display: block;
+			    margin: 0;
+			    li{
+			        display: inline;
+			        margin-right: 10px;
+			    }
+			    li:last-child{
+			    	margin-right: 0;
+			    }
+			    @media #{$small-only} {
+			    	position: absolute;
+			    	top: -130px;
+			    	right: 15px;
+			    }
+			}
+		}
+		.block-search-form{
+			.form-text{
+			    @include transition(width 0.3s ease-in-out);
+			    float: right;
+			}
+			.form-text:focus{
+				@media #{$medium-up} {
+					width:130%;
+				}
+				
+			}
+		}
+	}
+	.top-bar{
+		height: auto;
+		.title-area{
+			border-bottom: 1px solid black;
+			.toggle-topbar.menu-icon{
+				
+			}
+		}
+
+		#main-menu{
+		    a{
+		        text-transform: uppercase;
+		    }
+		}
+	}
+}
+.l-header-sub-region{
+	width: 100%;
+}
+
+.block-crea-design-crea-social,
+.block-search-form,
+.block-top-links{
+	text-align: right;
+}
+.profile,
+.logout,
+.block-locale-language{
+	display: inline-block;
+	margin: 0 0 0 15px;
+	border-left: 1px solid #E7E7E7;
+	padding: 0 0 0 15px;
+}
+.social-search{
+	float: right;
+	text-align: right;
+	width: 100%;
+	margin-top: 10px;
+}
+
+@media only screen and (max-width: 1137px) {
+}
+
+@media #{$small-only} {
+	.l-header{
+		width: $section-width-mobile;
+	}
+	.l-header .top-bar{
+		height: 2.8125rem;
+	}
+	.l-header .top-bar.expanded{
+		height: auto;
+	}
+	.block-crea-design-crea-social, 
+	.block-search-form, 
+	.block-top-links,
+	.l-header .l-header-region .block-locale-language{
+		text-align: center;
+	}
+	.block-top-links .profile{
+		margin-right: 2rem;
+	}
+	.l-header{
+		width: 100%;
+	}
+	.l-header .l-header-region .block-locale-language .language-switcher-locale-url{
+		position: relative;
+		right: 0;
+		top: 0;
+		margin: 0;
+	}
+}

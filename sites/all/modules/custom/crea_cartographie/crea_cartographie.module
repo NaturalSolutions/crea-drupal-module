@@ -1,0 +1,572 @@
+<?php
+module_load_include('inc', 'crea_cartographie', 'queries/map');
+
+/**
+ * Implementation of hook_block_info()
+ */
+function crea_cartographie_block_info() {
+    $blocks = array();
+    // affichage du module Charts
+    $blocks[0] = array(
+        'info' => t('Map OpenStreetMap'),
+        'cache' => DRUPAL_NO_CACHE
+    );
+    // affichage de la carte contact faune flore
+    $blocks[1] = array(
+        'info' => t('Map contact faune flore'),
+        'cache' => DRUPAL_NO_CACHE
+    );
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function crea_cartographie_block_configure($delta = '') {
+    if(isset($delta) && $delta<>""){
+        $form['crea_cartographie_block_' . $delta]['crea_cartographie_block_m_' . $delta] = array(
+            '#type' => 'textfield',
+            '#title' => t('Block message'),
+            '#size' => 60,
+            '#maxlength' => 128,
+            '#default_value' => variable_get('crea_cartographie_block_m_' . $delta, ""),
+        );
+    }
+    return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function crea_cartographie_block_save($delta = '', $edit = array()) {
+    if(isset($delta) && $delta<>""){
+        variable_set('crea_cartographie_block_' . $delta, $edit['crea_cartographie_block_' . $delta]);
+    }
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function crea_cartographie_block_view($delta = '') {
+    switch ($delta) {
+        case 0:
+            global $base_url, $language;
+            $iframe = '<div class="container" id="modulelive"><iframe src="'.$base_url.'/'.$language->language.'/temperatures/mode/standalone" width="100%" style="height:650px;border:none;" ></iframe></div>';
+            // bloc
+            $block = array(
+                'subject' => "",
+                'content' => $iframe
+            );
+            return $block;
+            break;
+        case 1:
+            global $base_url, $language;
+            $iframe = '<div class="container" id="modulelive"><iframe src="'.$base_url.'/'.$language->language.'/contact-faune-flore" width="100%" style="height:880px;border:none;" ></iframe></div>';
+            // bloc
+            $block = array(
+                'subject' => "",
+                'content' => $iframe
+            );
+            return $block;
+            break;
+    }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function crea_cartographie_theme(){
+    return array(
+        'crea_osm_map' => array(
+            'render element' => 'elements',
+        ),
+        'crea_fauneflore_map' => array(
+            'render element' => 'elements',
+            'variables' => array('observations' => NULL)
+        ),
+    );
+}
+
+function crea_cartographie_menu() {
+
+	$items['temperatures/mode/standalone'] = array(
+		'page callback' => 'crea_cartographie_standalone',
+		'delivery callback' => 'crea_cartographie_renderer',
+		'type' => MENU_CALLBACK,
+		'access arguments' => array('access content'),
+	);
+	
+    $items['temperatures/mode/standalone/%'] = array(
+        'page callback' => 'crea_cartographie_standalone',
+    	'page arguments' => array(3),
+        'delivery callback' => 'crea_cartographie_renderer',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+    );
+
+    $items['contact-faune-flore'] = array(
+        'page callback' => 'crea_contact_fauneflore',
+        'delivery callback' => 'crea_contact_fauneflore_renderer',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+    );
+
+    return $items;
+}
+
+/**
+ * Construit la map des stations en standalone
+ */
+function crea_cartographie_standalone($display_type = ''){
+    global $language, $conf;
+
+    // on liste les stations
+    $stations_js = array();
+    $stations = crea_load_stations();
+    foreach ($stations AS $station){
+        $illus = '';
+        if(isset($station->field_illustration['und'][0])){
+            $illus = scald_atom_load($station->field_illustration['und'][0]['sid']);
+            $illus = '<div class="stationPic" style="width:100%"><img alt="'.$station->title.'" src="'.image_style_url("station_pic", $illus->base_entity->uri).'" /></div>';
+        }
+        $stations_js[] = array(
+            'title' => $station->title,
+            'latitude' => $station->field_latitude['und']['0']['value'],
+            'longitude' => $station->field_longitude['und']['0']['value'],
+            'body' => $illus.$station->body['und']['0']['safe_value'],
+            'id_station' => $station->field_id['und']['0']['value']
+        );
+    }
+
+    $crealng = array(
+        'drupal_lng' => $language->language,
+        'access_year' => t('View average annual temperatures', array(), array('context' => 'CREA_LNG')),
+        'access_week' => t('View temperatures in the last week', array(), array('context' => 'CREA_LNG')),
+        'loading_charts' => t('Loading temperatures charts...', array(), array('context' => 'CREA_LNG')),
+        'oneweek' => t('1 week', array(), array('context' => 'CREA_LNG')),
+        'onemonth' => t('1 month', array(), array('context' => 'CREA_LNG')),
+        'threemonth' => t('3 months', array(), array('context' => 'CREA_LNG')),
+        'sixmonth' => t('6 month', array(), array('context' => 'CREA_LNG')),
+        'oneyear' => t('1 year', array(), array('context' => 'CREA_LNG')),
+        'all' => t('all', array(), array('context' => 'CREA_LNG')),
+        'title_charts_year' => t('Average annual temperatures from station', array(), array('context' => 'CREA_LNG')),
+        'title_charts_week' => t('Live temperatures from station', array(), array('context' => 'CREA_LNG')),
+        'select_range_time' => t('Select your range time', array(), array('context' => 'CREA_LNG')),
+        'temperatures' => t('Temperatures (°C)', array(), array('context' => 'CREA_LNG')),
+        'capteur1' => t('-5cm under surface', array(), array('context' => 'CREA_LNG')),
+        'capteur2' => t('At the surface', array(), array('context' => 'CREA_LNG')),
+        'capteur3' => t('30cm above ground', array(), array('context' => 'CREA_LNG')),
+        'capteur4' => t('2m above ground', array(), array('context' => 'CREA_LNG')),
+        'weekfrom' => t('Week of', array(), array('context' => 'CREA_LNG')),
+        'zoom' => t('Zoom on a period with the mouse : click and release', array(), array('context' => 'CREA_LNG')),
+        'release' => t('Release when you want to zoom', array(), array('context' => 'CREA_LNG')),
+        'contextButtonTitle' => t('Menu', array(), array('context' => 'CREA_LNG')),
+        'downloadJPEG' => t('Download JPG', array(), array('context' => 'CREA_LNG')),
+        'downloadPDF' => t('Download PDF', array(), array('context' => 'CREA_LNG')),
+        'downloadPNG' => t('Download PNG', array(), array('context' => 'CREA_LNG')),
+        'downloadSVG' => t('Download SVG', array(), array('context' => 'CREA_LNG')),
+        'printChart' => t('Print chart', array(), array('context' => 'CREA_LNG')),
+        'loading' => t('Loading', array(), array('context' => 'CREA_LNG')),
+        'resetZoom' => t('reset zoom', array(), array('context' => 'CREA_LNG')),
+        'resetZoomTitle' => t('Reset zoom 1:1', array(), array('context' => 'CREA_LNG')),
+        'shortMonths' => [
+            t('Jan', array(), array('context' => 'CREA_LNG')),
+            t('Feb', array(), array('context' => 'CREA_LNG')),
+            t('Mar', array(), array('context' => 'CREA_LNG')),
+            t('Apr', array(), array('context' => 'CREA_LNG')),
+            t('May', array(), array('context' => 'CREA_LNG')),
+            t('Jun', array(), array('context' => 'CREA_LNG')),
+            t('Jul', array(), array('context' => 'CREA_LNG')),
+            t('Aug', array(), array('context' => 'CREA_LNG')),
+            t('Sept', array(), array('context' => 'CREA_LNG')),
+            t('Oct', array(), array('context' => 'CREA_LNG')),
+            t('Nov', array(), array('context' => 'CREA_LNG')),
+            t('Dec', array(), array('context' => 'CREA_LNG'))
+        ],
+        'months' => [
+            t('January', array(), array('context' => 'CREA_LNG')),
+            t('February', array(), array('context' => 'CREA_LNG')),
+            t('March', array(), array('context' => 'CREA_LNG')),
+            t('April', array(), array('context' => 'CREA_LNG')),
+            t('May', array(), array('context' => 'CREA_LNG')),
+            t('June', array(), array('context' => 'CREA_LNG')),
+            t('July', array(), array('context' => 'CREA_LNG')),
+            t('August', array(), array('context' => 'CREA_LNG')),
+            t('September', array(), array('context' => 'CREA_LNG')),
+            t('October', array(), array('context' => 'CREA_LNG')),
+            t('November', array(), array('context' => 'CREA_LNG')),
+            t('December', array(), array('context' => 'CREA_LNG'))
+        ],
+        'weekdays' => [
+            t('Sunday', array(), array('context' => 'CREA_LNG')),
+            t('Monday', array(), array('context' => 'CREA_LNG')),
+            t('Tuesday', array(), array('context' => 'CREA_LNG')),
+            t('Wednesday', array(), array('context' => 'CREA_LNG')),
+            t('Thursday', array(), array('context' => 'CREA_LNG')),
+            t('Friday', array(), array('context' => 'CREA_LNG')),
+            t('Saturday', array(), array('context' => 'CREA_LNG'))
+        ],
+        'rangeSelectorFrom' => t('from', array(), array('context' => 'CREA_LNG')),
+        'rangeSelectorTo' => t('to', array(), array('context' => 'CREA_LNG')),
+        'noData' => t('No data to display', array(), array('context' => 'CREA_LNG'))
+    );
+    
+    $mapOptions = array();
+    $mapOptions['map_lat'] = '45.9';
+    $mapOptions['map_long'] = '6.95';
+    $mapOptions['map_zoom'] = '10';
+    $mapOptions['page_language'] = $language->language;
+    
+    if (isset($display_type)
+    && $display_type !== ''){
+    	switch ($display_type){
+    		case 'alps':
+	    		$mapOptions['map_lat'] = '45.2';
+    			$mapOptions['map_long'] = '6.7';
+    			$mapOptions['map_zoom'] = '8';
+    		break;
+    	}
+    }
+
+    $map_infos = array(
+        'stations' => $stations_js,
+        'crealng' => $crealng,
+    	  'mapOptions' => $mapOptions,
+        'IGNkey' => $conf['domain_ign_key']
+    );
+    drupal_add_js(array('CreaCartographieMap' => $map_infos), 'setting');
+
+    drupal_add_js(drupal_get_path('module', 'jquery_update').'/replace/ui/ui/minified/jquery.ui.datepicker.min.js');
+    if($language->language == "fr"){
+        drupal_add_js(drupal_get_path('module', 'jquery_update').'/replace/ui/ui/i18n/jquery.ui.datepicker-fr.js');
+    }
+    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+    return theme('crea_osm_map');
+}
+
+/**
+ * construit la map des stations en mode standalone
+ */
+function crea_cartographie_renderer($page_callback_result){
+    $cache_token = variable_get('css_js_query_string', '');
+    if ($cache_token != '') $cache_token = '?'.$cache_token;
+    
+    $content = '';
+    // Add CSS ans JS files
+    $jscss = drupal_get_css() . drupal_get_js();
+    $content .= $jscss;
+    $content .= '<link rel="stylesheet" type="text/css" href="/' . drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.css'.$cache_token.'">';
+    //$content .= '<link rel="stylesheet" type="text/css" href="/' . drupal_get_path('theme', 'crea') . '/css/theme-atlas.css'.$cache_token.'">';
+    $content .= '<script src="/'.(drupal_get_path('theme', 'crea').'/js/leaflet/leaflet.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_cartographie').'/js/crea_map.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/highstock.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/no-data-to-display.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/exporting.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/export-csv.js').$cache_token.'"></script>';
+
+    // render le crea_cartographie_standalone
+    print $content;
+    print $page_callback_result; // nécessaire sinon le theme n est pas recupere
+
+    // Perform end-of-request tasks.
+    drupal_page_footer();
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function crea_cartographie_image_default_styles() {
+    $styles = array();
+
+    // Default image preset for station pic
+    $styles['station_pic'] = array(
+        'effects' => array(
+            array(
+                'name' => 'image_scale_and_crop',
+                'data' => array('width' => 100, 'height' => 140),
+                'weight' => 0,
+            ),
+        ),
+    );
+
+    return $styles;
+}
+
+/**
+ * Construit la map pour la page contact faune flore
+ */
+function crea_contact_fauneflore(){
+    global $language, $conf;
+
+    // on liste les différentes observations
+    // on checke si on a du POST du formulaire
+    $pGroups = array();
+    $pDate = null;
+    $pTaxon = null;
+    foreach($_POST as $var => $value){
+        if(substr($var, 0, 6) == 'groups'){
+            $pGroups = $value;
+        }elseif (substr($var, 0, 7) == 'date_ff'){
+            $pDate['choice'] = $value;
+        }elseif (substr($var, 0, 9) == 'date_from'){
+            $pDate['from'] = $value['date'];
+        }elseif (substr($var, 0, 7) == 'date_to'){
+            $pDate['to'] = $value['date'];
+        }elseif (substr($var, 0, 5) == 'taxon'){
+            if($value != 'notaxon'){
+                $pTaxon = $value;
+            }
+        }
+    }
+
+    if($pTaxon != null){
+        $observations_js = crea_load_observations(null, $pDate, null, $pTaxon);
+    }else{
+        if(count($pGroups) == 0 ){
+            $observations_js = crea_load_observations(null, $pDate, null, null);
+        } else{
+            $observations_js = crea_load_observations($pGroups, $pDate, null, $pTaxon);
+        }
+    }
+
+    // traductions
+    $crealng_js = array(
+        'drupal_lng' => $language->language,
+        'author' => t('Author', array(), array('context' => 'CREA_LNG')),
+        'nbobs' => t('Species observations', array(), array('context' => 'CREA_LNG')),
+        'lastobs' => t('Last observation', array(), array('context' => 'CREA_LNG')),
+        'view' => t('View on', array(), array('context' => 'CREA_LNG')),
+    );
+
+    $mapOptions = array();
+    $mapOptions['map_lat'] = '45.9';
+    $mapOptions['map_long'] = '6.90';
+    $mapOptions['map_zoom'] = '10';
+    $mapOptions['page_language'] = $language->language;
+
+    $map_infos = array(
+        'observations' => $observations_js,
+        'crealng' => $crealng_js,
+        'mapOptions' => $mapOptions,
+        'IGNkey' => $conf['domain_ign_key'],
+      'group_amphibien' => variable_get('geonature_group_amphibien', 1),
+      'group_mammiferes' => variable_get('geonature_group_mammiferes', 11),
+      'group_oiseaux' => variable_get('geonature_group_oiseaux', 12),
+      'group_reptiles' => variable_get('geonature_group_reptiles', 14),
+      'group_flore' => variable_get('geonature_group_flore', 1003),
+      'prot_chocard' => variable_get('geonature_protocole_chocard', 100),
+      'prot_grenouille' => variable_get('geonature_protocole_grenouille', 101),
+      'prot_mesange' => variable_get('geonature_protocole_mesange', 102),
+      'prot_contactfaune' => variable_get('geonature_protocole_contactfaune', 1),
+      'prot_ffs' => variable_get('geonature_protocole_ffs', 103),
+    );
+
+    drupal_add_js(array('CreaFauneFloreMap' => $map_infos), 'setting');
+
+    $render_content = [];
+    $render_content['observations'] = $observations_js;
+    $render_content['faunaflora_form'] = drupal_get_form('crea_contact_fauneflore_form');
+
+    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+
+    return theme('crea_fauneflore_map', $render_content);
+}
+
+/**
+ * construit la map des observations
+ */
+function crea_contact_fauneflore_renderer($page_callback_result){
+   $cache_token = variable_get('css_js_query_string', '');
+    if ($cache_token != '') $cache_token = '?'.$cache_token;
+
+    $content = '';
+    // Add CSS ans JS files
+    $jscss = drupal_get_css() . drupal_get_js();
+    $content .= $jscss;
+    $content .= '<link rel="stylesheet" type="text/css" href="/' . drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.css'.$cache_token.'">';
+    //$content .= '<link rel="stylesheet" type="text/css" href="/' . drupal_get_path('theme', 'crea') . '/css/theme-atlas.css'.$cache_token.'">';
+    $content .= '<script src="/'.(drupal_get_path('theme', 'crea').'/js/leaflet/leaflet.js').$cache_token.'"></script>';
+    $content .= '<script src="/'.(drupal_get_path('module', 'crea_cartographie').'/js/crea_map_ff.js').$cache_token.'"></script>';
+
+    // render le crea_cartographie_standalone
+    print $content;
+    print $page_callback_result; // nécessaire sinon le theme n est pas recupere
+
+    // Perform end-of-request tasks.
+    drupal_page_footer();
+}
+
+/**
+ * Formulaire qui permet de switcher de station ou d année
+ */
+function crea_contact_fauneflore_form($form, &$form_state){
+    global $language;
+
+    $form = array();
+
+    $options = array(
+        'full' => t('All observations', array(), array('context' => 'CREA_LNG')),
+        'year' => t('Last year', array(), array('context' => 'CREA_LNG')),
+        'custom' => t('Specific period', array(), array('context' => 'CREA_LNG'))
+    );
+
+    $form['date_ff'] = array(
+        '#type' => 'radios',
+        '#title' => t('Période', array(), array('context' => 'CREA_LNG')).' :',
+        '#options' => $options,
+        '#default_value' => 'year'
+    );
+
+    if($language->language == "fr"){
+        $format = "d/m/Y";
+    }else{
+        $format = "Y/m/d";
+    }
+
+    $form['date_from'] = array(
+        '#type' => 'date_popup',
+        '#title' => t('from', array(), array('context' => 'CREA_LNG')),
+        '#default_value' => 'now',
+        '#date_format' => $format,
+        '#date_timezone' => 'Europe/Paris',
+        '#date_label_position' => 'invisible',
+    );
+    $form['date_to'] = array(
+        '#type' => 'date_popup',
+        '#title' => t('to', array(), array('context' => 'CREA_LNG')),
+        '#default_value' => 'now',
+        '#date_format' => $format,
+        '#date_timezone' => 'Europe/Paris',
+        '#date_label_position' => 'invisible',
+    );
+
+    // groupes (construit dynamiquement)
+    $groups = crea_gimmeGroups();
+    $form['groups'] = array(
+        '#type' => 'checkboxes',
+        '#options' => $groups,
+        '#default_value' => array_keys($groups),
+        '#title' => t('Classes d\'espèces').' : ',
+    );
+
+    // espece particuliere
+    $taxon_tree = crea_get_available_taxons();
+    $groups_name = unserialize(TAXONS_GROUPS);
+    $groupes = array();
+    $groupes['notaxon'] = t('Votre choix');
+    foreach ($taxon_tree AS $protocol => $group){
+        foreach ($group AS $group_id => $taxons){
+            foreach ($taxons AS $key_taxon => $taxon){
+                if (isset($groups_name[$group_id])){
+                    $groupes[$groups_name[$group_id]][$key_taxon] = $taxon;
+                }
+            }
+        }
+    }
+    $form['especes'] = array(
+      '#type' => 'markup',
+      '#markup' => '<label class="control-label">'.t('Espèce'). ' : </label>',
+    );
+
+    $form['taxon'] = array(
+      '#type' => 'select',
+      '#options' => $groupes,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Afficher',array(), array('context' => 'CREA_LNG')),
+        '#attributes' => array('class' => array('crea-button no-icon orange-button-link'))
+    );
+
+    return $form;
+
+}
+
+function crea_contact_fauneflore_form_submit($form, &$form_state){
+    $groups = $form_state['values']['groups'];
+    $hasValue = FALSE;
+    foreach($groups as $group){
+        if($group != 0){
+            $hasValue = TRUE;
+        }
+    }
+    if($hasValue === FALSE){
+      unset($form_state['input']['groups']);
+      unset($form_state['values']['groups']);
+    }
+    $form_state['rebuild'] = TRUE;
+    return;
+}
+
+function crea_cartographie_variable_info($options)
+{
+    $variables['help_text_ff'] = array(
+        'name' => 'help_text_ff',
+        'title' => t('Help text for Fauna/Flora Live page', array(), array('context' => 'CREA_LNG')),
+        'default' => "",
+        'type' => 'text',
+        'access' => 'administer nodes',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+    return $variables;
+}
+
+function atlas_espaceperso_fauneflore_form($form, &$form_state){
+  global $language;
+
+  $form = array();
+
+  $options = array(
+    'full' => t('All observations', array(), array('context' => 'CREA_LNG')),
+    'year' => t('Last year', array(), array('context' => 'CREA_LNG')),
+    'custom' => t('Specific period', array(), array('context' => 'CREA_LNG'))
+  );
+
+  $form['period'] = array(
+    '#markup' => '<h3>' . t('Période', array(), array('context' => 'CREA_LNG')) . ' : </h3>',
+  );
+
+  $form['date_ff'] = array(
+    '#type' => 'radios',
+    '#options' => $options,
+    '#default_value' => 'year'
+  );
+
+  if($language->language == "fr"){
+    $format = "d/m/Y";
+  }else{
+    $format = "Y/m/d";
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit',array(), array('context' => 'CREA_LNG')),
+  );
+
+  $form['date_from'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('from', array(), array('context' => 'CREA_LNG')),
+    '#default_value' => 'now',
+    '#date_format' => $format,
+    '#date_timezone' => 'Europe/Paris',
+    '#date_label_position' => 'invisible',
+  );
+  $form['date_to'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('to', array(), array('context' => 'CREA_LNG')),
+    '#default_value' => 'now',
+    '#date_format' => $format,
+    '#date_timezone' => 'Europe/Paris',
+    '#date_label_position' => 'invisible',
+  );
+
+  return $form;
+
+}
+
+function atlas_espaceperso_fauneflore_form_submit($form, &$form_state){
+  $form_state['rebuild'] = TRUE;
+  return;
+}

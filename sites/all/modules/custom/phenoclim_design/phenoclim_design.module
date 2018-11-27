@@ -1,0 +1,372 @@
+<?php
+/**
+ * Implements hook_block_info().
+ */
+function phenoclim_design_block_info() {
+    $blocks = array();
+    $blocks['phenoclim_espace_perso'] = array(
+        'info' => t('Phenoclim espace personnel'),
+    );
+    $blocks['phenoclim_espace_perso_en'] = array(
+        'info' => t('Phenoclim espace personnel (ENGLISH)'),
+    );
+    $blocks['phenoclim_tous_les_observateurs'] = array(
+        'info' => t('Phenoclim Tous les observateurs'),
+    );
+    $blocks['phenoclim_carte_vegetaux'] = array(
+        'info' => t('Phenoclim carte végétaux'),
+    );
+    $blocks['phenoclim_carte_vegetaux_temps'] = array(
+        'info' => t('Phenoclim carte végétaux au cours du temps'),
+    );
+    $blocks['phenoclim_enneigement'] = array(
+        'info' => t('Phenoclim enneigement'),
+    );
+    $blocks['phenoclim_login'] = array(
+        'info' => t('Phenoclim login'),
+    );
+    $blocks['phenoclim_actus'] = array(
+        'info' => t('HOMEPAGE Phenoclim actus WORDPRESS'),
+    );
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function phenoclim_design_block_configure($delta='') {
+    $form = array();
+    switch($delta) {
+        case 'phenoclim_espace_perso' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_espace_perso', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-register" name="espace-personnel" scrolling="yes" src="http://backend.phenoclim.org/portail/" title="Connexion à Phenoclim" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+        case 'phenoclim_espace_perso_en' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_espace_perso_en', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-register" name="espace-personnel" scrolling="yes" src="http://backend.phenoclim.org/portail/" title="Phenoclim connection" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+        case 'phenoclim_actus' :
+            $form['wordpress_json_url'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The url of the wordpress json feed'),
+                '#default_value' => variable_get('phenoclim_design_wordpress_json_url', ''),
+                '#description' => t('Eg: http://crea-ext.aql.fr/blog/wp-json/wp/v2/')
+            );
+            $form['wordpress_article_count'] = array(
+                '#type' => 'select',
+                '#title' => t('The number of wordpress articles to display'),
+                '#default_value' => variable_get('phenoclim_design_wordpress_article_count', 2),
+                '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10)),
+            );
+            $form['wordpress_article_tag'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The tag of wordpress articles to display'),
+                '#default_value' => variable_get('phenoclim_design_wordpress_article_tag', 46),
+                '#size' => 3,
+                '#maxlength' => 4, 
+                '#description' => t('Eg: 46 is the tag number of #phenoclim'),
+            );
+            break;
+        case 'phenoclim_tous_les_observateurs' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_tous_les_observateurs', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-tous-les-observateurs" name="tous-les-observateurs" scrolling="yes" src="https://creamontblanc.shinyapps.io/Shiny_carte_participants/" title="Phenoclim tous les observateurs" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+        case 'phenoclim_carte_vegetaux' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_carte_vegetaux', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-carte-des-vegetaux" name="carte-des-vegetaux" scrolling="yes" src="http://backend.phenoclim.org/portail/map_all_surveys" title="Phenoclim carte des végétaux" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+        case 'phenoclim_carte_vegetaux_temps' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_carte_vegetaux_temps', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-carte-des-vegetaux-temps" name="carte-des-vegetaux" scrolling="yes" src="http://backend.phenoclim.org/portail/map_viz" title="Phenoclim carte des végétaux dans le temps" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+        case 'phenoclim_enneigement' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('phenoclim_design_enneigement', '<iframe align="middle" frameborder="0" style="overflow:hidden;height:800px;width:100%" height="800px" id="phenoclim-enneigement" name="carte-des-vegetaux" scrolling="yes" src="http://phenoclim.org/fr/communaute/enneigement" title="Phenoclim enneigement" width="100%"></iframe>'),
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'phenoclim-block-iframe')
+                ),
+            );
+            break;
+    }
+
+    return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function phenoclim_design_block_save($delta = '', $edit = array()) {
+    switch($delta) {
+        case 'phenoclim_espace_perso' :
+            variable_set('phenoclim_design_espace_perso', $edit['text_body']['value']);
+            break;
+        case 'phenoclim_espace_perso_en' :
+            variable_set('phenoclim_design_espace_perso_en', $edit['text_body']['value']);
+            break;
+        case 'phenoclim_actus' :
+            variable_set('phenoclim_design_wordpress_json_url', $edit['wordpress_json_url']);
+            variable_set('phenoclim_design_wordpress_article_count', $edit['wordpress_article_count']);
+            variable_set('phenoclim_design_wordpress_article_tag', $edit['wordpress_article_tag']);
+            break;
+        case 'phenoclim_tous_les_observateurs' :
+            variable_set('phenoclim_design_tous_les_observateurs', $edit['text_body']['value']);
+            break;
+        case 'phenoclim_carte_vegetaux' :
+            variable_set('phenoclim_design_carte_vegetaux', $edit['text_body']['value']);
+            break;
+        case 'phenoclim_carte_vegetaux_temps' :
+            variable_set('phenoclim_design_carte_vegetaux_temps', $edit['text_body']['value']);
+            break;
+        case 'phenoclim_enneigement' :
+            variable_set('phenoclim_design_enneigement', $edit['text_body']['value']);
+            break;
+    }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function phenoclim_design_block_view($delta='') {
+    $block = array();
+
+    switch($delta) {
+        case 'phenoclim_espace_perso' :
+            $block['content'] = phenoclim_espace_perso();
+            break;
+        case 'phenoclim_espace_perso_en' :
+            $block['content'] = phenoclim_espace_perso_en();
+            break;
+        case 'phenoclim_tous_les_observateurs' :
+            $block['content'] = phenoclim_tous_les_observateurs();
+            break;
+        case 'phenoclim_carte_vegetaux' :
+            $block['content'] = phenoclim_carte_vegetaux();
+            break;
+        case 'phenoclim_actus' :
+            $block['content'] = phenoclim_actus_wordpress();
+            break;
+        case 'phenoclim_carte_vegetaux_temps' :
+            $block['content'] = phenoclim_carte_vegetaux_temps();
+            break;
+        case 'phenoclim_enneigement' :
+            $block['content'] = phenoclim_design_enneigement();
+            break;
+        case 'phenoclim_login' :
+            $block['content'] = phenoclim_login();
+            break;
+    }
+
+    return $block;
+}
+
+function phenoclim_espace_perso(){
+  $text = variable_get('phenoclim_design_espace_perso', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_espace_perso_en(){
+  $text = variable_get('phenoclim_design_espace_perso_en', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_tous_les_observateurs(){
+  $text = variable_get('phenoclim_design_tous_les_observateurs', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_carte_vegetaux(){
+  $text = variable_get('phenoclim_design_carte_vegetaux', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_carte_vegetaux_temps(){
+  $text = variable_get('phenoclim_design_carte_vegetaux_temps', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_design_enneigement(){
+  $text = variable_get('phenoclim_design_enneigement', '');
+
+  $block = array(
+      'message' => array(
+          '#type' => 'markup',
+          '#markup' => $text,
+          '#suffix' => '',
+      ),
+  );
+  return $block;
+}
+
+function phenoclim_login(){
+    $logged_in = l(t("Mon compte / S'inscrire"), 'espace-personnel');
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => $logged_in,
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function phenoclim_actus_wordpress(){
+    global $language;
+
+    $langJson = '&lang='.$language->language;
+    $articles = array();
+    $wordpress_json_url = variable_get('wordpress_json_url', false);
+    $wordpress_article_count = variable_get('wordpress_article_count', 2);
+    $wordpress_article_category= variable_get('wordpress_article_category', 46);
+    $cat = '&tags='.$wordpress_article_category;
+
+    $trim_alter = array(
+        'max_length' => 300,
+        'word_boundary' => true,
+        'ellipsis' => true,
+    );
+    if ($wordpress_json_url) {
+        if (substr($wordpress_json_url, -1) != '/') $wordpress_json_url .= '/';
+        try {
+            if($language->language == 'fr'){
+                $feeds = drupal_http_request($wordpress_json_url . 'posts' .$cat);
+            }else{
+                $feeds = drupal_http_request($wordpress_json_url . 'posts'.$langJson.$cat);
+            }
+            if ($feeds->code == 200){
+                $json_feed = json_decode($feeds->data, TRUE);
+                if (is_array($json_feed)
+                    && !empty($json_feed)) {
+                    foreach ($json_feed AS $feed) {
+                        $article_image = filter_xss($feed['featured_media']);
+
+                        try {
+                            if ($article_image){
+                                $feed_image = drupal_http_request($wordpress_json_url . 'media/' . $article_image);
+                                if ($feed_image->code == 200) {
+                                    $json_feed_image = json_decode($feed_image->data, TRUE);
+                                    //creaDump::debug($json_feed_image);
+                                }
+                            }
+                        } catch (Exception $e) {
+                            watchdog('wordpress_image feed', 'error with the wordpress image feed : ' . $e->getMessage(), array(), WATCHDOG_ERROR);
+                        }
+
+                        $articles[] = array(
+                            'title' => isset($feed['title']['rendered']) ? filter_xss($feed['title']['rendered']) : '',
+                            'date' => isset($feed['date']) ? format_date(strtotime(filter_xss($feed['date'])), 'custom', 'd/m/Y') : '',
+                            'content' => isset($feed['content']['rendered']) ? views_trim_text($trim_alter, filter_xss(strip_tags(trim($feed['content']['rendered'])))) : '',
+                            'know_more' => isset($feed['link']) ? filter_xss($feed['link']) : '',
+                            'image_src' => isset($json_feed_image['source_url']) ? filter_xss($json_feed_image['source_url']) : '',
+                            'image_alt' => isset($json_feed_image['alt_text']) ? filter_xss($json_feed_image['alt_text']) : '',
+                            'image_title' => isset($json_feed_image['title']['rendered']) ? filter_xss($json_feed_image['title']['rendered']) : '',
+                        );
+
+                        if (count($articles) >= $wordpress_article_count){
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception $e){
+            watchdog('wordpress_feed', 'error with the wordpress feed : ' . $e->getMessage(), array(), WATCHDOG_ERROR);
+        }
+    }
+    $block['content'] = array(
+        '#theme' => 'crea_actus_hp',
+        '#articles' =>  $articles
+    );
+    return $block;
+}
+
+/**
+* Implementation of hook_uninstall().
+*/
+function phenoclim_design_uninstall() {
+ // Get global variable array
+ global $conf;
+ foreach (array_keys($conf) as $key) {
+   // Find variables that have the module prefix
+   if (strpos($key, 'phenoclim_design') === 0) {
+     variable_del($key);
+   }
+ }
+}

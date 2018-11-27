@@ -1,0 +1,5 @@
+body .twentytwenty-before-label:before {
+  content: "Before"; }
+
+body .twentytwenty-after-label:before {
+  content: "After"; }

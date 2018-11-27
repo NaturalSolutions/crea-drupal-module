@@ -1,0 +1,370 @@
+<?php 
+
+function crea_backoffice_install(){
+	db_update('filter_format')
+	->fields(array(
+		'weight' => 0
+	))
+	->condition('format', 'full_html', '=')
+	->execute();
+	
+	db_update('filter_format')
+	->fields(array(
+		'weight' => 1
+	))
+	->condition('format', 'filtered_html', '=')
+	->execute();
+	
+	// Create an image field named "Illustration"
+	$field = field_read_field('field_illustration');
+	if (!$field){
+		$field = array(
+			'field_name' => 'field_illustration',
+			'type' => 'atom_reference',
+			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+			'locked' => FALSE,
+			'indexes' => array('sid' => array('sid')),
+			'settings' => array(
+				'uri_scheme' => 'public',
+				'default_image' => FALSE,
+			),
+			'storage' => array(
+				'type' => 'field_sql_storage',
+				'settings' => array(),
+				'module' => 'field_sql_storage',
+				'active' => '1',
+				'details' => array(
+					'sql' => array(
+						'FIELD_LOAD_CURRENT' => array(
+							'field_data_field_illustration' => array(
+								'sid' => 'field_illustration_sid'
+							),
+						),
+						'FIELD_LOAD_REVISION' => array(
+							'field_revision_field_illustration' => array(
+								'sid' => 'field_illustration_sid' 
+							),
+						),
+					),
+				),
+			),
+		);
+		field_create_field($field);
+	}
+	
+	$media_content_types = array('news', 'page', 'press_release', 'station', 'faune', 'flore');
+	
+	foreach ($media_content_types AS $type){
+		// Add the field "Média" to the content type.
+		$instance = array(
+			'field_name' => 'field_illustration',
+			'entity_type' => 'node',
+			'label' => 'Illustration',
+			'bundle' => $type,
+			'required' => 0,
+			'settings' => array(
+				'referencable_types' => array(
+					'image' => 'image',
+				),
+				'user_register_form' => FALSE,
+			),
+			'widget' => array(
+				'weight' => 2,
+				'type' => 'atom_reference_textfield',
+				'module' => 'atom_reference',
+				'active' => 1,
+				'settings' => array(
+					'context' => 'sdl_library_item',
+				),
+			),
+			'display' => array(
+				'default' => array(
+					'label' => 'hidden',
+					'type' => 'full',
+					'settings' => array('link' => 0),
+					'module' => 'atom_reference',
+					'weight' => 1,
+				),
+			),
+		);
+		field_create_instance($instance);
+	}
+	
+	
+	
+	// Create an image field named "Media"
+	$field = field_read_field('field_media');
+	if (!$field){
+		$field = array(
+			'field_name' => 'field_media',
+			'type' => 'atom_reference',
+			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+			'locked' => FALSE,
+			'indexes' => array('sid' => array('sid')),
+			'settings' => array(
+				'uri_scheme' => 'public',
+				'default_image' => FALSE,
+			),
+			'storage' => array(
+				'type' => 'field_sql_storage',
+				'settings' => array(),
+				'module' => 'field_sql_storage',
+				'active' => '1',
+				'details' => array(
+					'sql' => array(
+						'FIELD_LOAD_CURRENT' => array(
+							'field_data_field_media' => array(
+								'sid' => 'field_media_sid'
+							),
+						),
+						'FIELD_LOAD_REVISION' => array(
+							'field_revision_field_media' => array(
+								'sid' => 'field_media_sid' 
+							),
+						),
+					),
+				),
+			),
+		);
+		field_create_field($field);
+	}
+	
+	$media_content_types = array('news', 'page', 'press_release', 'station', 'faune', 'flore');
+	
+	foreach ($media_content_types AS $type){
+		// Add the field "Média" to the content type.
+		$instance = array(
+			'field_name' => 'field_media',
+			'entity_type' => 'node',
+			'label' => 'Médias associés',
+			'bundle' => $type,
+			'required' => 0,
+			'settings' => array(
+				'referencable_types' => array(
+					'image' => 'image',
+					'audio' => 'audio',
+					'video' => 'video',
+					'flash' => 'flash',
+				),
+				'user_register_form' => FALSE,
+			),
+			'widget' => array(
+				'weight' => 3,
+				'type' => 'atom_reference_textfield',
+				'module' => 'atom_reference',
+				'active' => 1,
+				'settings' => array(
+					'context' => 'sdl_library_item',
+				),
+			),
+			'display' => array(
+				'default' => array(
+					'label' => 'hidden',
+					'type' => 'full',
+					'settings' => array('link' => 0),
+					'module' => 'atom_reference',
+					'weight' => 2,
+				),
+			),
+		);
+		field_create_instance($instance);
+	}
+	
+	$types = node_type_get_types();
+	foreach ($types AS $type){
+		if ($instance = field_read_instance('node', 'body', $type->type)){
+			$instance['settings']['dnd_enabled'] = 1;
+			$instance['settings']['mee_enabled'] = 1;
+			
+			field_update_instance($instance);
+		}
+		
+		variable_set('i18n_node_options_'.$type->type, array('current', 'required'));
+	}
+        
+	// configuration scald pour enlever les items en trop dans les display
+	$scald_content_types = array('image', 'audio', 'video', 'flash');
+	foreach ($scald_content_types AS $type){
+		// champ auteur
+		if ($instance = field_read_instance('scald_atom', 'scald_authors', $type)){
+			$instance['display']['default']['type'] = 'hidden';
+			field_update_instance($instance);
+		}
+		// champ tags
+		if ($instance = field_read_instance('scald_atom', 'scald_tags', $type)){
+			$instance['display']['default']['type'] = 'hidden';
+			field_update_instance($instance);
+		}
+	}
+        
+	// on cache le langage dans les display
+	$media_content_types = array('news', 'page', 'press_release', 'station', 'faune', 'flore');
+	foreach ($media_content_types AS $type){
+		variable_set('language_content_type_'.$type, 0);
+	}
+	
+	
+	db_update('system')
+	->fields(array('weight' => 6))
+	->condition('name', 'crea_backoffice', '=')
+	->execute();
+	
+	include_once("updates/update_7001.inc");
+}
+
+function crea_backoffice_update_7001(){
+	include_once("updates/update_7001.inc");
+}
+
+function crea_backoffice_update_7002(){
+    include_once("updates/update_7002.inc");
+}
+
+function crea_backoffice_update_7003()
+{
+    include_once("updates/update_7003.inc");
+}
+
+function crea_backoffice_update_7004(){
+    include_once("updates/update_7004.inc");
+}
+
+function crea_backoffice_update_7005(){
+    include_once("updates/update_7005.inc");
+}
+
+function crea_backoffice_update_7006(){
+    include_once("updates/update_7006.inc");
+}
+
+function crea_backoffice_update_7007(){
+	db_update('system')
+	->fields(array('weight' => 6))
+	->condition('name', 'crea_backoffice', '=')
+	->execute();
+}
+function crea_backoffice_update_7008(){
+    include_once("updates/update_7008.inc");
+}
+
+function crea_backoffice_update_7009(){
+	include_once("updates/update_7009.inc");
+}
+
+function crea_backoffice_update_7010(){
+	include_once("updates/update_7010.inc");
+}
+
+function crea_backoffice_update_7011(){
+	include_once("updates/update_7011.inc");
+}
+
+function crea_backoffice_update_7012(){
+	include_once("updates/update_7012.inc");
+}
+
+function crea_backoffice_update_7013(){
+	include_once("updates/update_7013.inc");
+}
+
+function crea_backoffice_update_7014(){
+	include_once("updates/update_7014.inc");
+}
+
+function crea_backoffice_update_7015(){
+	include_once("updates/update_7015.inc");
+}
+
+function crea_backoffice_update_7016(){
+	include_once("updates/update_7016.inc");
+}
+
+function crea_backoffice_update_7017(){
+	include_once("updates/update_7017.inc");
+}
+
+function crea_backoffice_update_7018(){
+	include_once("updates/update_7018.inc");
+}
+
+function crea_backoffice_update_7019(){
+	include_once("updates/update_7019.inc");
+}
+
+function crea_backoffice_update_7020(){
+	include_once("updates/update_7020.inc");
+}
+
+function crea_backoffice_update_7021(){
+  include_once("updates/update_7021.inc");
+}
+
+function crea_backoffice_update_7022(){
+  include_once("updates/update_7022.inc");
+}
+
+function crea_backoffice_update_7023(){
+  include_once("updates/update_7023.inc");
+}
+
+function crea_backoffice_update_7024(){
+  include_once("updates/update_7024.inc");
+}
+
+function crea_backoffice_update_7025(){
+  include_once("updates/update_7025.inc");
+}
+
+function crea_backoffice_update_7026(){
+  include_once("updates/update_7026.inc");
+}
+
+function crea_backoffice_update_7027(){
+  include_once("updates/update_7027.inc");
+}
+
+function crea_backoffice_update_7028(){
+  include_once("updates/update_7028.inc");
+}
+
+function crea_backoffice_update_7029(){
+  include_once("updates/update_7029.inc");
+}
+
+function crea_backoffice_update_7030(){
+  include_once("updates/update_7030.inc");
+}
+
+function crea_backoffice_update_7031(){
+  include_once("updates/update_7031.inc");
+}
+
+function crea_backoffice_update_7032(){
+  include_once("updates/update_7032.inc");
+}
+
+function crea_backoffice_update_7033(){
+  include_once("updates/update_7033.inc");
+}
+
+function crea_backoffice_update_7034(){
+  include_once("updates/update_7034.inc");
+}
+
+function crea_backoffice_uninstall(){
+	$types = node_type_get_types();
+	foreach ($types AS $type){
+		if ($instance = field_read_instance('node', 'field_illustration', $type->type)){
+			field_delete_instance($instance);
+		}
+		
+		if ($instance = field_read_instance('node', 'field_media', $type->type)){
+			field_delete_instance($instance);
+		}
+	}
+	
+	field_delete_field('field_illustration');
+	field_delete_field('field_media');
+	
+}
+

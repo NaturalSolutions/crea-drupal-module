@@ -1,0 +1,382 @@
+a, h1, h2 {
+    color: #76b729;
+}
+a:hover,
+a:focus{
+    color: #9cd954;
+}
+
+#header{
+    margin-top: 10px;
+    min-height: 80px;
+}
+#header .col:first-child{
+    padding-left: 0;
+}
+#header .logo{
+    margin-left: 0;
+    width: 50%;
+}
+
+#header .navbar-brand{
+    font-size: 1.3em;
+    font-family: "Klavika-Light",Tahoma,sans-serif;
+    border: 0;
+    margin-left: 0;
+    margin-bottom: 2px;
+}
+
+.sur_content{
+    margin: 0;
+}
+
+.banniere_phenoclim{
+    position: relative;
+    margin-bottom: 15px;
+}
+.banniere_phenoclim .btn-halo{
+    position: absolute;
+    right: 40px;
+    top: calc(50% - 40px);
+    border-color: #FFF;
+    background-color: rgba(255, 255, 255, .5);
+    border-radius: 0;
+    text-transform: uppercase;
+    color: #222;
+}
+
+.breadcrumb .active{
+    color:#76b729;
+}
+.page-header {
+    color: #000;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    text-transform: uppercase;
+    font-size: 2.571em;
+    border: 0;
+}
+.page-header:after {
+    border-bottom: 1px solid #CCC;
+}
+
+/* TODO : remplacer par sélecteur field_identité_visuelle */
+.domain-phenoclim .page-header{
+    color: #76b729;
+}
+.domain-phenoclim .page-header::after {
+    border-bottom: 1px solid #76b729;
+    content: "";
+    display: block;
+    margin-top: 5px;
+    width: 2em;
+}
+.domain-phenoclim.main-container a{
+    color: #76b729;
+}
+.domain-phenoclim .main-container a:hover,
+.domain-phenoclim .main-container a:focus{
+    color: #9cd954;
+}
+.domain-phenoclim .trombinoscope .presentation{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+/**/
+
+#topbar #block-phenoclim-design-phenoclim-login{
+  margin-top: 5px;
+}
+
+#hellouser #profilpic{
+    padding:0;
+}
+#hellouser #profilpic img{
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+}
+
+#hellouser .hello{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    text-transform: uppercase;
+}
+#hellouser .username{
+    font-family: "Klavika-Light",Tahoma,sans-serif;
+    font-size:1.571em;
+}
+#flashinfo ul{
+    padding: 0;
+}
+
+#flashinfo li{
+    padding: 5px;
+}
+#flashinfo li:before{
+    content: "•";
+    margin: 0 5px;
+    position: relative;
+    top: 0px;
+    font-size: 1.143em;
+}
+#flashinfo li.dark{
+    background-color: #faf3dd;
+}
+#flashinfo li.light{
+    background-color: #fffbf0;
+}
+#flashinfo .content{
+    height: 300px;
+    overflow: auto;
+}
+#flashinfo h3.title{
+    color: #000;
+    background-color: #f49a17;
+    text-transform: uppercase;
+    padding: 10px;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    margin-bottom: 0;
+}
+.bg-rayure{
+    background: url('../images/bg-rayure-atlas.jpg');
+}
+.bg-rayure img{
+    width: 100%;
+}
+
+.page-header{
+    color: #75ad0a;
+}
+.page-header::after{
+    border-bottom: 1px solid #75ad0a;
+}
+
+img[usemap] {
+    border: none;
+    height: auto;
+    max-width: 100%;
+    width: auto;
+}
+
+.front #footer{
+    margin-top: 0;
+}
+
+.navbar-nav{
+    margin: 0 !important;
+}
+
+#block-phenoclim-design-phenoclim-actus{
+    margin-bottom: 15px;
+}
+#block-phenoclim-design-phenoclim-actus .row{
+    margin: 0;
+}
+#block-phenoclim-design-phenoclim-actus .col.article{
+    background-color: #303336;
+    padding: 20px 20px 50px;
+    color: white;
+    height: 380px;
+}
+#block-phenoclim-design-phenoclim-actus .col.photo{
+    padding: 0;
+    height: 380px;
+}
+#block-phenoclim-design-phenoclim-actus .col.photo img{
+    max-width: 100%;
+}
+#block-phenoclim-design-phenoclim-actus .col h2{
+    color: #76b729;
+    text-transform: uppercase;
+    font-size: 1.714em;
+    margin: 0 0 15px;
+}
+#block-phenoclim-design-phenoclim-actus .col h2 a{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+#block-phenoclim-design-phenoclim-actus .col h2 a:hover,
+#block-phenoclim-design-phenoclim-actus .col h2 a:focus{
+    color: white;
+    text-decoration: none;
+}
+#block-phenoclim-design-phenoclim-actus .col h2:after{
+    content: "";
+    display: block;;
+    width: 2em;
+    margin-top: 5px;
+    border-bottom: 1px solid #76b729;
+}
+#block-phenoclim-design-phenoclim-actus .col .date{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+    margin-bottom: 5px;
+}
+#block-phenoclim-design-phenoclim-actus .col .know_more{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+#block-phenoclim-design-phenoclim-actus .col .know_more a{
+    text-decoration: underline;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+#block-phenoclim-design-phenoclim-actus .col .know_more a:hover,
+#block-phenoclim-design-phenoclim-actus .col .know_more a:focus{
+    color: white;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control{
+    opacity: 0.8;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control:hover,
+#block-phenoclim-design-phenoclim-actus .carousel-control:focus{
+    opacity: 1;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control.left,
+#block-phenoclim-design-phenoclim-actus .carousel-control.right{
+    background: none;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control.left{
+    left: 0;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control .fa-chevron-right{
+    right: 20%;
+    padding-left: 3px;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control .fa-chevron-left{
+    left: 20%;
+    padding-right: 3px;
+}
+#block-phenoclim-design-phenoclim-actus .carousel-control .fa{
+    border: 1px solid white;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3em;
+    height: 40px;
+    padding-top: 7px;
+    position: absolute;
+    text-shadow: none;
+    top: 40%;
+    width: 40px;
+}
+
+/* HP block Tweet */
+#block-phenoclim-design-crea-tweet-hp{
+    padding-left: 0;
+    margin-bottom: 30px;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title{
+    position: relative;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title h2{
+    font-size: 1.143em;
+    text-transform: uppercase;
+    margin: 0;
+    color: white;
+    padding: 3px 10px;
+    background-color: #303336;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title .title{
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    vertical-align: top;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title a{
+    bottom: 10px;
+    display: block;
+    position: absolute;
+    right: 15px;
+    text-align: right;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+    text-decoration: underline;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title a:hover,
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .block-title a:focus{
+    color: white;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list > ul{
+    padding: 0;
+    margin: 0;
+    height: 366px;
+    overflow: auto;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list > ul > li{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 10px 0;
+    list-style: outside none none;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .row{
+    margin: 0;
+}
+#block-phenoclim-design-crea-tweet-hp #twitter_update_list .date{
+    margin-top: 5px;
+}
+
+/* Réseaus sociaux HP*/
+
+.block-phenoclim-social .pane-content > ul{
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+    padding: 0;
+}
+.block-phenoclim-social .pane-content > ul li{
+    display: inline;
+    margin: 0 8px;
+}
+
+body.domain-phenoclim #topbar #block-crea-design-crea-langue-switcher .dropdown-menu li.en {
+    display: none;
+}
+
+
+@media (max-width: 750px) {
+    #header .right-column img{
+        max-height: 60px;
+    }
+}
+
+@media (max-width: 770px) {
+    .block-crea-social > ul li{
+        margin: 0;
+    }
+    .block-crea-social{
+        margin-bottom: 0;
+    }
+    #header .right-column{
+        position: inherit;
+        margin-top: 0;
+    }
+    #header .navbar-brand{
+        font-size: 1.2em;
+    }
+    #block-crea-design-crea-main-menu li.highlight{
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+    #block-crea-design-crea-main-menu li.highlight a{
+        text-align: center;
+    }
+    #block-phenoclim-design-phenoclim-actus .col.article{
+        height: auto;
+    }
+    #block-phenoclim-design-phenoclim-actus .col.photo{
+        height: auto;
+    }
+    #block-phenoclim-design-phenoclim-actus .carousel-control .fa{
+        top: 45%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .banniere_phenoclim .crea-button {
+        position: relative !important;
+        right: 0 !important;
+        text-align: center;
+        top: 0 !important;
+        width: 100%;
+    }
+}

@@ -1,0 +1,4 @@
+name = Phenoclim Design
+description = Module permettant de gérer les blocs et menu de Phenoclim
+core = 7.x
+package = CREA

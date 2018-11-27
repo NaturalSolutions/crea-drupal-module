@@ -1,0 +1,33 @@
+name = ATLAS Bootstrap Sub-Theme of CREA bootstrap
+core = 7.x
+base theme = crea_bootstrap
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Regions
+;;;;;;;;;;;;;;;;;;;;;
+
+regions[sur_header]     = 'Page top'
+regions[header]         = 'Top Bar'
+regions[navigation]     = 'Navigation'
+regions[help]           = 'Help'
+regions[sur_content]    = 'Sur-Content'
+regions[content]        = 'Content'
+regions[sub_content]    = 'Sub-Content'
+regions[footer]         = 'Footer'
+regions[sub_footer]     = 'Page bottom'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Stylesheets
+;;;;;;;;;;;;;;;;;;;;;
+
+stylesheets[all][] = css/style-atlas.css
+stylesheets[all][] = css/layout-atlas.css
+stylesheets[all][] = css/search-atlas.css
+stylesheets[all][] = css/menu-atlas.css
+stylesheets[all][] = css/icons-atlas.css
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Scripts
+;;;;;;;;;;;;;;;;;;;;;

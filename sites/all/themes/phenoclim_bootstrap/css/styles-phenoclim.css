@@ -1,0 +1,21 @@
+.crea-button.transparent-white-button-link{
+    color: #222 !important;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid white;
+}
+.crea-button.transparent-white-button-link:hover,
+.crea-button.transparent-white-button-link:focus{
+    color: white !important;
+    text-decoration: none;
+}
+.crea-button.transparent-white-button-link.no-icon{
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.crea-button.transparent-white-button-link.full{
+    width: 100%;
+    text-align: center;
+    border: 0;
+    padding-left: 0;
+    padding-right: 0;
+}

@@ -1,0 +1,10 @@
+#crea-backoffice-validate-pffs-submissions-form .overflow-fix{
+	width: 49%;
+	float: left;
+}
+#map{
+	width:49%;
+	height:600px;
+	position: fixed;
+	right: 0;
+}

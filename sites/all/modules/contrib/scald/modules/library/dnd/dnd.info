@@ -1,0 +1,12 @@
+name = DnD Library
+package = Scald
+description = Enable a drag and drop media interface.
+core = 7.x
+dependencies[] = scald
+
+
+; Information added by Drupal.org packaging script on 2018-07-30
+version = "7.x-1.11"
+core = "7.x"
+project = "scald"
+datestamp = "1532952793"

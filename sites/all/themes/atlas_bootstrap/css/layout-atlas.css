@@ -1,0 +1,529 @@
+a {
+    color: #ff9900;
+}
+a:hover,
+a:focus{
+    color: #c05705;
+}
+
+#header{
+    margin-top: 10px;
+}
+#header .col:first-child{
+    padding-left: 0;
+}
+#header .logo{
+    margin-left: 0;
+    width: 50%;
+}
+
+#header .navbar-brand{
+    font-size: 1.3em;
+    font-family: "Klavika-Light",Tahoma,sans-serif;
+    border: 0;
+    margin-left: 0;
+    margin-bottom: 2px;
+}
+
+.sur_content{
+    margin: 0;
+}
+
+.banniere_atlas{
+    position: relative;
+}
+.banniere_atlas .crea-button{
+    position: absolute;
+    right: 40px;
+    top: calc(50% - 40px);
+}
+
+.front .colonne-gauche{
+    border-right: 1px solid #cccccc;
+    padding-right: 15px;
+}
+.front .colonne-gauche .colonne-gauche{
+    border: 0;
+    padding-right: 10px;
+}
+.front .colonne-gauche .colonne-droite{
+    padding-left: 10px;
+}
+.front .node-panel{
+    margin-top: 50px;
+}
+.atlas-hp-blocks{
+    margin-bottom: 15px;
+}
+.atlas-hp-blocks .dnd-atom-wrapper,
+.atlas-hp-blocks .dnd-atom-wrapper img{
+    width: 100%;
+}
+
+.breadcrumb .active{
+    color:#ff9900;
+}
+.page-header {
+    color: #000;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    text-transform: uppercase;
+    font-size: 2.571em;
+    border: 0;
+}
+.page-header:after {
+    border-bottom: 1px solid #CCC;
+}
+#othersprotocols h3.title{
+    color: #FFF;
+    background-color: #303336;
+    text-transform: uppercase;
+    padding: 10px;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    margin-bottom: 0;
+}
+#othersprotocols .bg-light-grey{
+    padding: 5px;
+}
+#othersprotocols a{
+    color:#000;
+}
+#edit-date-ff input{
+    margin-top: 2px;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    #edit-date-ff input { margin-top: 4px; }
+}
+#hellouser #profilpic{
+    padding:0;
+}
+#hellouser #profilpic img{
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+}
+
+#hellouser .hello{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    text-transform: uppercase;
+}
+#hellouser .username{
+    font-family: "Klavika-Light",Tahoma,sans-serif;
+    font-size:1.571em;
+}
+#flashinfo ul{
+    padding: 0;
+}
+
+#flashinfo li{
+    padding: 5px;
+}
+#flashinfo li:before{
+    content: "•";
+    margin: 0 5px;
+    position: relative;
+    top: 0px;
+    font-size: 1.143em;
+}
+#flashinfo li.dark{
+    background-color: #faf3dd;
+}
+#flashinfo li.light{
+    background-color: #fffbf0;
+}
+#flashinfo .content{
+    height: 300px;
+    overflow: auto;
+}
+#flashinfo h3.title{
+    color: #000;
+    background-color: #f49a17;
+    text-transform: uppercase;
+    padding: 10px;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    margin-bottom: 0;
+}
+.espaceperso .coldroite{
+    border-left: 1px solid #dedede;
+    padding-left: 20px;
+}
+.espaceperso .coldroite #newobs h2{
+    margin-top: 0;
+}
+.espaceperso .coldroite #newobs h2:after,
+.espaceperso .coldroite #mesobs h2:after {
+    border-bottom: 1px solid #CCC;
+    content: "";
+    display: block;
+    width: 2em;
+    margin-top: 5px;
+}
+
+.espaceperso #map{
+    width:100%;
+    height:540px;
+    overflow: hidden;
+}
+
+.espaceperso #mesobs .nbObs{
+    text-transform: uppercase;
+    background-color: #fabe17;
+    color:#000;
+    padding: 5px;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    text-align: center;
+}
+.espaceperso #mesobs .actions{
+    margin-bottom: 20px;
+    width:100%;
+}
+.espaceperso #mesobs .filter{
+    background-color: #303336;
+    color: #FFF;
+    padding: 5px;
+}
+.espaceperso #mesobs .filter h3{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    text-transform: uppercase;
+    margin-bottom: 0px;
+    margin-top: 3px;
+    float:left;
+}
+.espaceperso #mesobs #edit-date-ff{
+    float:left;
+    margin: 1px 0 0 5px;
+}
+.espaceperso #mesobs .control-label,
+#crea-contact-fauneflore-form .control-label{
+    margin-right: 10px;
+}
+.espaceperso #mesobs #edit-submit{
+    float:left;
+    margin-left: 10px;
+    padding: 0px 5px;
+}
+.espaceperso #mesobs .form-item-date-ff{
+    display: inline;
+}
+.espaceperso #mesobs .form-item-date-from .control-label,
+.espaceperso #mesobs .form-item-date-to .control-label,
+#crea-contact-fauneflore-form .form-item-date-from .control-label,
+#crea-contact-fauneflore-form .form-item-date-to .control-label{
+    float:left;
+    margin-top: 5px;
+    width: 20px;
+    text-align: right;
+}
+.espaceperso #mesobs .form-item-date-from,
+.espaceperso #mesobs .form-item-date-to{
+    margin-top: 10px;
+}
+.espaceperso #tabResults{
+    margin-top:5px;
+    padding-left:0;
+    padding-right: 0;
+}
+.espaceperso #tabResults .header{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size:1.143em;
+    text-transform: uppercase;
+    padding-left:0;
+    padding-right: 0;
+ }
+.espaceperso #tabResults .header .col{
+    border-right: 1px solid black;
+    background-color: #cccccc;
+    color:#000;
+    padding: 5px;
+}
+
+.espaceperso #tabResults .obs{
+    padding: 5px 0;
+}
+.espaceperso #tabResults .lines{
+    width: 100%;
+    height: 390px;
+    overflow: auto;
+}
+.espaceperso #tabResults .light{
+    background-color: #f8f8f8;
+}
+.espaceperso #tabResults .dark{
+    background-color: #eeeded;
+}
+.espaceperso #tabResults .header .col:last-child{
+    border-right: none;
+}
+.espaceperso #download {
+    text-align: right;
+}
+.espaceperso #download .crea-button {
+    padding: 5px 20px;
+}
+
+.mon-atlas{
+    margin: 40px 0;
+}
+.bg-rayure{
+    background: url('../images/bg-rayure-atlas.jpg');
+}
+.bg-rayure img{
+    width: 100%;
+}
+
+.page-header{
+    color: #ff9900;
+}
+.page-header::after{
+    border-bottom: 1px solid #ff9900;
+}
+#crea-users-saisir-faune-flore-form .crea-button{
+  padding: 5px 20px;
+  float:right;
+  border-color: transparent;
+}
+#crea-users-saisir-faune-flore-form .btn-primary{
+  background-color: #ff9900;
+  border-color: white;
+}
+img[usemap] {
+    border: none;
+    height: auto;
+    max-width: 100%;
+    width: auto;
+}
+.contactfaune.block-title,
+.temp.block-title{
+    background-color: #303336;
+    color: white;
+    font-size: 1.143em;
+    margin: 0;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    display: table;
+    border-bottom: 1px solid white;
+}
+.contactfaune.block-title .title,
+.temp.block-title .title{
+    vertical-align: middle;
+    width: 100%;
+    display: table-cell;
+}
+#diagram .crea-button{
+    padding: 5px 20px;
+    width: 100%;
+}
+#diagram #faunefloreblock,
+#temperatures-bloc{
+    background-color: #efeeee;
+}
+#diagram #faunefloreblock .content{
+    padding: 10px;
+}
+#temperatures-bloc .content{
+    padding: 0 10px 10px 10px;
+}
+#diagram #faunefloreblock{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+
+#diagram .form-item-taxon,
+#crea-charts-form .form-item-id-station{
+    margin-top: 5px;
+    background-color: white;
+    padding: 0;
+    text-align: right;
+    margin: 0;
+    position: relative;
+}
+#diagram .form-item-taxon:after,
+#crea-charts-form .form-item-id-station:after{
+    pointer-events: none;
+    content: "\e252";
+    font-family: "Glyphicons Halflings";
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    font-size: 0.6em;
+    padding: 3px 5px 1px 4px;
+    z-index: 2;
+}
+#diagram #edit-taxon,
+#crea-charts-form #edit-id-station{
+    cursor: pointer;
+    border: 0 none;
+    box-shadow: none;
+    border-radius: 0;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /*text-align: right;
+    text-align-last: right;*/
+    padding: 0 40px 0 5px;
+    font-size: 0.8em;
+}
+#switchCharts{
+    text-align: center;
+}
+#switchCharts .crea-button{
+    font-size: 0.8em;
+    width:auto;
+    margin: 10px 0;
+    color: black !important;
+    background-color: #efeeee;
+}
+#switchCharts button.active{
+    color: white !important;
+    background-color: #ff9900;
+}
+#creaChartsForm{
+   /* float: left;*/
+    width:100%;
+    text-align: center;
+}
+
+#temperatures-bloc{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+#temperatures-bloc .form-item-id-station{
+    width:100%;
+    /*float:left;*/
+}
+#temperatures-bloc #edit-submit,
+#temperatures-bloc #edit-download{
+    /*float: left;*/
+    width: auto;
+    margin: 10px 0 20px 15px;
+    font-size: 0.8em;
+}
+#containerCharts{
+    clear: both;
+}
+.highcharts-container,
+.highcharts-container svg{
+    width:100% !important;
+}
+.highcharts-container .highcharts-button{
+    right: 0 !important;
+}
+.highcharts-container .highcharts-legend-item path{
+    /*display: none;*/
+}
+
+.front #footer{
+    margin-top: 0;
+}
+#diagram .content .block-title{
+    width: 100%;
+    text-align: center;
+}
+
+.highcharts-container input:checked:after{
+    background-repeat: no-repeat;
+    background-size: 1.2rem;
+    background-position: center;
+    border-radius: 20px;
+    border: 1px solid #CCC;
+}
+
+.highcharts-container input:after {
+    position: absolute;
+    content: '';
+    display: block;
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 20px;
+    z-index: 22;
+    background: #fff;
+    top: -3px;
+    left: -5px;
+}
+.highcharts-container input:nth-child(2):checked:after {
+    background: #000000;
+}
+.highcharts-container input:nth-child(3):checked:after {
+    background: #9a9a9a;
+}
+.highcharts-container input:nth-child(4):checked:after {
+    background: #ffbf00;
+}
+.highcharts-container input:nth-child(5):checked:after {
+    background: #e74a00;
+}
+#search-block-form .form-group{
+    margin-bottom: 0;
+}
+#ui-datepicker-div{
+    display: none;
+}
+.navbar-nav{
+    margin: 0 !important;
+}
+
+@media (max-width: 750px) {
+    .espaceperso #map{
+        height: 350px;
+    }
+    .espaceperso .coldroite{
+        border-left:none;
+    }
+    .espaceperso #tabResults .header .col{
+        border-right:none;
+    }
+    .espaceperso #othersprotocols{
+        display: none;
+    }
+    .espaceperso .coldroite #newobs h2{
+        margin-top: 15px;
+    }
+    #header .right-column img{
+        max-height: 60px;
+    }
+}
+
+@media (max-width: 770px) {
+    .block-crea-social > ul li{
+        margin: 0;
+    }
+    .block-crea-social{
+        margin-bottom: 0;
+    }
+    #header .right-column{
+        position: inherit;
+        margin-top: 0;
+    }
+    #header .navbar-brand{
+        font-size: 1.2em;
+    }
+    #block-crea-design-crea-main-menu li.highlight{
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+    #block-crea-design-crea-main-menu li.highlight a{
+        text-align: center;
+    }
+}
+
+@media (max-width: 1200px) {
+    .banniere_atlas .crea-button {
+        position: relative !important;
+        right: 0 !important;
+        text-align: center;
+        top: 0 !important;
+        width: 100%;
+    }
+}

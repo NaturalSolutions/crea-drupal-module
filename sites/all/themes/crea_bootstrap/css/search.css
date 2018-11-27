@@ -1,0 +1,27 @@
+#search-block-form .input-group{
+  float: right;
+}
+#search-block-form input.form-text{
+  border-color: black;
+  border-radius: 0;
+  padding-left: 40px;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  color: #303336;
+}
+#search-block-form .input-group-btn{
+  left: 4px;
+  position: absolute;
+  top: 4px;
+}
+#search-block-form button{
+  background-color: white !important;
+  border: 0 none;
+  color: black;
+  padding: 4px 12px;
+}
+#search-block-form button .icon{
+    height: auto;
+}
+#search-block-form #edit-actions{
+  margin-bottom: 8px;
+}

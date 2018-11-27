@@ -1,0 +1,155 @@
+.column, .columns{
+	padding: 0;
+}
+
+.l-main .main{
+	max-width: 100%;
+	width: $section-width-desktop;
+	margin: 0 auto;
+}
+.row{
+	width: auto;
+	max-width: 100%;
+}
+.row .row{
+	margin: 0;
+}
+
+.logo-wrapper .logo{
+	width:100%;
+	vertical-align: bottom;
+}
+
+.l-content{
+	background: $color-background-3;
+	padding: 20px 0;
+}
+
+.node-type-page {
+	.side-page{
+		float: none;
+		position: fixed;
+		right: 2%;
+		z-index: 1;
+
+		@media #{$small-only} {
+            display: none;
+        }
+        .icon{
+			font-size: 2.25rem;
+		}
+		.row{
+			display: inline-block;
+			width: 100%;
+			text-align: center;
+		}
+	}
+	.side-page.medium-1{
+		width: 4%;
+	}
+	#reveal-atom-videos{
+		.video{
+			text-align: center;
+		}
+	}
+}
+
+.accueil_mb_live .row {
+  margin:20px 10px 30px 10px;
+}
+.accueil_mb_live #synthese li {
+  list-style : none;
+}
+.accueil_mb_live #synthese span {
+  width: 25px;
+  height:25px;
+  margin-right:10px;
+  display: inline-block;
+  text-align: center;
+}
+
+.atom-align-left{
+	margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid black;
+    
+    .dnd-legend-wrapper{
+    	border-right: 1px solid black;
+    }
+}
+
+.atom-align-right{
+	margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid black;
+    
+    .dnd-legend-wrapper{
+    	border-left: 1px solid black;
+    	padding-left: 10px;
+    }
+}
+
+.tab-medias{
+	position: relative;
+	width: 100%;
+	margin: 25px 0;
+	
+	& > h2{
+		width: $section-width-desktop;
+		margin: 0 auto;
+		padding: 15px 0;
+		text-align: center;
+	}
+	.orbit-slides-container{
+	 	width: $section-width-desktop;
+	 	margin: 0 auto;
+		overflow: hidden;
+	}
+	.video,
+	.file,
+	.link{
+		text-align: center;
+		padding-bottom: 30px;
+	}
+	.video a,
+	.file a,
+	.link a{
+		color: white;
+		text-decoration: underline;
+	}
+	.file a img{
+		vertical-align: middle;
+		padding-right: 10px;
+	}
+}
+
+
+@media only screen and (max-width: 1137px) {
+	.row{
+		width: 100%;
+	}
+	.tab-medias > h2{
+		padding: 25px 20px;
+	}
+	.tab-medias .orbit-container h3,
+	.tab-medias .orbit-container p{
+		padding: 0 20px;
+	}
+	.tab-medias .orbit-slides-container{
+		width: 90%;
+		margin: 0 auto;
+		overflow: hidden;
+	}
+}
+
+@media #{$medium-only} {
+	.node-type-page .side-page{
+		right: 1%;
+	}
+}
+
+@media #{$small-only} {
+	.l-main .main{
+		width: $section-width-mobile;
+	}
+}

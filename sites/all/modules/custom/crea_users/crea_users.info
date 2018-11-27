@@ -1,0 +1,7 @@
+name = CREA users
+description = Module de gestion des utilisateurs et de communication avec UsersHub
+version = "7.x-0.1"
+core = "7.x"
+project = "CREA"
+package = CREA
+

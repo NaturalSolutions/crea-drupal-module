@@ -1,0 +1,94 @@
+a{
+	color: #B0DDE7;
+}
+a:hover,
+a:focus,
+a.active{
+	color: #5DC4E5;
+}
+button, 
+.button{
+	background-color: #B0DDE7 !important;
+}
+button:hover, 
+button:focus, 
+button.active,
+.button:hover,
+.button:focus{
+	background-color: #5DC4E5 !important;
+}
+.orbit-container .orbit-slides-container > * .orbit-caption{
+	position: relative;
+	background-color: #00AFD4;
+}
+.l-main .tab-medias{
+	background-color: #00AFD4;
+}
+.page-content-accueil-mb-live a{
+	color: #B0DDE7;
+}
+.page-content-accueil-mb-live a:hover,
+.page-content-accueil-mb-live a:focus,
+.page-content-accueil-mb-live a.active{
+	color: #5DC4E5;
+}
+.page-content-accueil-mb-live #temperatures,
+.page-content-accueil-mb-live #webcam{
+	border-right: 1px solid #B0DDE7;
+	padding-right: 20px;
+}
+.page-content-accueil-mb-live .accueil_mb_live > .columns > .row:first-child{
+	border-bottom: 1px solid #B0DDE7;
+	padding-bottom: 30px;
+}
+.page-content-accueil-mb-live #presentation,
+.page-content-accueil-mb-live #synthese{
+	padding-left: 20px;
+}
+
+.icon-support,
+.icon-mail,
+.icon-scoop-it,
+.icon-facebook,
+.icon-twitter,
+.icon-youtube,
+.icon-print,
+.icon-storify{
+	background: url(../images/sprite-crea.png) no-repeat;
+	background-size: 150px 60px;
+	display: inline-block;
+	margin: 0;
+	width: 35px;
+	height: 30px;
+}
+.icon-support{
+	background-position: -27px -27px;
+}
+.icon-mail{
+	background-position: -28px 0;
+}
+.icon-scoop-it{
+	background-position: 0 0;
+    width: 29px;
+}
+.icon-facebook{
+	background-position: -61px 0;
+    width: 30px;
+}
+.icon-twitter{
+	background-position: -90px 0;
+    width: 30px;
+}
+.icon-youtube{
+	background-position: -119px 0;
+    width: 30px;
+}
+.icon-print{
+	background-position: 3px -27px;
+}
+.icon-storify{
+	background-position: -58px -27px;
+}
+.block-crea-design-crea-social ul p, .block-block-6 ul p{
+	color: #B0DDE7;
+}

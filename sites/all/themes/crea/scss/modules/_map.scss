@@ -1,0 +1,79 @@
+main .block-crea-cartographie-0,
+main .block-crea-cartographie-1{
+	max-width: 100%;
+	width: $section-width-desktop;
+	margin: 0 auto;
+}
+#graph #page-title{
+	font-size: 1.2rem;
+}
+#crea-charts-form{
+	position: relative;
+	overflow: hidden;
+	
+	.form-item-id-station{
+		width: 70%;
+		float: left;
+		margin: 0.5rem 0 0 0;
+		
+		label{
+			display: none;
+		}
+	}
+	
+	#edit-submit{
+		width: 29%;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		margin-bottom: 1rem;
+	}
+}
+#crea-users-saisir-faune-flore-form{
+	input{
+		width: 100%;
+	}
+	.container-inline-date .form-item .form-item{
+		width: 50%;
+	}
+	#edit-date-obs input{
+		width: 90%;
+	}
+	.form-radios{
+		width: 100%;
+		overflow: hidden;
+	}
+	.form-type-radio{
+		float: left;
+		
+		input{
+			width: auto;
+			margin: 0;
+		}
+	}
+	#edit-upload-upload-button{
+		display: none;
+	}
+	#edit-submit{
+		width: 100%;
+	}
+}
+#switchLive,
+#switchAverage,{
+	margin-bottom: 0.5rem;
+	width: 49%;
+	padding: 0.5rem 0;
+}
+@media only screen and (max-width: 750px) {
+	#map,
+	#diagram{
+		width: 100% !important;
+		float: none !important;
+	}
+}
+@media #{$small-only} {
+	main .block-crea-cartographie-0,
+	main .block-crea-cartographie-1{
+		width: $section-width-mobile;
+	}
+}

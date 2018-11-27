@@ -1,0 +1,68 @@
+<?php
+
+module_load_include('inc', 'crea_gn_protocols', 'includes/protocol_bo_import');
+
+/**
+ * Implements hook_menu().
+ */
+function crea_gn_protocols_menu()
+{
+    $items = array();
+
+    $items['admin/crea_backoffice/protocol_import'] = array(
+        'title' => t('Protocols', array(), array('context' => 'CREA_LNG')),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crea_gn_protocols_import_form'),
+        'access callback' => 'crea_gn_protocols_import_access',
+        'file' => 'includes/protocol_bo_import.inc',
+        'type' => MENU_LOCAL_TASK
+    );
+
+    return $items;
+}
+
+/**
+ * Implements hook_access().
+ */
+function crea_gn_protocols_import_access()
+{
+    global $user;
+    if(in_array('manager',$user->roles) || in_array('administrator',$user->roles)){
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
+/**
+ * Implements hook_variable_info().
+ */
+function crea_gn_protocols_variable_info($options)
+{
+
+    $array_protocols = array();
+
+    $array_protocols[""] = t('Choose a protocol', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["temperatures"] = t('Temperatures', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["neige"] = t('Snow', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["chocard"] = t('Chocard', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["mesange"] = t('Repro mésange noire', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["grenouille"] = t('Repro grenouille rousse', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["faune"] = t('Contact faune', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["flore"] = t('Contact flore', array(), array('context' => 'CREA_LNG'));
+    $array_protocols["oiseaux"] = t('Abondance oiseaux alpins', array(), array('context' => 'CREA_LNG'));
+
+    $protocols = serialize($array_protocols);
+
+    $variables['geonature_protocols'] = array(
+        'name' => 'geonature_protocols',
+        'title' => t('Protocols', array(), $options),
+        'description' => t(''),
+        'default' => $protocols,
+        'type' => 'text',
+        'group' => 'crea_variable',
+        'localize' => TRUE
+    );
+
+    return $variables;
+}

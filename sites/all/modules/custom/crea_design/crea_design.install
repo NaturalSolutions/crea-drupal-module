@@ -1,0 +1,12 @@
+<?php
+
+function crea_design_update_7001(){
+  include_once("updates/update_7001.inc");
+}
+
+/**
+ * installation du nouveau module CREA
+ */
+function crea_design_update_7002(){
+  include_once("updates/update_7002.inc");
+}

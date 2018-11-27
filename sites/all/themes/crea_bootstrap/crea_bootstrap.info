@@ -1,0 +1,65 @@
+name = CREA Bootstrap Sub-Theme (CDN)
+description = Uses the Bootstrap Framework LESS source files and must be compiled (not for beginners).
+core = 7.x
+base theme = bootstrap
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Regions
+;;;;;;;;;;;;;;;;;;;;;
+
+regions[sur_header]     = 'Page top'
+regions[header]         = 'Top Bar'
+regions[navigation]     = 'Navigation'
+regions[help]           = 'Help'
+regions[sur_content]    = 'Sur-Content'
+regions[content]        = 'Content'
+regions[sub_content]    = 'Sub-Content'
+regions[footer]         = 'Footer'
+regions[sub_footer]     = 'Page bottom'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Stylesheets
+;;;;;;;;;;;;;;;;;;;;;
+
+stylesheets[all][] = css/fonts.css
+stylesheets[all][] = css/menu.css
+stylesheets[all][] = css/style.css
+stylesheets[all][] = css/layout.css
+stylesheets[all][] = css/search.css
+stylesheets[all][] = css/form.css
+stylesheets[all][] = css/icons.css
+stylesheets[all][] = css/templates.css
+stylesheets[all][] = css/wysiwyg.css
+stylesheets[all][] = css/timeline.css
+stylesheets[all][] = css/special-layout.css
+
+; Slider CSS (minified).
+stylesheets[all][] = css/twentytwenty/twentytwenty.css
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Scripts
+;;;;;;;;;;;;;;;;;;;;;
+
+; BootstrapCDN
+settings[bootstrap_cdn_provider] = 'jsdelivr'
+settings[bootstrap_cdn_custom_css] = 'https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.css'
+settings[bootstrap_cdn_custom_css_min] = 'https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css'
+settings[bootstrap_cdn_custom_js] = 'https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.js'
+settings[bootstrap_cdn_custom_js_min] = 'https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js'
+settings[bootstrap_cdn_jsdelivr_version] = '3.3.6'
+settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
+
+; Slider scripts (minified).
+scripts[] = js/twentytwenty/jquery.event.move.js
+scripts[] = js/twentytwenty/jquery.twentytwenty.js
+scripts[] = js/timeline/jquery.timelinr-0.9.54.js
+
+; script image map
+scripts[] = js/jquery.rwdImageMaps.min.js
+
+; iframe resizer
+scripts[] = js//iframeresizer/iframeResizer.min.js
+
+scripts[] = js/app.js

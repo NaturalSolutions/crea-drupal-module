@@ -1,0 +1,212 @@
+<?php 
+
+function crea_cartographie_install(){
+	// Create an image field named "Latitude"
+	$field = field_read_field('field_latitude');
+	if (!$field){
+		$field = array(
+			'field_name' => 'field_latitude',
+			'type' => 'text',
+			'cardinality' => 1,
+			'locked' => FALSE,
+			'indexes' => array('format' => array('format')),
+			'settings' => array(
+				'max_length' => '15',
+			),
+			'translatable' => '0',
+		);
+		field_create_field($field);
+	}
+	
+	
+	// Add the field "Latitude" to the content type.
+	$instance = array(
+		'field_name' => 'field_latitude',
+		'entity_type' => 'node',
+		'label' => 'Latitude',
+		'bundle' => 'station',
+		'required' => 1,
+		'settings' => array(
+			'text_processing' => '0',
+			'dnd_enabled' => 0,
+			'mee_enabled' => 0,
+			'context_default' => 'no-access',
+			'context' => 'no-access',
+			'user_register_form' => FALSE,
+		),
+		'widget' => array(
+			'weight' => 3,
+			'type' => 'text_textfield',
+			'module' => 'text',
+			'active' => 1,
+			'settings' => array(
+				'size' => 15,
+			),
+		),
+		'display' => array(
+			'default' => array(
+				'label' => 'hidden',
+				'type' => 'text_default',
+				'settings' => array(),
+				'weight' => 2,
+				'module' => 'text',
+			),
+		),
+	);
+	field_create_instance($instance);
+	
+	
+	// Create an image field named "Longitude"
+	$field = field_read_field('field_longitude');
+	if (!$field){
+		$field = array(
+			'field_name' => 'field_longitude',
+			'type' => 'text',
+			'cardinality' => 1,
+			'locked' => FALSE,
+			'indexes' => array('format' => array('format')),
+			'settings' => array(
+				'max_length' => '15',
+			),
+			'translatable' => '0',
+		);
+		field_create_field($field);
+	}
+	
+	
+	// Add the field "Longitude" to the content type.
+	$instance = array(
+		'field_name' => 'field_longitude',
+		'entity_type' => 'node',
+		'label' => 'Longitude',
+		'bundle' => 'station',
+		'required' => 1,
+		'settings' => array(
+			'text_processing' => '0',
+			'dnd_enabled' => 0,
+			'mee_enabled' => 0,
+			'context_default' => 'no-access',
+			'context' => 'no-access',
+			'user_register_form' => FALSE,
+		),
+		'widget' => array(
+			'weight' => 4,
+			'type' => 'text_textfield',
+			'module' => 'text',
+			'active' => 1,
+			'settings' => array(
+				'size' => 15,
+			),
+		),
+		'display' => array(
+			'default' => array(
+				'label' => 'hidden',
+				'type' => 'text_default',
+				'settings' => array(),
+				'weight' => 3,
+				'module' => 'text',
+			),
+		),
+	);
+	field_create_instance($instance);
+	
+	
+	// Create an image field named "id"
+	$field = field_read_field('field_id');
+	if (!$field){
+		$field = array(
+			'field_name' => 'field_id',
+			'type' => 'text',
+			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+			'locked' => FALSE,
+			'indexes' => array('format' => array('format')),
+			'settings' => array(
+				'max_length' => '10',
+			),
+			'translatable' => '0',
+		);
+		field_create_field($field);
+	}
+	
+	
+	// Add the field "Longitude" to the content type.
+	$instance = array(
+		'field_name' => 'field_id',
+		'entity_type' => 'node',
+		'label' => 'id station',
+		'bundle' => 'station',
+		'required' => 1,
+		'settings' => array(
+			'text_processing' => '0',
+			'dnd_enabled' => 0,
+			'mee_enabled' => 0,
+			'context_default' => 'no-access',
+			'context' => 'no-access',
+			'user_register_form' => FALSE,
+		),
+		'widget' => array(
+			'weight' => 5,
+			'type' => 'text_textfield',
+			'module' => 'text',
+			'active' => 1,
+			'settings' => array(
+				'size' => 10,
+			),
+		),
+		'display' => array(
+			'default' => array(
+				'label' => 'hidden',
+				'type' => 'text_default',
+				'settings' => array(),
+				'weight' => 4,
+				'module' => 'text',
+			),
+		),
+	);
+	field_create_instance($instance);
+	
+	
+	$fields_node = field_info_instances("node", 'station');
+	
+
+	if(isset($fields_node['body'])){
+		$fields_node['body']['weight'] = 6;
+		$fields_node['body']['widget']['weight'] = 6;
+		field_update_instance($fields_node['body']);
+	}
+	
+	if(isset($fields_node['field_illustration'])){
+		$fields_node['field_illustration']['weight'] = 7;
+		$fields_node['field_illustration']['widget']['weight'] = 7;
+		field_update_instance($fields_node['field_illustration']);
+	}
+	
+	if(isset($fields_node['field_media'])){
+		$fields_node['field_media']['weight'] = 8;
+		$fields_node['field_media']['widget']['weight'] = 8;
+		field_update_instance($fields_node['field_media']);
+	}
+}
+
+function crea_cartographie_uninstall(){
+	$fields_station = field_info_instances("node", "station");
+	
+	if(isset($fields_station['field_latitude']))
+	{
+		field_delete_instance($fields_station['field_latitude']);
+	}
+	
+	if(isset($fields_station['field_longitude']))
+	{
+		field_delete_instance($fields_station['field_longitude']);
+	}
+	
+	if(isset($fields_station['field_id']))
+	{
+		field_delete_instance($fields_station['field_id']);
+	}
+	
+	field_delete_field('field_latitude');
+	field_delete_field('field_longitude');
+	field_delete_field('field_id');
+}

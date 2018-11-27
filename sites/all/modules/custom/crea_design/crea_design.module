@@ -1,0 +1,1574 @@
+<?php
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+define("TWITTER_ACCOUNT","creamontblanc");
+define("TWITTER_CONSUMER_KEY","NF8ETCmkFYdU5Fb5hTB1PiwNe");
+define("TWITTER_CONSUMER_SECRET","6zr2O5HVyZp1lpWaD2g7RkYI7bhkZMdQYFhgXBENf7Kp8wnuP9");
+define("TWITTER_ACCESSTOKEN","364161278-KKTIwlZkuhJYABXeFxakdSEBgzqkSIouPYwdRnfU");
+define("TWITTER_ACCESSTOKEN_SECRET","Ft9f1SXCfE0fnLJ1wsmoNl0xJyvGTRK8VUnW7e3MQFfry");
+
+define("HTTP_DEV_HOST", "dev.crea.proj.aql.fr");
+define("HTTP_REC_HOST", "crea.proj.620nm.com");
+
+module_load_include('inc', 'crea_design', 'queries/geonature');
+
+/**
+ * Implements hook_block_info().
+ */
+function crea_design_block_info() {
+    $blocks = array();
+    $blocks['crea_slideshow'] = array(
+        'info' => t('CREA Block Slideshow'),
+    );
+    $blocks['crea_social'] = array(
+        'info' => t('CREA Block social'),
+    );
+    $blocks['crea_main_menu'] = array(
+        'info' => t('CREA Block main menu'),
+    );
+    $blocks['crea_langue_switcher'] = array(
+        'info' => t('CREA langue switcher'),
+    );
+    $blocks['crea_login'] = array(
+        'info' => t('CREA login'),
+    );
+    $blocks['crea_actus'] = array(
+        'info' => t('HOMEPAGE CREA actus WORDPRESS'),
+    );
+    $blocks['crea_live_hp'] = array(
+        'info' => t('HOMEPAGE CREA live'),
+    );
+    $blocks['crea_agenda_hp'] = array(
+        'info' => t('HOMEPAGE CREA agenda'),
+    );
+    $blocks['crea_agenda_hp_en'] = array(
+        'info' => t('HOMEPAGE CREA agenda (ENGLISH)'),
+    );
+    $blocks['crea_tweet_hp'] = array(
+        'info' => t('HOMEPAGE CREA tweets'),
+    );
+    $blocks['crea_logos_hp'] = array(
+        'info' => t('HOMEPAGE CREA logos'),
+    );
+    $blocks['crea_logos_footer'] = array(
+        'info' => t('HOMEPAGE CREA logos footer'),
+    );
+    $blocks['atlas_titre_mont_blanc_live'] = array(
+        'info' => t('widget titre Mont-Blanc Live'),
+    );
+    // $blocks['atlas_compteur_obs'] = array(
+    //     'info' => t('widget compteur des observations'),
+    // );
+    $blocks['atlas_temperature_station'] = array(
+        'info' => t('widget température de station'),
+    );
+    $blocks['atlas_webcams_connected'] = array(
+        'info' => t('widget webcams connectés'),
+    );
+    $blocks['atlas_others_protocols'] = array(
+        'info' => t('ATLAS ACCOUNT - autres protocoles'),
+    );
+    $blocks['atlas_flash_info'] = array(
+        'info' => t('ATLAS ACCOUNT - flash info'),
+    );
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function crea_design_block_configure($delta='') {
+    $form = array();
+    switch($delta) {
+        case 'crea_social' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('crea_block_social', ''),
+            );
+            break;
+        case 'crea_actus' :
+            $form['wordpress_json_url'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The url of the wordpress json feed'),
+                '#default_value' => variable_get('wordpress_json_url', ''),
+                '#description' => t('Eg: http://crea-ext.aql.fr/blog/wp-json/wp/v2/')
+            );
+            $form['wordpress_article_count'] = array(
+                '#type' => 'select',
+                '#title' => t('The number of wordpress articles to display'),
+                '#default_value' => variable_get('wordpress_article_count', 2),
+                '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10)),
+            );
+            break;
+        case 'crea_agenda_hp' :
+            $form['agenda_article_count'] = array(
+                '#type' => 'select',
+                '#title' => t('The number of news to display'),
+                '#default_value' => variable_get('agenda_article_count', 2),
+                '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10)),
+            );
+
+            $agenda_article_contenus = variable_get('agenda_article_contenus', false);
+
+            $form['contenus'] = array(
+                '#type' => 'container',
+                '#tree' => TRUE,
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'field-type-text-long',
+                        '1' => 'field-widget-text-textarea'
+                    )
+                ),
+            );
+
+            $form['contenus']['und'] = array(
+                '#title' => 'contenus',
+                '#theme' => 'field_multiple_value_form',
+                '#cardinality' => FIELD_CARDINALITY_UNLIMITED,
+            );
+
+            for ($i = 0; $i < variable_get('agenda_article_count', 2); $i++){
+                if (isset($agenda_article_contenus['und'][$i]['value'])){
+                    $value = $agenda_article_contenus['und'][$i]['value'];
+                }
+                else{
+                    $value = '';
+                }
+                if (isset($agenda_article_contenus['und'][$i]['_weight'])){
+                    $_weight = $agenda_article_contenus['und'][$i]['_weight'];
+                }
+                else{
+                    $_weight = $i;
+                }
+                $form['contenus']['und'][$i] = array(
+                    '#field_name' => 'field_contenu',
+                    '#type' => 'text_format',
+                    '#title' => t('Actu') . ' ' . ($i + 1),
+                    '#columns' => array(
+                        0 => 'value',
+                        1 => 'format'
+                    ),
+                    '#default_value' => $value,
+                    '#rows' => '4',
+                    '#attributes' => array(
+                        'class' => array(
+                            '0' => 'text-full'
+                        )
+                    ),
+                    '#base_type' => 'textarea',
+                    '_weight' => array(
+                        '#type' => 'weight',
+                        '#title' => t('Poids pour la ligne') . ' ' . ($i + 1),
+                        '#title_display' => 'invisible',
+                        '#delta' => 10,
+                        '#default_value' => $_weight,
+                        '#weight' => 100,
+                    ),
+                );
+            }
+
+            break;
+        case 'crea_agenda_hp_en' :
+            $form['agenda_article_count_en'] = array(
+                '#type' => 'select',
+                '#title' => t('The number of news to display'),
+                '#default_value' => variable_get('agenda_article_count_en', 2),
+                '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10)),
+            );
+
+            $agenda_article_contenus_en = variable_get('agenda_article_contenus_en', false);
+
+            $form['contenus_en'] = array(
+                '#type' => 'container',
+                '#tree' => TRUE,
+                '#attributes' => array(
+                    'class' => array(
+                        '0' => 'field-type-text-long',
+                        '1' => 'field-widget-text-textarea'
+                    )
+                ),
+            );
+
+            $form['contenus_en']['und'] = array(
+                '#title' => 'contenus_en',
+                '#theme' => 'field_multiple_value_form',
+                '#cardinality' => FIELD_CARDINALITY_UNLIMITED,
+            );
+
+            for ($i = 0; $i < variable_get('agenda_article_count_en', 2); $i++){
+                if (isset($agenda_article_contenus_en['und'][$i]['value'])){
+                    $value = $agenda_article_contenus_en['und'][$i]['value'];
+                }
+                else{
+                    $value = '';
+                }
+                if (isset($agenda_article_contenus_en['und'][$i]['_weight'])){
+                    $_weight = $agenda_article_contenus_en['und'][$i]['_weight'];
+                }
+                else{
+                    $_weight = $i;
+                }
+                $form['contenus_en']['und'][$i] = array(
+                    '#field_name' => 'field_contenu_en',
+                    '#type' => 'text_format',
+                    '#title' => t('Actu') . ' ' . ($i + 1),
+                    '#columns' => array(
+                        0 => 'value',
+                        1 => 'format'
+                    ),
+                    '#default_value' => $value,
+                    '#rows' => '4',
+                    '#attributes' => array(
+                        'class' => array(
+                            '0' => 'text-full'
+                        )
+                    ),
+                    '#base_type' => 'textarea',
+                    '_weight' => array(
+                        '#type' => 'weight',
+                        '#title' => t('Poids pour la ligne') . ' ' . ($i + 1),
+                        '#title_display' => 'invisible',
+                        '#delta' => 10,
+                        '#default_value' => $_weight,
+                        '#weight' => 100,
+                    ),
+                );
+            }
+
+            break;
+        case 'crea_live_hp' :
+            $form['live_image_src'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The url of the HOMEPAGE live image'),
+                '#default_value' => variable_get('live_image_src', ''),
+                '#description' => t('Eg: http://crea.montblanc.pro/crea/crealive/vallot.jpg')
+            );
+            $form['live_id_station'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The id of the live station'),
+                '#default_value' => variable_get('live_id_station', ''),
+                '#description' => t('Eg: 231')
+            );
+            $form['live_niveau_neige'] = array(
+                '#type' => 'textfield',
+                '#title' => t('The snow level of the live station'),
+                '#default_value' => variable_get('live_niveau_neige', ''),
+                '#description' => t('Eg: 51 cm')
+            );
+            break;
+        case 'crea_tweet_hp' :
+            $form['widget_twitter_username'] = array(
+                '#type' => 'textfield',
+                '#title' => t('Votre pseudo Twitter'),
+                '#default_value' => variable_get('widget_twitter_username', TWITTER_ACCOUNT),
+                '#description' => t('Eg: creamontblanc')
+            );
+            $form['widget_twitter_tweets_count'] = array(
+                '#type' => 'select',
+                '#title' => t('Nombre de tweets à afficher'),
+                '#default_value' => variable_get('widget_twitter_tweets_count', 2),
+                '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10)),
+            );
+            $form['widget_twitter_consumerkey'] = array(
+                '#type' => 'textfield',
+                '#title' => t('Consumer key'),
+                '#default_value' => variable_get('widget_twitter_consumerkey', TWITTER_CONSUMER_KEY),
+                '#description' => t('Ex: ').TWITTER_CONSUMER_KEY
+            );
+            $form['widget_twitter_consumersecret'] = array(
+                '#type' => 'textfield',
+                '#title' => t('Consumer secret'),
+                '#default_value' => variable_get('widget_twitter_consumersecret', TWITTER_CONSUMER_SECRET),
+                '#description' => t('Ex: ').TWITTER_CONSUMER_SECRET
+            );
+            $form['widget_twitter_accesstoken'] = array(
+                '#type' => 'textfield',
+                '#title' => t('Access token'),
+                '#default_value' => variable_get('widget_twitter_accesstoken', TWITTER_ACCESSTOKEN),
+                '#description' => t('Ex: ').TWITTER_ACCESSTOKEN
+            );
+            $form['widget_twitter_accesstokensecret'] = array(
+                '#type' => 'textfield',
+                '#title' => t('Access token secret'),
+                '#default_value' => variable_get('widget_twitter_accesstokensecret', TWITTER_ACCESSTOKEN_SECRET),
+                '#description' => t('Ex: ').TWITTER_ACCESSTOKEN_SECRET,
+            );
+            break;
+        case 'crea_logos_hp' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('crea_logos_hp', ''),
+            );
+            break;
+        case 'crea_logos_footer' :
+            $form['text_body'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('crea_logos_footer', ''),
+            );
+            break;
+        case 'atlas_webcams_connected' :
+            for($i = 1; $i <= variable_get('atlas_webcams_number', 3); $i++){
+                $form['webcam_connected_name_'.$i] = array(
+                    '#type' => 'textfield',
+                    '#title' => $i.". ".t('The name of the station'),
+                    '#default_value' => variable_get('webcam_connected_name_'.$i, ''),
+                    '#description' => t('Eg: PlanPraz')
+                );
+                $form['webcam_connected_image_'.$i] = array(
+                    '#type' => 'textfield',
+                    '#title' => $i.". ".t('The url of the webcam image'),
+                    '#default_value' => variable_get('webcam_connected_image_'.$i, ''),
+                    '#description' => t('Eg: http://crea.montblanc.pro/crea/crealive/vallot.jpg')
+                );
+            }
+            break;
+        case 'atlas_others_protocols' :
+            $form['protocols'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('atlas_others_protocols', ''),
+            );
+            break;
+        case 'atlas_flash_info' :
+            $form['flash_info'] = array(
+                '#type' => 'text_format',
+                '#title' => t('Enter content of block'),
+                '#default_value' => variable_get('atlas_flash_info', ''),
+            );
+            break;
+    }
+
+    return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function crea_design_block_save($delta = '', $edit = array()) {
+    switch($delta) {
+        case 'crea_social' :
+            variable_set('crea_block_social', $edit['text_body']['value']);
+            break;
+        case 'crea_actus' :
+            variable_set('wordpress_json_url', $edit['wordpress_json_url']);
+            variable_set('wordpress_article_count', $edit['wordpress_article_count']);
+            break;
+        case 'crea_agenda_hp' :
+            variable_set('agenda_article_count', $edit['agenda_article_count']);
+            variable_set('agenda_article_contenus', $edit['contenus']);
+            break;
+        case 'crea_agenda_hp_en' :
+            variable_set('agenda_article_count_en', $edit['agenda_article_count_en']);
+            variable_set('agenda_article_contenus_en', $edit['contenus_en']);
+            break;
+        case 'crea_live_hp' :
+            variable_set('live_image_src', $edit['live_image_src']);
+            variable_set('live_id_station', $edit['live_id_station']);
+            variable_set('live_niveau_neige', $edit['live_niveau_neige']);
+            break;
+        case 'crea_tweet_hp' :
+            variable_set('widget_twitter_username', $edit['widget_twitter_username']);
+            variable_set('widget_twitter_tweets_count', $edit['widget_twitter_tweets_count']);
+            variable_set('widget_twitter_consumerkey', $edit['widget_twitter_consumerkey']);
+            variable_set('widget_twitter_consumersecret', $edit['widget_twitter_consumersecret']);
+            variable_set('widget_twitter_accesstoken', $edit['widget_twitter_accesstoken']);
+            variable_set('widget_twitter_accesstokensecret', $edit['widget_twitter_accesstokensecret']);
+            break;
+        case 'crea_logos_hp' :
+            variable_set('crea_logos_hp', $edit['text_body']['value']);
+            break;
+        case 'crea_logos_footer' :
+            variable_set('crea_logos_footer', $edit['text_body']['value']);
+            break;
+        case 'atlas_webcams_connected' :
+            for($i = 1; $i <= variable_get('atlas_webcams_number', 3); $i++){
+                variable_set('webcam_connected_name_'.$i, $edit['webcam_connected_name_'.$i]);
+                variable_set('webcam_connected_image_'.$i, $edit['webcam_connected_image_'.$i]);
+            }
+            break;
+        case 'atlas_others_protocols' :
+            variable_set('atlas_others_protocols', $edit['protocols']['value']);
+            break;
+        case 'atlas_flash_info' :
+            variable_set('atlas_flash_info', $edit['flash_info']['value']);
+            break;
+    }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function crea_design_block_view($delta='') {
+    $block = array();
+
+    switch($delta) {
+        case 'crea_slideshow' :
+            $block['content'] = custom_crea_slideshow();
+            break;
+        case 'crea_social' :
+            $block['content'] = custom_crea_social();
+            break;
+        case 'crea_main_menu' :
+            $block['content'] = crea_main_menu();
+            break;
+        case 'crea_langue_switcher' :
+            $block['content'] = crea_langue_switcher();
+            break;
+        case 'crea_login' :
+            $block['content'] = crea_login();
+            break;
+        case 'crea_actus' :
+            $block['content'] = crea_actus_wordpress();
+            break;
+        case 'crea_live_hp' :
+            $block['content'] = crea_live_hp();
+            break;
+        case 'crea_agenda_hp' :
+            $block['content'] = crea_agenda_hp();
+            break;
+        case 'crea_agenda_hp_en' :
+            $block['content'] = crea_agenda_hp_en();
+            break;
+        case 'crea_tweet_hp' :
+            $block['content'] = crea_tweet_hp();
+            break;
+        case 'crea_logos_hp' :
+            $block['content'] = crea_logos_hp();
+            break;
+        case 'crea_logos_footer' :
+            $block['content'] = crea_logos_footer();
+            break;
+        case 'atlas_titre_mont_blanc_live':
+            $block['content'] = atlas_titre_mont_blanc_live();
+            break;
+        // case 'atlas_compteur_obs' :
+        //     $block['content'] = atlas_compteur_obs();
+        //     break;
+        case 'atlas_temperature_station' :
+            $block['content'] = atlas_temperature_station();
+            break;
+        case 'atlas_webcams_connected' :
+            $block['content'] = atlas_webcams_connected();
+            break;
+        case 'atlas_titre_mont_blanc_live' :
+            $block['content'] = atlas_titre_mont_blanc_live();
+            break;
+        case 'atlas_others_protocols' :
+            $block['content'] = atlas_others_protocols();
+            break;
+        case 'atlas_flash_info' :
+            $block['content'] = atlas_flash_info();
+            break;
+    }
+
+    return $block;
+}
+
+function custom_crea_slideshow() {
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => generate_slideshow(),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function custom_crea_social() {
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => variable_get('crea_block_social', ''),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function crea_main_menu(){
+    $menu_tree = menu_tree_all_data('main-menu');
+    $menu_tree_output = menu_tree_output($menu_tree);
+    //$menu_tree_w_active = menu_tree_add_active_path($menu_tree);
+    //$variables['main_menu'] = menu_tree_output($menu_tree_w_active);
+
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => drupal_render($menu_tree_output),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function crea_langue_switcher(){
+    global $language;
+    $content = '';
+
+    $content .= '<ul class="nav navbar-nav"><li>'.l($language->language . '<span class="caret"></span>', '<front>', array(
+            'language' => $language,
+            'attributes' => array(
+                'class' => array('dropdown-toggle'),
+                'data-toggle' => 'dropdown',
+                'role' => 'button',
+                'aria-haspopup' => true,
+                'aria-expanded' => false
+            ),
+            'html' => true
+        ));
+    $language_list = language_list();
+    if (!empty($language_list)){
+        $content .= '<ul class="dropdown-menu">';
+        foreach ($language_list AS $key => $value){
+            if ($value->enabled == true){
+                $content .= '<li class='.$value->language.'>'.l($value->language, '<front>', array('language' => $value)).'</li>';
+            }
+        }
+        $content .= '</ul>';
+    }
+    $content .= '</li></ul>';
+
+
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => $content,
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function crea_login(){
+    $not_logged_in = l(t("Se connecter"), 'user/login') . ' / ' . l(t("S'inscrire"), 'user/register');
+    $logged_in = l(t("Mon compte"), 'atlas/account') . ' / ' . l(t("Se déconnecter"), 'user/logout');
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => user_is_logged_in() ? $logged_in : $not_logged_in,
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function crea_actus_wordpress(){
+    global $language;
+
+    $langJson = '&lang='.$language->language;
+    $articles = array();
+    $wordpress_json_url = variable_get('wordpress_json_url', false);
+    $wordpress_article_count = variable_get('wordpress_article_count', 2);
+
+    $trim_alter = array(
+        'max_length' => 300,
+        'word_boundary' => true,
+        'ellipsis' => true,
+    );
+    if ($wordpress_json_url) {
+        if (substr($wordpress_json_url, -1) != '/') $wordpress_json_url .= '/';
+
+        try {
+            if($language->language == 'fr'){
+                $feeds = drupal_http_request($wordpress_json_url . 'posts');
+            }else{
+                $feeds = drupal_http_request($wordpress_json_url . 'posts'.$langJson);
+            }
+            if ($feeds->code == 200){
+                $json_feed = json_decode($feeds->data, TRUE);
+                if (is_array($json_feed)
+                    && !empty($json_feed)) {
+                    foreach ($json_feed AS $feed) {
+                        $article_image = filter_xss($feed['featured_media']);
+
+                        try {
+                            if ($article_image){
+                                $feed_image = drupal_http_request($wordpress_json_url . 'media/' . $article_image);
+                                if ($feed_image->code == 200) {
+                                    $json_feed_image = json_decode($feed_image->data, TRUE);
+                                    //creaDump::debug($json_feed_image);
+                                }
+                            }
+                        } catch (Exception $e) {
+                            watchdog('wordpress_image feed', 'error with the wordpress image feed : ' . $e->getMessage(), array(), WATCHDOG_ERROR);
+                        }
+
+                        $articles[] = array(
+                            'title' => isset($feed['title']['rendered']) ? filter_xss($feed['title']['rendered']) : '',
+                            'date' => isset($feed['date']) ? format_date(strtotime(filter_xss($feed['date'])), 'custom', 'd/m/Y') : '',
+                            'content' => isset($feed['content']['rendered']) ? views_trim_text($trim_alter, filter_xss(strip_tags(trim($feed['content']['rendered'])))) : '',
+                            'know_more' => isset($feed['link']) ? filter_xss($feed['link']) : '',
+                            'image_src' => isset($json_feed_image['source_url']) ? filter_xss($json_feed_image['source_url']) : '',
+                            'image_alt' => isset($json_feed_image['alt_text']) ? filter_xss($json_feed_image['alt_text']) : '',
+                            'image_title' => isset($json_feed_image['title']['rendered']) ? filter_xss($json_feed_image['title']['rendered']) : '',
+                        );
+
+                        if (count($articles) >= $wordpress_article_count){
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception $e){
+            watchdog('wordpress_feed', 'error with the wordpress feed : ' . $e->getMessage(), array(), WATCHDOG_ERROR);
+        }
+    }
+    $block['content'] = array(
+        '#theme' => 'crea_actus_hp',
+        '#articles' =>  $articles
+    );
+    return $block;
+}
+
+function crea_live_hp(){
+    $temperature_sol = false;
+    $temperature_air = false;
+    $niveau_neige = variable_get('live_niveau_neige', false);
+    if ($live_id_station = variable_get('live_id_station', false)){
+        // on se pluggue sur la bdd crea-data
+        try {
+            $db_data = Database::getConnection('crea-data', 'default');
+
+            $data = array();
+            $sqlTemp = 'SELECT value_date,
+      ROUND(AVG(capteur_2)::numeric,1) as sum_c2,
+      ROUND(AVG(capteur_4)::numeric,1) as sum_c4
+      FROM "data-temperatures".temperatures
+      WHERE id_station=' . $live_id_station . '
+      GROUP BY value_date
+      ORDER BY value_date DESC
+      LIMIT 5;';
+
+            $resTemp = $db_data->query($sqlTemp);
+            $temperatures = $resTemp->fetchAll();
+
+            foreach($temperatures AS $value){
+                if (!$temperature_sol
+                    && isset($value->sum_c2)){
+                    $temperature_sol = $value->sum_c2;
+                }
+                if (!$temperature_air
+                    && isset($value->sum_c4)){
+                    $temperature_air = $value->sum_c4;
+                }
+            }
+
+            // on se repluggue sur la bdd par defaut (drupal)
+            db_set_active();
+        }
+        catch(Exception $e){
+
+        }
+    }
+    $block = array(
+        '#theme' => 'crea_live_hp',
+        '#live_image_src' => variable_get('live_image_src', false),
+        '#temperature_sol' => $temperature_sol,
+        '#temperature_air' => $temperature_air,
+        '#niveau_neige' => $niveau_neige
+    );
+    return $block;
+}
+
+function crea_agenda_hp(){
+    $articles = array();
+    $agenda_article_contenus = variable_get('agenda_article_contenus', false);
+
+    if (isset($agenda_article_contenus['und'])
+        && is_array($agenda_article_contenus['und'])){
+        foreach ($agenda_article_contenus['und'] AS $contenu){
+            $value = trim(strip_tags($contenu['value']));
+            if (isset($contenu['_weight'])
+                && isset($contenu['value'])
+                && isset($contenu['format'])
+                && !empty($value)) {
+                $articles[$contenu['_weight']] = check_markup(trim($contenu['value']), $contenu['format']);
+            }
+        }
+    }
+    ksort($articles);
+
+    if (empty($articles)) return ;
+
+    $block = array(
+        '#theme' => 'crea_agenda_hp',
+        '#articles' => $articles
+    );
+    return $block;
+}
+
+function crea_agenda_hp_en(){
+    $articles = array();
+    $agenda_article_contenus_en = variable_get('agenda_article_contenus_en', false);
+
+    if (isset($agenda_article_contenus_en['und'])
+        && is_array($agenda_article_contenus_en['und'])){
+        foreach ($agenda_article_contenus_en['und'] AS $contenu){
+            $value = trim(strip_tags($contenu['value']));
+            if (isset($contenu['_weight'])
+                && isset($contenu['value'])
+                && isset($contenu['format'])
+                && !empty($value)) {
+                $articles[$contenu['_weight']] = check_markup(trim($contenu['value']), $contenu['format']);
+            }
+        }
+    }
+    ksort($articles);
+
+    if (empty($articles)) return ;
+
+    $block = array(
+        '#theme' => 'crea_agenda_hp_en',
+        '#articles' => $articles
+    );
+    return $block;
+}
+
+function crea_tweet_hp(){
+    // cache d une heure sur les tweets
+    $cache_id = 'latest_tweets' ;
+    $cache = cache_get($cache_id, 'cache');
+    if ($cache) {
+        $tweets = $cache->data;
+    }else {
+        $user_name = variable_get('widget_twitter_username', TWITTER_ACCOUNT);
+        $count = variable_get('widget_twitter_tweets_count', 2);
+
+        drupal_add_js(drupal_get_path('module', 'crea_design') . '/resources/js/twitter/twitter.js');
+        require_once("resources/js/twitter/twitteroauth/autoload.php");
+        $consumerkey = variable_get('widget_twitter_consumerkey', TWITTER_CONSUMER_KEY);
+        $consumersecret = variable_get('widget_twitter_consumersecret', TWITTER_CONSUMER_SECRET);
+        $accesstoken = variable_get('widget_twitter_accesstoken', TWITTER_ACCESSTOKEN);
+        $accesstokensecret = variable_get('widget_twitter_accesstokensecret', TWITTER_ACCESSTOKEN_SECRET);
+        $connection = new TwitterOAuth($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
+        $connection->setTimeouts(10, 15);
+        if($_SERVER['HTTP_HOST'] == HTTP_DEV_HOST
+            || $_SERVER['HTTP_HOST'] == HTTP_REC_HOST) {
+            $connection->setProxy(
+                array(
+                    'CURLOPT_PROXY' => 'proxy1.proj.aql.fr',
+                    'CURLOPT_PROXYUSERPWD' => '',
+                    'CURLOPT_PROXYPORT' => 3128,
+                )
+            );
+        }
+        $tweets = $connection->get("statuses/user_timeline", array("count" => $count, "screen_name" => $user_name));
+
+        foreach ($tweets AS &$tweet){
+            if (isset($tweet->entities->user_mentions)
+                && is_array($tweet->entities->user_mentions)){
+                foreach ($tweet->entities->user_mentions AS $user_mentions){
+                    $user_mentions_url = '<a href="https://twitter.com/'.$user_mentions->screen_name.'" title="" target="_blank">@'.$user_mentions->screen_name.'</a>';
+                    $tweet->text = str_replace('@'.$user_mentions->screen_name, $user_mentions_url, $tweet->text);
+                }
+            }
+            if (isset($tweet->entities->hashtags)
+                && is_array($tweet->entities->hashtags)){
+                foreach ($tweet->entities->hashtags AS $hashtags){
+                    $hashtag_url = '<a href="https://twitter.com/hashtag/'.$hashtags->text.'?src=hash" title="" target="_blank">#'.$hashtags->text.'</a>';
+                    $tweet->text = str_replace('#'.$hashtags->text, $hashtag_url, $tweet->text);
+                }
+            }
+            if (isset($tweet->entities->media)
+                && is_array($tweet->entities->media)){
+                foreach ($tweet->entities->media AS $media){
+                    $image_html = '<img src="'.$media->media_url_https.'" alt="" />';
+                    $tweet->text = str_replace($media->url, $image_html, $tweet->text);
+                }
+            }
+            if (isset($tweet->entities->urls)
+                && is_array($tweet->entities->urls)){
+                foreach ($tweet->entities->urls AS $urls){
+                    $url_url = '<a href="'.$urls->url.'" title="" target="_blank">'.$urls->url.'</a>';
+                    $tweet->text = str_replace($urls->url, $url_url, $tweet->text);
+                }
+            }
+        }
+        if(count($tweets) > 0) {
+            cache_set($cache_id, $tweets, 'cache', 60 * 60);
+        }
+    }
+    $block['content'] = array(
+        '#theme' => 'crea_tweet_hp',
+        '#settings' => array(
+            'widget_twitter_username' => variable_get('widget_twitter_username', TWITTER_ACCOUNT),
+            'widget_twitter_tweets_count' => variable_get('widget_twitter_tweets_count', 2),
+        ),
+        '#tweets' =>  $tweets
+    );
+    return $block;
+}
+
+function crea_logos_hp(){
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => variable_get('crea_logos_hp', ''),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function crea_logos_footer(){
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => variable_get('crea_logos_footer', ''),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function atlas_compteur_obs(){
+
+    $nbr_obs = 0;
+    $nbr_obs_protocoles = gimmeStatsGeonatureProtocoles(array(1, 7, 103));
+    if (is_array($nbr_obs_protocoles)
+        && !empty($nbr_obs_protocoles)){
+        foreach($nbr_obs_protocoles AS $nbr_obs_protocole){
+            $nbr_obs += $nbr_obs_protocole['nbfiches'];
+        }
+    }
+
+    if ($nbr_obs > 10000000) $nbr_obs = 9999999;
+    $nbr_obs = str_split((string)$nbr_obs);
+
+    $max_item = 7;
+    if (count($nbr_obs) < $max_item){
+        for ($i = count($nbr_obs); $i < $max_item ; $i++){
+            array_unshift($nbr_obs, '0');
+        }
+    }
+
+    $block['content'] = array(
+        '#theme' => 'atlas_compteur_obs',
+        '#title' => 'observations faune et flore',
+        '#nbr_obs' => $nbr_obs,
+    );
+    return $block;
+}
+
+function atlas_temperature_station(){
+    $stations_data = array();
+    $query = db_select('node', 'n');
+    $query->join('field_data_field_id', 'nfid', 'nfid.entity_id = n.nid');
+    $query->fields('n', array('title', 'nid'))
+        ->fields('nfid', array('field_id_value'))
+        ->condition('n.type', 'station')
+        ->condition('nfid.bundle', 'station')
+        ->orderBy('n.title');
+
+    $results = $query->execute()->fetchAll();
+
+    foreach($results AS $result){
+        $stations_data[$result->field_id_value] = $result->title . ' (' . $result->field_id_value . ')';
+    }
+
+    $temperature_data = crea_load_station_last_values(231);
+
+    $block['content'] = array(
+        '#theme' => 'atlas_temperature_station',
+        '#title' => 'climat',
+        '#stations_temperature_form' => drupal_get_form('atlas_temperature_sonde_form'),
+    );
+    return $block;
+}
+
+function atlas_webcams_connected(){
+
+    $block['content'] = array(
+        '#theme' => 'atlas_webcams_connected',
+        '#title' => t('Connected webcams'),
+        '#webcams_connected_form' => drupal_get_form('atlas_webcams_connected_form'),
+    );
+
+    return $block;
+}
+
+function atlas_titre_mont_blanc_live(){
+    $current_date = format_date(time(), 'titre');
+    $current_date = explode(' ', $current_date);
+    $content = '<h2 class="title-atlas-mb-live">Mont-Blanc
+    <span class="orange">live</span>';
+    if (isset($current_date[0]) && isset($current_date[1]) && isset($current_date[2])){
+        $content .= '<span class="date">' . $current_date[0] . ' ' . $current_date[1] . ' <span class="year">' . $current_date[2] . '</span></span>';
+    }
+    $content .= '</h2>';
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => $content,
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function atlas_others_protocols(){
+
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => variable_get('atlas_others_protocols', ''),
+            '#suffix' => '',
+        ),
+    );
+
+    return $block;
+}
+
+function atlas_flash_info(){
+
+    $block = array(
+        'message' => array(
+            '#type' => 'markup',
+            '#markup' => variable_get('atlas_flash_info', ''),
+            '#suffix' => '',
+        ),
+    );
+    return $block;
+}
+
+function generate_slideshow(){
+    global $language;
+
+    $type = 'slideshow_home';
+    $query = new EntityFieldQuery();
+    $entities = $query
+        ->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', $type)
+        ->propertyCondition('status', 1)
+        ->propertyCondition('language', $language->language)
+        ->propertyOrderBy('created', 'ASC')
+        ->execute();
+    $nodes = array();
+    if(!is_null($entities['node'])){
+        $nodes = node_load_multiple(array_keys($entities['node']));
+    }
+
+    foreach($nodes as $key => $node){
+        if (!node_access("view", $node)){
+            unset($nodes[$key]);
+        }
+    }
+
+    $html = '';
+    if($nodes){
+        $html .= '<ul class="example-orbit" data-orbit>';
+        foreach($nodes as $node){
+            $atom = scald_atom_load($node->field_slide_image['und'][0]['sid']);
+            $image = theme('image', array(
+                'path' => $atom->file_source
+            ));
+            $caption = $node->body['und'][0]['safe_value'];
+            $link = $node->field_slide_link['und'][0]['url'];
+            $link_title = $node->field_slide_link['und'][0]['title'];
+            $title = $node->title;
+            $html .= '<li class="active"><a href="'. $link .'" title="'. $link_title .'"> '. $image .'</a><div class="orbit-caption"><h2>'. $title .' </h2>'. $caption .'</div></li>';
+        }
+        $html .= '</ul>';
+    }
+
+    return $html;
+}
+
+function crea_design_menu() {
+
+    $items['content/accueil-mb-live'] = array(
+        'page callback' => 'crea_design_accueil_mb_live',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+    );
+
+    $items['atlas/account'] = array(
+        'title' => t('Espace personnel'),
+        'page callback' => 'atlas_design_espaceperso',
+        'type' => MENU_CALLBACK,
+        'access callback' => true,
+    );
+
+    $items['atlas/account/download/%/%/%'] = array(
+        'title' => t('Download'),
+        'page callback' => 'atlas_design_espaceperso',
+        'type' => MENU_CALLBACK,
+        'access callback' => 'crea_user_logged_in',
+    );
+
+    return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function crea_design_theme(){
+    return array(
+        'crea_accueil_mb_live' => array(
+            'template' => 'templates/accueil_mb_live',
+        ),
+        'crea_tweet_hp' => array(
+            'variables' => array('tweets' => NULL, 'settings' => array('widget_twitter_username' => NULL, 'widget_twitter_tweets_count' => NULL)),
+        ),
+        'crea_actus_hp' => array(
+            'variables' => array('articles' => NULL),
+        ),
+        'crea_live_hp' => array(
+            'variables' => array('live_image_src' => NULL, 'temperature_sol' => NULL, 'temperature_air' => NULL, 'niveau_neige' => NULL),
+        ),
+        'crea_agenda_hp' => array(
+            'variables' => array('articles' => NULL),
+        ),
+        'crea_agenda_hp_en' => array(
+            'variables' => array('articles' => NULL),
+        ),
+        'atlas_temperature_station' => array(
+            'variables' => array('title' => NULL, 'stations_temperature_form' => NULL),
+        ),
+        // 'atlas_compteur_obs' => array(
+        //     'variables' => array('title' => NULL, 'nbr_obs' => NULL),
+        // ),
+        'atlas_webcams_connected' => array(
+            'variables' => array('title' => NULL, 'webcams_connected_form' => NULL),
+        ),
+        'atlas_espaceperso' => array(
+            'template' => 'templates/atlas_espaceperso_home',
+        ),
+    );
+}
+
+function crea_design_accueil_mb_live(){
+    $cache_token = variable_get('css_js_query_string', '');
+    if ($cache_token != '') $cache_token = '?'.$cache_token;
+
+    global $language, $conf;
+
+    // bloc des temperatures
+    $options = [];
+    $options['type'] = 'week';
+    $options['id_station'] = DEFAULT_STATION;
+    $chart = crea_charts_build_charts('week', DEFAULT_STATION, true);
+
+    $crealng = array(
+        'access_year' => t('View average annual temperatures', array(), array('context' => 'CREA_LNG')),
+        'access_week' => t('View temperatures in the last week', array(), array('context' => 'CREA_LNG')),
+        'loading_charts' => t('Loading temperatures charts...', array(), array('context' => 'CREA_LNG')),
+        'oneweek' => t('1w', array(), array('context' => 'CREA_LNG')),
+        'onemonth' => t('1m', array(), array('context' => 'CREA_LNG')),
+        'threemonth' => t('3m', array(), array('context' => 'CREA_LNG')),
+        'sixmonth' => t('6m', array(), array('context' => 'CREA_LNG')),
+        'oneyear' => t('1y', array(), array('context' => 'CREA_LNG')),
+        'all' => t('all', array(), array('context' => 'CREA_LNG')),
+        'title_charts_year' => t('Average annual temperatures from station', array(), array('context' => 'CREA_LNG')),
+        'title_charts_week' => t('Live temperatures from station', array(), array('context' => 'CREA_LNG')),
+        'select_range_time' => t('Select your range time', array(), array('context' => 'CREA_LNG')),
+        'temperatures' => t('Temperatures (°C)', array(), array('context' => 'CREA_LNG')),
+        'capteur1' => t('-5cm under surface', array(), array('context' => 'CREA_LNG')),
+        'capteur2' => t('At the surface', array(), array('context' => 'CREA_LNG')),
+        'capteur3' => t('30cm above ground', array(), array('context' => 'CREA_LNG')),
+        'capteur4' => t('2m above ground', array(), array('context' => 'CREA_LNG')),
+        'weekfrom' => t('Week of', array(), array('context' => 'CREA_LNG')),
+        'zoom' => t('Zoom on a period with the mouse : click and release', array(), array('context' => 'CREA_LNG')),
+        'release' => t('Release when you want to zoom', array(), array('context' => 'CREA_LNG')),
+        'contextButtonTitle' => t('Menu', array(), array('context' => 'CREA_LNG')),
+        'downloadJPEG' => t('Download JPG', array(), array('context' => 'CREA_LNG')),
+        'downloadPDF' => t('Download PDF', array(), array('context' => 'CREA_LNG')),
+        'downloadPNG' => t('Download PNG', array(), array('context' => 'CREA_LNG')),
+        'downloadSVG' => t('Download SVG', array(), array('context' => 'CREA_LNG')),
+        'printChart' => t('Print chart', array(), array('context' => 'CREA_LNG')),
+        'loading' => t('Loading', array(), array('context' => 'CREA_LNG')),
+        'resetZoom' => t('reset zoom', array(), array('context' => 'CREA_LNG')),
+        'resetZoomTitle' => t('Reset zoom 1:1', array(), array('context' => 'CREA_LNG')),
+        'shortMonths' => [
+            t('Jan', array(), array('context' => 'CREA_LNG')),
+            t('Feb', array(), array('context' => 'CREA_LNG')),
+            t('Mar', array(), array('context' => 'CREA_LNG')),
+            t('Apr', array(), array('context' => 'CREA_LNG')),
+            t('May', array(), array('context' => 'CREA_LNG')),
+            t('Jun', array(), array('context' => 'CREA_LNG')),
+            t('Jul', array(), array('context' => 'CREA_LNG')),
+            t('Aug', array(), array('context' => 'CREA_LNG')),
+            t('Sept', array(), array('context' => 'CREA_LNG')),
+            t('Oct', array(), array('context' => 'CREA_LNG')),
+            t('Nov', array(), array('context' => 'CREA_LNG')),
+            t('Dec', array(), array('context' => 'CREA_LNG'))
+        ],
+        'months' => [
+            t('January', array(), array('context' => 'CREA_LNG')),
+            t('February', array(), array('context' => 'CREA_LNG')),
+            t('March', array(), array('context' => 'CREA_LNG')),
+            t('April', array(), array('context' => 'CREA_LNG')),
+            t('May', array(), array('context' => 'CREA_LNG')),
+            t('June', array(), array('context' => 'CREA_LNG')),
+            t('July', array(), array('context' => 'CREA_LNG')),
+            t('August', array(), array('context' => 'CREA_LNG')),
+            t('September', array(), array('context' => 'CREA_LNG')),
+            t('October', array(), array('context' => 'CREA_LNG')),
+            t('November', array(), array('context' => 'CREA_LNG')),
+            t('December', array(), array('context' => 'CREA_LNG'))
+        ],
+        'weekdays' => [
+            t('Sunday', array(), array('context' => 'CREA_LNG')),
+            t('Monday', array(), array('context' => 'CREA_LNG')),
+            t('Tuesday', array(), array('context' => 'CREA_LNG')),
+            t('Wednesday', array(), array('context' => 'CREA_LNG')),
+            t('Thursday', array(), array('context' => 'CREA_LNG')),
+            t('Friday', array(), array('context' => 'CREA_LNG')),
+            t('Saturday', array(), array('context' => 'CREA_LNG'))
+        ],
+        'rangeSelectorFrom' => t('from', array(), array('context' => 'CREA_LNG')),
+        'rangeSelectorTo' => t('to', array(), array('context' => 'CREA_LNG')),
+        'noData' => t('No data to display', array(), array('context' => 'CREA_LNG'))
+    );
+
+    $map_infos = array(
+        'crealng' => $crealng
+    );
+
+    drupal_add_js(array('CreaCartographieMap' => $map_infos, 'IGNkey' => $conf['domain_ign_key']), 'setting');
+
+    if($language->language == "fr"){
+        $datepicker_fr = '<script src="/'.(drupal_get_path('module', 'jquery_update') . '/replace/ui/ui/i18n/jquery.ui.datepicker-fr.js').'"></script>';
+    }else{
+        $datepicker_fr = "";
+    }
+    $html_chart = drupal_get_css() .
+        '<script src="/'.(drupal_get_path('module', 'jquery_update') . '/replace/ui/ui/minified/jquery.ui.datepicker.min.js').'"></script>' .
+        $datepicker_fr .
+        '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/highstock.js').$cache_token.'"></script>' .
+        '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/no-data-to-display.js').$cache_token.'"></script>' .
+        '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/exporting.js').$cache_token.'"></script>' .
+        '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/crea_charts_options.js').$cache_token.'"></script>' .
+        '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/crea_charts.js').$cache_token.'"></script>' .
+        $chart;
+    // bloc geonature
+    $stats = gimmeStatsGeonature();
+    $render_content = [];
+    $render_content["data_temp"] = $html_chart;
+    $render_content["data_geonature"] = $stats;
+
+    return theme('crea_accueil_mb_live', $render_content);
+}
+
+function crea_form_search_block_form_alter(&$form, &$form_state, $form_id){
+    $form['search_block_form']['#size'] = 30;
+}
+
+function crea_design_block_view_alter(&$data, $block){
+    $args = arg();
+    if (isset($args[0]) && $args[0] != 'node') {
+        if ($block->module == 'system'
+            && $block->delta == 'main'
+            && ($block->theme == 'crea_bootstrap' || $block->theme == 'atlas_bootstrap')
+        ) {
+            $block->css_class = 'container';
+        }
+    }
+}
+
+function crea_design_preprocess_node(&$variables){
+    global $user, $language;
+    // Disable node display for several content types
+    // redirect to homepage
+    if (isset($variables['type'])){
+        switch ($variables['type']){
+            case 'slideshow_home':
+            case 'faune':
+            case 'flore':
+            case 'station':
+                drupal_goto('<front>');
+                break;
+
+            case 'slider_before_after':
+            case 'time_machine':
+            case 'module_kmz':
+                if ($variables['type'] == 'slider_before_after'){
+                    $field_table = 'field_data_field_slider';
+                    $field_nid = 'field_slider_nid';
+                }
+                if ($variables['type'] == 'time_machine'){
+                    $field_table = 'field_data_field_time_machine';
+                    $field_nid = 'field_time_machine_nid';
+                }
+                if ($variables['type'] == 'module_kmz'){
+                    $field_table = 'field_data_field_module_kmz';
+                    $field_nid = 'field_module_kmz_nid';
+                }
+
+                // If manager account, you can be redirected to unpublished content
+                if(in_array('manager',$user->roles) || in_array('administrator',$user->roles)){
+                    $query = db_select($field_table, 'f')
+                        ->fields('f')
+                        ->condition('f.'.$field_nid, $variables['nid'])
+                        ->condition('f.entity_type', 'node')
+                        ->orderBy('entity_id', 'DESC')
+                        ->range(0, 1);
+                }else{
+                    $query = db_select($field_table, 'f');
+                    $query->join('node', 'n', 'f.entity_id = n.nid');
+                    $query->fields('f')
+                        ->condition('f.'.$field_nid, $variables['nid'])
+                        ->condition('n.status', 1)
+                        ->condition('f.entity_type', 'node')
+                        ->orderBy('entity_id', 'DESC')
+                        ->range(0, 1);
+                }
+
+                $result = $query->execute()->fetchObject();
+
+                if (is_object($result)
+                    && isset($result->entity_id)){
+                    drupal_goto('node/'.$result->entity_id);
+                }
+                else{
+                    drupal_goto('<front>');
+                }
+                break;
+        }
+    }
+
+    if (isset($variables['field_media'])
+        && is_array($variables['field_media'])
+        && !empty($variables['field_media'])){
+        $images = false;
+        $videos = false;
+        $files = false;
+
+        foreach ($variables['field_media'] AS $media_key => $media_value){
+            $atom = scald_atom_load($media_value['sid']);
+
+            if($atom->type == 'image'){
+                $images = true;
+            }else if($atom->type == 'video'){
+                $videos = true;
+            }else if($atom->type == 'file'){
+                $files = true;
+            }
+        }
+
+        $variables['media_images'] = $images;
+        $variables['media_videos'] = $videos;
+        $variables['media_files'] = $files;
+    }
+
+    if (isset($variables['field_links'])
+        && is_array($variables['field_links'])
+        && !empty($variables['field_links'])){
+        $variables['media_links'] = true;
+    }
+}
+
+/*
+ * fonction pour le bloc Twitter
+ * permet d'afficher quand le tweet a été posté
+ */
+function getAgo($timestamp) {
+    $difference = time() - $timestamp;
+    $phrase = t("Posté il y a")." ";
+    if ($difference < 60) {
+        return $phrase.$difference." secondes";
+    } else {
+        $difference = round($difference / 60);
+    }
+
+    if ($difference < 60) {
+        return $phrase.$difference." minutes";
+    } else {
+        $difference = round($difference / 60);
+    }
+
+    if ($difference < 24) {
+        return $phrase.$difference." heures";
+    }
+    else {
+        $difference = round($difference / 24);
+    }
+
+    if ($difference < 7) {
+        return $phrase.$difference." jours";
+    } else {
+        $difference = round($difference / 7);
+        return $phrase.$difference." semaines";
+    }
+}
+
+function crea_agenda_ajax_add_text($form, $form_state){
+    return $form['agenda'];
+}
+
+function crea_design_page_alter(){
+    global $language;
+    if (request_path() == $language->language . '/sejours-sciences/sejours') {
+        $breadcrumb[] = l(t('Home'), NULL);
+        $breadcrumb[] = t('Volontariat scientifique');
+        $breadcrumb[] = t('Nos missions');
+        drupal_set_breadcrumb($breadcrumb);
+    }
+}
+
+function crea_design_node_view_alter(&$build) {
+    if (isset($build['#node'])){
+        $node = $build['#node'];
+        switch ($node->type){
+            case 'news':
+                $breadcrumb[] = l(t('Home'), NULL);
+                $breadcrumb[] = t('Volontariat scientifique');
+                $breadcrumb[] = l(t('Nos missions'), 'sejours-sciences/sejours');
+                drupal_set_breadcrumb($breadcrumb);
+                break;
+        }
+    }
+}
+
+function atlas_temperature_sonde_form($form, &$form_state){
+
+  $stations_data = array();
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_id', 'nfid', 'nfid.entity_id = n.nid');
+  $query->fields('n', array('title', 'nid'))
+    ->fields('nfid', array('field_id_value'))
+    ->condition('n.type', 'station')
+    ->condition('nfid.bundle', 'station')
+    ->orderBy('n.title');
+
+  $results = $query->execute()->fetchAll();
+
+  foreach($results AS $result){
+    $stations_data[$result->field_id_value] = $result->title . ' (' . $result->field_id_value . ')';
+  }
+
+  $temperature_data = crea_load_station_last_values((!empty($form_state['values']['station']) ? $form_state['values']['station'] : 231));
+
+    // on ajoute + 1 à la date présente dans la BDD qui est en GMT
+    $lastdate = $temperature_data->value_date;
+    if($lastdate != '---'){
+        $lastdate = $temperature_data->value_date;
+        $lastdate = strtotime($lastdate) + 3600;
+        $lastdate = date("H\hi",$lastdate);
+    }
+
+  $form['temperatures'] = array(
+    '#markup' => '<div class="first col col-sm-3 col-xs-12">
+        <span class="date">' . $lastdate . '</span>
+      </div>
+      <div class="col col-sm-4 col-xs-6">
+        AIR : <strong>' . $temperature_data->sum_c4 . '°C</strong>
+      </div>
+      <div class="last col col-sm-4 col-xs-6">
+        SOL : <strong>' . $temperature_data->sum_c1 . '°C</strong>
+      </div>',
+        '#prefix' => '<div class="row" id="wrapper_temperatures">',
+        '#suffix' => '</div>',
+    );
+    $form['station'] = array(
+        '#type' => 'select',
+        '#options' => $stations_data,
+        '#default_value' => 231,
+        '#ajax' => array(
+            'callback' => 'ajax_atlas_temperature_sonde',
+            'wrapper' => 'wrapper_temperatures',
+            'effect' => 'none',
+            //'method' => 'html',
+        ),
+    );
+    return $form;
+}
+function ajax_atlas_temperature_sonde($form, $form_state) {
+    return $form['temperatures'];
+}
+function atlas_webcams_connected_form($form, &$form_state){
+
+    $webcams_data = array();
+    for($i = 1; $i <= variable_get('atlas_webcams_number', 3); $i++){
+        $webcams_data[$i] = variable_get('webcam_connected_name_'.$i);
+    }
+
+    $form['image_webcam'] = array(
+        '#markup' => '',
+        '#prefix' => atlas_webcams_gimme(1),
+    );
+
+    $form['webcams'] = array(
+        '#type' => 'select',
+        '#options' => $webcams_data,
+        '#default_value' => 0,
+        '#ajax' => array(
+            'callback' => 'ajax_atlas_webcams_connected',
+            'wrapper' => 'wrapper_webcams',
+            'effect' => 'none',
+        ),
+    );
+
+    return $form;
+}
+function ajax_atlas_webcams_connected($form, $form_state) {
+    $id = $form_state['input']['webcams'];
+    return atlas_webcams_gimme($id);
+}
+function atlas_webcams_gimme($id){
+    $img = variable_get('webcam_connected_image_'.$id, '');
+    $wrapper = '';
+    $wrapper .= '<div class="row" id="wrapper_webcams">';
+    if($img != ''){
+        $wrapper .= '<img src="'.$img.'" width="100%" />';
+    }else{
+        $wrapper .= t('No picture');
+    }
+    $wrapper .= '</div>';
+    return $wrapper;
+}
+
+function atlas_design_espaceperso(){
+    global $language, $user, $conf;
+
+    if(! user_is_logged_in()){
+        drupal_set_message(t('Vous n\'avez pas accès à cette page, veuillez vous identifier'), 'error');
+        drupal_goto('user/login');
+    }else {
+
+        $args = arg();
+
+        // on liste les différentes observations
+        $pGroups = array();
+        $pDate = NULL;
+        $pTaxon = NULL;
+
+        // on checke si on a du POST du formulaire
+
+        foreach ($_POST as $var => $value) {
+            if (substr($var, 0, 6) == 'groups') {
+                $pGroups = $value;
+            }
+            elseif (substr($var, -7) == 'date_ff') {
+                $pDate['choice'] = $value;
+            }
+            elseif (substr($var, -9) == 'date_from') {
+                if (isset($args[2]) && $args[2] == 'download') {
+                    $pDate['from'] = $value;
+                }
+                else {
+                    $pDate['from'] = $value['date'];
+                }
+            }
+            elseif (substr($var, -7) == 'date_to') {
+                if (isset($args[2]) && $args[2] == 'download') {
+                    $pDate['to'] = $value;
+                }
+                else {
+                    $pDate['to'] = $value['date'];
+                }
+            }
+            elseif (substr($var, 0, 5) == 'taxon') {
+                if ($value != 'notaxon') {
+                    $pTaxon = $value;
+                }
+            }
+        }
+
+        $geonatuser = verifyIfUserExistsInExternalBDD('geonaturedb', $user->name, $user->mail);
+        if (is_array($geonatuser)
+            && !empty($geonatuser)
+        ) {
+            if ($pTaxon != NULL) {
+                $observations_js = crea_load_observations(NULL, $pDate, NULL, $pTaxon);
+            }
+            else {
+                if (count($pGroups) == 0) {
+                    $observations_js = crea_load_observations(NULL, $pDate, $user, NULL);
+                }
+                else {
+                    $observations_js = crea_load_observations($pGroups, $pDate, $user, $pTaxon);
+                }
+            }
+            $nbObservations = count($observations_js['entries']);
+        }
+        else {
+            $observations_js = array();
+            $nbObservations = 0;
+        }
+
+        /**
+         * Cas du download
+         */
+        if (isset($args[2]) && $args[2] == 'download') {
+            drupal_add_http_header('Content-Type', 'text/csv; utf-8');
+            drupal_add_http_header('Content-Disposition', 'attachment; filename=exportObservations.csv');
+
+            $output = '';
+            $keys = array();
+            $headers = array('DATE', 'PROTOCOLES', 'ESPECES', 'OBSERVATIONS');
+
+            foreach ($headers as $value) {
+                $keys[] = $value;
+            }
+            if ($keys) {
+                $output .= implode(";", $keys) . "\n";
+            }
+            foreach ($observations_js['entries'] as $key => $value) {
+                $dateobs = strftime('%d-%m-%Y', strtotime($value['dateobs']));
+                $output .= str_replace('-', '/', $dateobs) . ';' .
+                    utf8_decode($value['groupelibelle']) . ';' .
+                    utf8_decode($value['nom']) . ';' .
+                    utf8_decode(gimmeObservationFiche($value['id'])) . "\n";
+            }
+            print $output;
+            drupal_exit();
+
+        }
+        else {
+            /**
+             * Cas classique en visu
+             */
+
+            // traductions
+            $crealng_js = array(
+                'drupal_lng' => $language->language,
+                'author' => t('Author', array(), array('context' => 'CREA_LNG')),
+                'nbobs' => t('Species observations', array(), array('context' => 'CREA_LNG')),
+                'lastobs' => t('Last observation', array(), array('context' => 'CREA_LNG')),
+                'view' => t('View on', array(), array('context' => 'CREA_LNG')),
+            );
+
+            $mapOptions = array();
+            $mapOptions['map_lat'] = '45.9';
+            $mapOptions['map_long'] = '6.95';
+            $mapOptions['map_zoom'] = '10';
+
+            $map_infos = array(
+                'observations' => $observations_js,
+                'crealng' => $crealng_js,
+                'mapOptions' => $mapOptions,
+                'IGNkey' => $conf['domain_ign_key'],
+                'group_amphibien' => variable_get('geonature_group_amphibien', 1),
+                'group_mammiferes' => variable_get('geonature_group_mammiferes', 11),
+                'group_oiseaux' => variable_get('geonature_group_oiseaux', 12),
+                'group_reptiles' => variable_get('geonature_group_reptiles', 14),
+                'group_flore' => variable_get('geonature_group_flore', 1003),
+                'prot_chocard' => variable_get('geonature_protocole_chocard', 100),
+                'prot_grenouille' => variable_get('geonature_protocole_grenouille', 101),
+                'prot_mesange' => variable_get('geonature_protocole_mesange', 102),
+                'prot_contactfaune' => variable_get('geonature_protocole_contactfaune', 1),
+                'prot_ffs' => variable_get('geonature_protocole_ffs', 103),
+            );
+
+            drupal_add_js(array('CreaFauneFloreMap' => $map_infos), 'setting');
+            drupal_add_js(drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.js');
+            drupal_add_js(drupal_get_path('module', 'crea_cartographie') . '/js/crea_map_ff.js');
+            drupal_add_css(drupal_get_path('theme', 'crea') . '/js/leaflet/leaflet.css');
+
+            $render_content = [];
+            $render_content["user"] = $user;
+            $render_content["nbObs"] = $nbObservations;
+            $render_content["observations"] = $observations_js;
+            $render_content["form"] = drupal_get_form('atlas_espaceperso_fauneflore_form');
+            $render_content["lang"] = $language->language;
+
+            return theme('atlas_espaceperso', $render_content);
+        }
+    }
+}

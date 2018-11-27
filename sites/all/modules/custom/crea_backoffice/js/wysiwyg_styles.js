@@ -1,0 +1,38 @@
+CKEDITOR.stylesSet.add( 'manager',
+[
+ 	// Block-level styles
+ 	{ name : 'Titre 1' , element : 'h2', attributes : { 'class' : 'crea_wysiwyg_title_1' } },
+ 	{ name : 'Titre 2' , element : 'h3', attributes : { 'class' : 'crea_wysiwyg_title_2' } },
+ 	{ name : 'Titre 3' , element : 'h4', attributes : { 'class' : 'crea_wysiwyg_title_3' } },
+ 	{ name : 'Titre 4' , element : 'h5', attributes : { 'class' : 'crea_wysiwyg_title_4' } },
+ 	{ name : 'Chapô (Summary)' , element : 'div', attributes : { 'class' : 'crea_wysiwyg_summary' } },
+ 	{ name : 'Mise en exergue' , element : 'div', attributes : { 'class' : 'crea_wysiwyg_highlight' } },
+ 	{ name : 'Paragraphe' , element : 'div', attributes : { 'class' : 'crea_wysiwyg_paragraph' } },
+  {name : 'Background light-grey' , element : 'div', attributes : { 'class' : 'bg-light-grey' } },
+  {name : 'Background light-yellow' , element : 'div', attributes : { 'class' : 'bg-light-yellow' } },
+  {name : 'Background light-green' , element : 'div', attributes : { 'class' : 'bg-light-green' } },
+  {name : 'Background dark-grey' , element : 'div', attributes : { 'class' : 'bg-dark-grey' } },
+  {name : 'Titre séjours' , element : 'h2', attributes : { 'class' : 'titre-tourisme' } },
+  {name : 'Sous-titre séjours' , element : 'h3', attributes : { 'class' : 'tourisme' } },
+  {name : 'Titre menu séjours' , element : 'h2', attributes : { 'class' : 'crea-encart-titre' } },
+  {name : 'Menu séjours' , element : 'ul', attributes : { 'class' : 'crea-menu-tourisme' } },
+  {name : 'Item light' , element : 'li', attributes : { 'class' : 'light' } },
+  {name : 'Item dark' , element : 'li', attributes : { 'class' : 'dark' } },
+  {name : 'Bouton PDF' , element : 'div', attributes : { 'class' : 'crea-button-pdf-link' } },
+  {name : 'Bouton PDF Bleu' , element : 'div', attributes : { 'class' : 'crea-button-pdf-link blue' } },
+  {name : 'Date agenda' , element : 'p', attributes : { 'class' : 'date_agenda' } },
+
+  // Inline-level styles
+  { name : 'Green' , element : 'span', attributes : { 'class' : 'green-text' } },
+  { name : 'Blue' , element : 'span', attributes : { 'class' : 'blue-text' } },
+  { name : 'Orange' , element : 'span', attributes : { 'class' : 'orange-text' } },
+  { name : 'White' , element : 'span', attributes : { 'class' : 'white-text' } },
+  { name : 'Green Pheno' , element : 'span', attributes : { 'class' : 'green-pheno-text' } },
+  { name : 'Blue button' , element : 'a', attributes : { 'class' : 'crea-button blue-button-link' } },
+  { name : 'Green button' , element : 'a', attributes : { 'class' : 'crea-button green-button-link' } },
+  { name : 'Orange button' , element : 'a', attributes : { 'class' : 'crea-button orange-button-link' } },
+  { name : 'Green Pheno button' , element : 'a', attributes : { 'class' : 'crea-button green-pheno-button-link' } },
+  { name : 'Light orange button' , element : 'a', attributes : { 'class' : 'crea-button light-orange-button-link' } },
+  { name : 'Transparent orange button' , element : 'a', attributes : { 'class' : 'crea-button transparent-orange-button-link' } },
+  { name : 'Lien haut de page' , element : 'a', attributes : { 'class' : 'crea-top-link' } }
+]);

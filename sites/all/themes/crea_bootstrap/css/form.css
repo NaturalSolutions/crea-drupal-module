@@ -1,0 +1,7 @@
+.form-control,
+.form-control::-moz-placeholder{
+  color: black;
+}
+.input-group .form-control:focus{
+  z-index: 1;
+}

@@ -1,0 +1,60 @@
+#block-search-form{
+    margin-right: 15px;
+}
+#search-block-form input.form-text{
+    background-color: #666666;
+    color: white;
+    border: 0;
+    height: 31px;
+}
+
+#search-block-form button{
+    background-color: transparent !important;
+    color: white;
+}
+
+#search-block-form input.form-text::-webkit-input-placeholder{ /* WebKit, Blink, Edge */
+    color: white;
+}
+#search-block-form input.form-text:-moz-placeholder{ /* Mozilla Firefox 4 to 18 */
+    color: white;
+}
+#search-block-form input.form-text::-moz-placeholder{ /* Mozilla Firefox 19+ */
+    color: white;
+}
+#search-block-form input.form-text:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+    color: white;
+}
+#search-block-form #edit-actions{
+    margin: 0;
+}
+
+.form-control:focus{
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(244, 154, 23, 0.7);
+}
+
+/* FIX ME : missing .container */
+.page-search.domain-phenoclim .region #block-system-main.block-system  {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 768px) {
+    .page-search.domain-phenoclim .region #block-system-main.block-system {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .page-search.domain-phenoclim .region #block-system-main.block-system {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .page-search.domain-phenoclim .region #block-system-main.block-system {
+        width: 1170px;
+    }
+}

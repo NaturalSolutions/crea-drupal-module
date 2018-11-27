@@ -1,0 +1,136 @@
+.crea_wysiwyg_title_1{
+  font-family: 'Klavika-Bold', 'Tahoma', sans-serif !important;
+  font-size: 1.857em;
+}
+.crea_wysiwyg_title_2{
+  font-family: 'Klavika-Bold', 'Tahoma', sans-serif !important;
+  font-size: 1.429em;
+}
+.crea_wysiwyg_title_3{
+  font-family: 'Klavika-Bold', 'Tahoma', sans-serif !important;
+  font-size: 1.143em;
+}
+.crea_wysiwyg_title_4{
+  font-family: 'Klavika-Regular', 'Tahoma', sans-serif !important;
+  font-size: 1em;
+  text-align: center;
+}
+.crea_wysiwyg_summary{
+  font-family: 'Klavika-Regular', 'Tahoma', sans-serif !important;
+  font-size: 1.2em;
+}
+.crea_wysiwyg_highlight{
+  font-family: 'Klavika-LightItalic', 'Tahoma', sans-serif !important;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-left: 33%;
+}
+.crea_wysiwyg_paragraph{
+  font-family: 'Klavika-Light', 'Tahoma', sans-serif !important;
+  font-size: 1em;
+}
+
+.one_column,
+.two_columns,
+.two_columns_66_33,
+.two_columns_33_66,
+.three_columns,
+.four_columns{
+  margin: 3px 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.two_columns .col{
+  width: 49%;
+  float: left;
+  margin-right: 1.5%;
+  padding: 0;
+}
+.two_columns .last{
+  margin-right: 0;
+}
+
+.two_columns_66_33 .col{
+  width: 65%;
+  float: left;
+  margin-right: 1.5%;
+  padding: 0;
+}
+.two_columns_66_33 .last{
+  width: 33%;
+  margin-right: 0;
+}
+
+.two_columns_33_66 .col{
+  width: 33%;
+  float: left;
+  margin-right: 1.5%;
+  padding: 0;
+}
+.two_columns_33_66 .last{
+  width: 65%;
+  margin-right: 0;
+}
+
+.three_columns .col{
+  width: 32%;
+  float: left;
+  margin-right: 1.5%;
+  padding: 0;
+}
+.three_columns .last{
+  margin-right: 0;
+}
+
+.two_columns .dnd-atom-wrapper,
+.two_columns_66_33 .dnd-atom-wrapper,
+.two_columns_33_66 .dnd-atom-wrapper,
+.three_columns .dnd-atom-wrapper{
+  display: block;
+}
+
+.two_columns img,
+.two_columns_66_33 img,
+.two_columns_33_66 img,
+.three_columns img{
+  display: inline-block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+
+.trombinoscope{
+  float: left;
+  width: 285px;
+  height: 285px;
+  position: relative;
+  overflow: hidden;
+}
+.trombinoscope img{
+  max-width: 100%;
+}
+.trombinoscope .presentation{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 15px;
+  width: 100%;
+}
+.trombinoscope .image-anime,
+.trombinoscope .presentation{
+  display: none;
+}
+.trombinoscope:hover .image-anime,
+.trombinoscope:focus .image-anime,
+.trombinoscope:hover .presentation,
+.trombinoscope:focus .presentation{
+  display: block;
+}
+.trombinoscope:hover .image-fixe,
+.trombinoscope:focus .image-fixe{
+  display: none;
+}

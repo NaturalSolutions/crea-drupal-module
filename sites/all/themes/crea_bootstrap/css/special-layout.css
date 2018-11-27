@@ -1,0 +1,59 @@
+.blue-layout .page-header{
+  color: #00aed0;
+}
+.blue-layout .page-header::after {
+  border-bottom: 1px solid #00aed0;
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 2em;
+}
+.blue-layout .main-container a{
+  color: #00aed0;
+}
+.blue-layout .main-container a:hover,
+.blue-layout .main-container a:focus{
+  color: #23527c;
+}
+
+.green-layout .page-header{
+  color: #cccc33;
+}
+.green-layout .page-header::after {
+  border-bottom: 1px solid #cccc33;
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 2em;
+}
+.green-layout .main-container a{
+  color: #cccc33;
+}
+.green-layout .main-container a:hover,
+.green-layout .main-container a:focus{
+  color: #149C48;
+}
+.green-layout .trombinoscope .presentation{
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.orange-layout .page-header{
+    color: #ff9900;
+}
+.orange-layout .page-header::after {
+    border-bottom: 1px solid #ff9900;
+    content: "";
+    display: block;
+    margin-top: 5px;
+    width: 2em;
+}
+.orange-layout .main-container a{
+    color: #ff9900;
+}
+.orange-layout .main-container a:hover,
+.orange-layout .main-container a:focus{
+    color: #EB5F0A;
+}
+.orange-layout .trombinoscope .presentation{
+    background-color: rgba(0, 0, 0, 0.7);
+}

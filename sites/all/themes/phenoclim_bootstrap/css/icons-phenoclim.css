@@ -1,0 +1,46 @@
+.icon-scoop-it,
+.icon-facebook,
+.icon-twitter,
+.icon-youtube,
+.icon-storify,
+.icon-flickr,
+.icon-instagram,
+.icon-level-on,
+.icon-level-off{
+    background: url(../images/sprite-phenoclim.png) no-repeat;
+    display: inline-block;
+    margin: 0;
+    width: 47px;
+    height: 47px;
+}
+.icon-scoop-it{
+    background-position: 0 2px;
+}
+.icon-facebook{
+    background-position: -103px 2px;
+}
+.icon-twitter{
+    background-position: -151px 2px;
+}
+.icon-youtube{
+    background-position: -200px 2px;
+}
+.icon-storify{
+    background-position: -151px -44px;
+}
+.icon-flickr{
+    background-position: -103px -44px;
+}
+.icon-instagram{
+    background-position: -200px -44px;
+}
+.icon-level-on{
+    background-position: -2px -95px;
+    height: 25px;
+    width: 25px;
+}
+.icon-level-off{
+    background-position: -27px -95px;
+    height: 25px;
+    width: 25px;
+}

@@ -1,0 +1,4 @@
+name = CREA Design
+description = Module permettant de gérer le Design
+core = 7.x
+package = CREA

@@ -1,0 +1,91 @@
+<?php
+
+define('IFRAME_URLS', serialize(array('temperatures/mode/standalone', 'contact-faune-flore')));
+
+/**
+ * Implements hook_init().
+ */
+function crea_cookies_init(){
+  global $base_url;
+  if (!path_is_admin(current_path())){
+    $IFRAME_URLS = unserialize(IFRAME_URLS);
+    if (!in_array(current_path(), $IFRAME_URLS)) {
+      drupal_add_css(drupal_get_path('module', 'crea_cookies') . '/css/style_cookies.css');
+      drupal_add_js(drupal_get_path('module', 'crea_cookies') . '/js/jquery.cookie.js');
+      drupal_add_js(drupal_get_path('module', 'crea_cookies') . '/js/tag_google_analytics.js');
+      drupal_add_js(drupal_get_path('module', 'crea_cookies') . '/js/cookie_script.js');
+
+
+      drupal_add_js(array('cookie_text' => t(variable_get('info_cookies', ''))), 'setting');
+      drupal_add_js(array('cookie_accept' => t(variable_get('info_cookies_accept', ''))), 'setting');
+      drupal_add_js(array('cookie_refuse' => t(variable_get('info_cookies_refuse', ''))), 'setting');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function crea_cookies_theme(){
+  return array(
+    'info_cookies' => array(
+      'variables' => array('settings' => array('info_cookies' => NULL)),
+      'template' => 'templates/info_cookies'
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function crea_cookies_block_info() {
+  $blocks = array();
+
+  $blocks['info_cookies'] = array(
+    'info' => t('Infos sur les cookies'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function crea_cookies_block_configure($delta='') {
+  $form = array();
+  switch($delta) {
+    case 'info_cookies':
+      $form['info_cookies'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Texte pour signaler les cookies'),
+        '#default_value' => variable_get('info_cookies', ''),
+        '#description' => t('Texte pour signaler les cookies')
+      );
+      $form['info_cookies_accept'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Texte pour le bouton accepter'),
+        '#default_value' => variable_get('info_cookies_accept', ''),
+      );
+      $form['info_cookies_refuse'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Texte pour le bouton refuser'),
+        '#default_value' => variable_get('info_cookies_refuse', ''),
+      );
+      break;
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function crea_cookies_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'info_cookies':
+      variable_set('info_cookies', $edit['info_cookies']['value']);
+      variable_set('info_cookies_accept', $edit['info_cookies_accept']);
+      variable_set('info_cookies_refuse', $edit['info_cookies_refuse']);
+      break;
+  }
+}

@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'Klavika-Medium';
+    src: url('../fonts/Klavika/Klavika-Medium.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-Medium.otf')  format('opentype'),
+    url('../fonts/Klavika/Klavika-Medium.woff') format('woff'), url('../fonts/Klavika/Klavika-Medium.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-Medium.svg#Klavika-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Klavika-Regular';
+  src: url('../fonts/Klavika/Klavika-Regular.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-Regular.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-Regular.woff') format('woff'), url('../fonts/Klavika/Klavika-Regular.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-Regular.svg#Klavika-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Klavika-RegularItalic';
+  src: url('../fonts/Klavika/Klavika-RegularItalic.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-RegularItalic.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-RegularItalic.woff') format('woff'), url('../fonts/Klavika/Klavika-RegularItalic.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-RegularItalic.svg#Klavika-RegularItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Klavika-LightItalic';
+  src: url('../fonts/Klavika/Klavika-LightItalic.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-LightItalic.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-LightItalic.woff') format('woff'), url('../fonts/Klavika/Klavika-LightItalic.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-LightItalic.svg#Klavika-LightItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Klavika-Light';
+  src: url('../fonts/Klavika/Klavika-Light.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-Light.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-Light.woff') format('woff'), url('../fonts/Klavika/Klavika-Light.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-Light.svg#Klavika-Light') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Klavika-BoldItalic';
+  src: url('../fonts/Klavika/Klavika-BoldItalic.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-BoldItalic.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-BoldItalic.woff') format('woff'), url('../fonts/Klavika/Klavika-BoldItalic.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-BoldItalic.svg#Klavika-BoldItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Klavika-Bold';
+  src: url('../fonts/Klavika/Klavika-Bold.eot?#iefix') format('embedded-opentype'),  url('../fonts/Klavika/Klavika-Bold.otf')  format('opentype'),
+       url('../fonts/Klavika/Klavika-Bold.woff') format('woff'), url('../fonts/Klavika/Klavika-Bold.ttf')  format('truetype'), url('../fonts/Klavika/Klavika-Bold.svg#Klavika-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Skolar-Regular';
+    src: url('../fonts/Skolar/skolar_regular.eot?#iefix') format('embedded-opentype'),  url('../fonts/Skolar/skolar_regular.otf')  format('opentype'),
+    url('../fonts/Skolar/skolar_regular.woff') format('woff'), url('../fonts/Skolar/skolar_regular.ttf')  format('truetype'), url('../fonts/Skolar/skolar_regular.svg#skolar_regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Skolar-BoldItalic';
+    src: url('../fonts/Skolar/skolar_bolditalic.eot?#iefix') format('embedded-opentype'),  url('../fonts/Skolar/skolar_bolditalic.otf')  format('opentype'),
+    url('../fonts/Skolar/skolar_bolditalic.woff') format('woff'), url('../fonts/Skolar/skolar_bolditalic.ttf')  format('truetype'), url('../fonts/Skolar/skolar_bolditalic.svg#skolar_bolditalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Skolar-Bold';
+    src: url('../fonts/Skolar/skolar_bold.eot?#iefix') format('embedded-opentype'),  url('../fonts/Skolar/skolar_bold.otf')  format('opentype'),
+    url('../fonts/Skolar/skolar_bold.woff') format('woff'), url('../fonts/Skolar/skolar_bold.ttf')  format('truetype'), url('../fonts/Skolar/skolar_bold.svg#skolar_bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

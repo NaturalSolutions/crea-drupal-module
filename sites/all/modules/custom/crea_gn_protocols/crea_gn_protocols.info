@@ -1,0 +1,4 @@
+name = Crea - Gestion des protocoles Geonature
+description = module permettant de faire l import export des CSV Geonature
+core = 7.x
+package = CREA

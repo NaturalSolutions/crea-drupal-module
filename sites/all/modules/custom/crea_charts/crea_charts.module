@@ -1,0 +1,198 @@
+<?php 
+
+module_load_include('inc', 'crea_charts', 'queries/charts');
+module_load_include('inc', 'crea_cartographie', 'queries/map');
+
+define('DEFAULT_STATION', 232);
+define('DEFAULT_CHARTS_YEAR', date('Y'));
+
+/*
+ * Implementation of hook_block_info()
+ */
+function crea_charts_block_info() {
+    $blocks = array();
+        // affichage du module Charts
+	$blocks[0] = array(
+            'info' => t('Graphiques températures'),
+            'cache' => DRUPAL_NO_CACHE
+	);
+    return $blocks;
+}
+
+/*
+ * Implementation of hook_theme()
+ */
+function crea_charts_theme() {
+    return array(
+        'crea_charts_popin' => array(
+            'template' => 'templates/display_temperatures',
+        )
+    );
+}
+/**
+ * 2 routes pour gérer le chart et ses data
+ */
+function crea_charts_menu() {
+  
+    $items['gimmechartsdata/%/%'] = array(
+	'page callback' => 'crea_charts_gimme_data', 
+	'page arguments' => array(2),
+	'type' => MENU_CALLBACK,
+	'access arguments' => array('access content'),
+    );
+  
+    $items['buildcharts/%/%'] = array(
+	'page callback' => 'crea_charts_build_charts', 
+	'delivery callback' => 'crea_charts_renderer',
+	'page arguments' => array(2),
+	'type' => MENU_CALLBACK,
+	'access arguments' => array('access content'),
+    );
+  
+  return $items;
+}
+
+/**
+ * construit le JSON de data
+ */
+function crea_charts_gimme_data() {
+    // récupération des params
+    $path = explode('/', $_GET['q']);
+    isset($path[1]) ? $type = $path[1] : $type = "year";
+    isset($path[2]) ? $id_station = $path[2] : $id_station = DEFAULT_STATION;
+    $cache_id = 'crea_temperatures:' . $type . ":" . $id_station ;
+    $cache = cache_get($cache_id, 'cache');
+    if($type == "year"){
+        if ($cache) {
+            $temperatures = $cache->data;
+        }else {
+            $temperatures = crea_load_station_charts($id_station);
+	        if(count($temperatures) != 0) {
+		        cache_set( $cache_id, $temperatures, 'cache', 60 * 60 * 24 );
+	        }
+        }
+    }else if($type == "week") {
+        if ($cache) {
+            $temperatures = $cache->data;
+        } else {
+            $temperatures = crea_load_lastdays_charts($id_station);
+            // on met un cache sur une journée
+	        if(count($temperatures) != 0) {
+		        cache_set( $cache_id, $temperatures, 'cache', 60 * 15 );
+	        }
+        }
+    }else{
+        $temperatures = [];
+    }
+    print json_encode($temperatures);
+}
+
+/**
+ * Construit le chart
+ */
+function crea_charts_build_charts($type, $id_station, $standalone = false)
+{
+    // passage des variables au template
+    $render_content = [];
+    // récupération des params
+    if (!$standalone) {
+        $path = explode('/', $_GET['q']);
+        isset($path[1]) ? $type = $path[1] : $type = "year";
+        isset($path[2]) ? $id_station = $path[2] : $id_station = DEFAULT_STATION;
+        $charts_form = 'crea_charts_form';
+    }else{
+        if(!isset($id_station)){
+            $id_station = DEFAULT_STATION;
+        }
+        $charts_form = 'crea_charts_standalone_form';
+    }
+    $type == "year" ? $switchType = "week" : $switchType = "year";
+    $render_content["charts_form"] = drupal_get_form($charts_form, $id_station);
+    $render_content["type"] = $type;
+    $render_content["switchType"] = $switchType;
+    $render_content["id_station"] = $id_station;
+    $render_content["standalone"] = $standalone;
+    return theme('crea_charts_popin', $render_content);
+}
+
+/**
+ * Rendu du template pour afficher le chart
+ */
+function crea_charts_renderer($page_callback_result){
+    $cache_token = variable_get('css_js_query_string', '');
+    if ($cache_token != '') $cache_token = '?'.$cache_token;
+    
+    print $page_callback_result; // nécessaire sinon rien ne s affiche :0
+    // Only render content
+    $content = drupal_render($page_callback_result);
+    // Add CSS ans JS files
+    $html = drupal_get_css() .
+	    '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/crea_charts_options.js').$cache_token.'"></script>' .
+	    '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/crea_charts.js').$cache_token.'"></script>' .
+	    $content;
+    print $html;
+
+    // Perform end-of-request tasks.
+    drupal_page_footer();
+}
+
+/**
+ * Formulaire qui permet de switcher de station ou d année
+ */
+function crea_charts_form($form, &$form_state, $id_station){
+
+    $form = array();
+
+    $stations = crea_load_stations();
+    $stationsOptions = array();
+    foreach($stations as $station){
+	    $stationsOptions[$station->field_id['und']['0']['value']] = $station->title . ' (n° '.$station->field_id['und'][0]['value'].')';
+    }
+    $form['id_station'] = array(
+	    '#type' => 'select',
+	    '#options' => $stationsOptions,
+	    '#default_value' => $id_station
+    );
+
+    $form['submit'] = array(
+        '#type' => 'button',
+        '#value' => t('Submit',array(), array('context' => 'CREA_LNG')),
+        '#attributes' => array('class' => array('crea-button no-icon orange-button-link nosubmit'))
+    );
+
+  /*$form['download'] = array(
+    '#type' => 'button',
+    '#value' => t('Télécharger',array(), array('context' => 'CREA_LNG')),
+    '#attributes' => array('class' => array('crea-button no-icon orange-button-link nosubmit'), 'onclick' => array('javascript:window.chart.exportChart();')),
+  );*/
+
+    return $form;
+
+}
+/**
+ * Formulaire qui sert juste pour les variables
+ */
+function crea_charts_standalone_form($form, &$form_state, $id_station){
+
+    $form = array();
+    $nom_station = crea_load_station($id_station);
+
+    $form['id_station'] = array(
+        '#type' => 'hidden',
+        '#attributes' => array(
+            'id' => 'edit-id-station',
+        ),
+        '#default_value' => $id_station,
+    );
+
+    $form['nom_station'] = array(
+        '#type' => 'hidden',
+        '#attributes' => array(
+            'id' => 'edit-nom-station',
+        ),
+        '#default_value' => $nom_station,
+    );
+
+    return $form;
+
+}

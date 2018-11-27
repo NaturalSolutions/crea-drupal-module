@@ -1,0 +1,1262 @@
+body {
+  color: black;
+  font-family: "Klavika-Light",Tahoma,sans-serif;
+}
+a {
+  font-family: "Klavika-Light",Tahoma,sans-serif;
+  color: #00AFD4;
+}
+
+h2{
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+.no-padding-left{
+    padding-left: 0;
+    padding-right: 7px;
+}
+.no-padding-right{
+    padding-right: 0;
+    padding-left: 7px;
+}
+
+.icon.live{
+  background: url('../images/icon-live.png') no-repeat;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.icon.list{
+  background: url('../images/icon-list.png') no-repeat;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.icon.tweet{
+  background: url('../images/icon-tweet.png') no-repeat;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.icon.montagne{
+    background: url('../images/icon-montagne.png') no-repeat;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+.icon.feuille{
+    background: url('../images/icon-feuille.png') no-repeat;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+.icon.video{
+    background: url('../images/icon-video.png') no-repeat;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+.icon.loupe{
+    background: url('../images/icon-loupe.png') no-repeat;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+.icon{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+#toolbar-menu .icon,
+.btn .icon{
+    width: auto;
+    height: auto;
+}
+
+.main-container.container-fluid{
+  padding: 0;
+}
+
+.col img{
+  max-width: 100%;
+}
+.layoutmanager > .container-fluid{
+  padding: 0;
+}
+
+article strong,
+article strong a{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+}
+
+.container > .messages{
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+#topbar{
+  background-color: black;
+  padding: 0;
+}
+#topbar > .main-container{
+  text-align: right;
+  color: white;
+}
+#topbar a{
+  color: white;
+}
+#topbar .region-sur-header{
+  float: right;
+}
+#topbar .region-sur-header > section{
+  float: left;
+}
+#topbar #block-crea-design-crea-login{
+  margin-top: 5px;
+}
+#topbar #block-crea-design-crea-langue-switcher{
+  margin-left: 15px;
+}
+#topbar #block-crea-design-crea-langue-switcher a{
+  text-transform: uppercase;
+  padding: 2px 7px 5px;
+}
+#topbar #block-crea-design-crea-langue-switcher .dropdown-toggle{
+  background-color: #5c5452;
+}
+#topbar #block-crea-design-crea-langue-switcher a .caret{
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+#topbar #block-crea-design-crea-langue-switcher .dropdown-menu{
+  background-color: #5c5452;
+  border: 0 none;
+  min-width: 0;
+  padding: 5px 0 0;
+}
+#topbar #block-crea-design-crea-langue-switcher .dropdown-menu a:hover,
+#topbar #block-crea-design-crea-langue-switcher .dropdown-menu a:focus{
+  background-color: black;
+}
+
+body:not(.domain-phenoclim) #topbar #block-crea-design-crea-langue-switcher .dropdown-menu li.it {
+  display: none;
+}
+
+#header{
+  position: relative;
+}
+#header .logo{
+  width: 21%;
+  margin-left: 15px;
+}
+#header .logo.changement_climatique{
+  width: 50%;
+  margin-left: 0;
+}
+
+#header .logo img{
+  width: 100%;
+}
+#header .navbar-brand{
+  border-left: 1px solid black;
+  bottom: 0;
+  color: black;
+  line-height: 1.3em;
+  margin-bottom: 8px;
+  margin-left: 15px;
+  padding-bottom: 0;
+  padding-top: 0;
+  position: absolute;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.511em;
+}
+#header .navbar-brand.changement_climatique{
+  height: auto;
+}
+#header.changement_climatique{
+  margin-top: 20px;
+}
+#header .right-column {
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+
+#navbar{
+  margin-top: 15px;
+}
+#navbar > .navbar{
+  background-color: #eeeeee;
+  margin-bottom: 0;
+}
+#navbar > .navbar a,
+#navbar > .navbar .item{
+  color: black;
+  text-transform: uppercase;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.05em;
+}
+#navbar > .navbar a:hover,
+#navbar > .navbar a:focus,
+#navbar > .navbar a.active,
+#navbar > .navbar .item:hover,
+#navbar > .navbar .item:focus,
+#navbar > .navbar .item.active{
+  color: #00AFD4;
+  background: none;
+}
+#navbar .dropdown-menu > li > a,
+#navbar .dropdown-menu > li > .item{
+  padding-right: 15px;
+  padding-left: 15px;
+}
+#navbar .dropdown:hover > .dropdown-menu,
+#navbar .dropdown:focus > .dropdown-menu,
+#navbar .dropdown.open > .dropdown-menu{
+  display: block;
+}
+
+#btn-adhesion-crea{
+  background-color: #00aed0;
+  color: white;
+  display: block;
+  float: right;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.breadcrumb{
+  background: none;
+  border-top: 2px solid #eeeeee;
+  border-bottom: 2px solid #eeeeee;
+  border-radius: 0;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding-right: 0;
+  padding-left: 0;
+}
+.breadcrumb a{
+  color: black !important;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+}
+.breadcrumb .active{
+  color: black;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+.breadcrumb > li + li:before{
+  content: "\00a0\003E\00a0";
+  color: black;
+}
+
+.tabs--primary{
+  margin: 15px 0;
+}
+
+#block-crea-design-crea-logos-hp{
+  margin-top: 20px;
+}
+#block-crea-design-crea-logos-hp .three_columns{
+  text-align: center;
+}
+#block-crea-design-crea-logos-hp .three_columns .col,
+#block-crea-design-crea-logos-hp .three_columns .col div,
+#block-crea-design-crea-logos-hp .three_columns .col img{
+  display: inline;
+  float: none;
+  margin: 0;
+  width: auto;
+}
+
+#block-crea-design-crea-actus{
+  margin-bottom: 15px;
+}
+#block-crea-design-crea-actus .row{
+  margin: 0;
+}
+#block-crea-design-crea-actus .col.article{
+  background-color: #303336;
+  padding: 20px 20px 50px;
+  color: white;
+  height: 380px;
+}
+#block-crea-design-crea-actus .col.photo{
+  padding: 0;
+  height: 380px;
+}
+#block-crea-design-crea-actus .col.photo img{
+  max-width: 100%;
+}
+#block-crea-design-crea-actus .col h2{
+  color: #00aed0;
+  text-transform: uppercase;
+  font-size: 1.714em;
+  margin: 0 0 15px;
+}
+#block-crea-design-crea-actus .col h2 a{
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+#block-crea-design-crea-actus .col h2 a:hover,
+#block-crea-design-crea-actus .col h2 a:focus{
+  color: white;
+  text-decoration: none;
+}
+#block-crea-design-crea-actus .col h2:after{
+  content: "";
+  display: block;;
+  width: 2em;
+  margin-top: 5px;
+  border-bottom: 1px solid #00aed0;
+}
+#block-crea-design-crea-actus .col .date{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.143em;
+  margin-bottom: 5px;
+}
+#block-crea-design-crea-actus .col .know_more{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+#block-crea-design-crea-actus .col .know_more a{
+  text-decoration: underline;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.143em;
+}
+#block-crea-design-crea-actus .col .know_more a:hover,
+#block-crea-design-crea-actus .col .know_more a:focus{
+  color: white;
+}
+#block-crea-design-crea-actus .carousel-control{
+  opacity: 0.8;
+}
+#block-crea-design-crea-actus .carousel-control:hover,
+#block-crea-design-crea-actus .carousel-control:focus{
+  opacity: 1;
+}
+#block-crea-design-crea-actus .carousel-control.left,
+#block-crea-design-crea-actus .carousel-control.right{
+  background: none;
+}
+#block-crea-design-crea-actus .carousel-control.left{
+  left: 0;
+}
+#block-crea-design-crea-actus .carousel-control .fa-chevron-right{
+  right: 20%;
+  padding-left: 3px;
+}
+#block-crea-design-crea-actus .carousel-control .fa-chevron-left{
+  left: 20%;
+  padding-right: 3px;
+}
+#block-crea-design-crea-actus .carousel-control .fa{
+  border: 1px solid white;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.3em;
+  height: 40px;
+  padding-top: 7px;
+  position: absolute;
+  text-shadow: none;
+  top: 40%;
+  width: 40px;
+}
+
+.block-crea-social{
+  /*margin-bottom: 15px;*/
+}
+.block-crea-social > ul{
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+  padding: 0;
+}
+.block-crea-social > ul li{
+  display: inline;
+  margin: 0 8px;
+}
+
+#block-crea-design-crea-tweet-hp{
+  padding-right: 0;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title{
+  position: relative;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title h2{
+  font-size: 1.714em;
+  text-transform: uppercase;
+  margin: 0;
+  color: white;
+  padding: 10px 10px 4px;
+  background-color: #666666;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title .title{
+  display: inline-block;
+  position: relative;
+  top: 3px;
+  vertical-align: top;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title a{
+  bottom: 10px;
+  display: block;
+  position: absolute;
+  right: 15px;
+  text-align: right;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.143em;
+  text-decoration: underline;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title a:hover,
+#block-crea-design-crea-tweet-hp #twitter_update_list .block-title a:focus{
+  color: white;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list > ul{
+  padding: 0;
+  margin: 0;
+  height: 295px;
+  overflow: auto;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list > ul > li{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0;
+  padding: 10px 0;
+  list-style: outside none none;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .row{
+  margin: 0;
+}
+#block-crea-design-crea-tweet-hp #twitter_update_list .date{
+  margin-top: 5px;
+}
+
+#block-crea-design-crea-live-hp{
+  padding-left: 0;
+}
+#block-crea-design-crea-live-hp .block-title{
+  background-color: #666666;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.714em;
+}
+#block-crea-design-crea-live-hp .block-title .title{
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+#block-crea-design-crea-live-hp .video-live{
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  overflow: hidden;
+}
+#block-crea-design-crea-live-hp .video-live img{
+  max-width: 115%;
+}
+#block-crea-design-crea-live-hp .stats-live{
+  background-color: #303336;
+  color: white;
+  font-size: 1.286em;
+  text-align: center;
+  padding: 15px 5px;
+  text-transform: uppercase;
+}
+#block-crea-design-crea-live-hp .stats-live .sol,
+#block-crea-design-crea-live-hp .stats-live .air{
+  border-right: 1px solid white;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
+#block-crea-design-crea-agenda-hp .block-title,
+#block-crea-design-crea-agenda-hp-en .block-title{
+  background-color: #666666;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.714em;
+}
+#block-crea-design-crea-agenda-hp .block-title .title,
+#block-crea-design-crea-agenda-hp-en .block-title .title{
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+#block-crea-design-crea-agenda-hp .content ul,
+#block-crea-design-crea-agenda-hp-en .content ul{
+  height: 295px;
+  overflow: auto;
+  padding: 0;
+}
+#block-crea-design-crea-agenda-hp .content ul li,
+#block-crea-design-crea-agenda-hp-en .content ul li{
+  padding: 10px 15px;
+  clear:both;
+  list-style-position: inherit;
+}
+#block-crea-design-crea-agenda-hp .date a,
+#block-crea-design-crea-agenda-hp-en .date a{
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  font-size: 1.143em;
+  margin-left: -5px;
+  color: black;
+  text-decoration: underline;
+}
+#block-crea-design-crea-agenda-hp .date a:hover,
+#block-crea-design-crea-agenda-hp .date a:focus,
+#block-crea-design-crea-agenda-hp-en .date a:hover,
+#block-crea-design-crea-agenda-hp-en .date a:focus{
+  color: #00AFD4;
+}
+#block-crea-design-crea-agenda-hp .odd,
+#block-crea-design-crea-agenda-hp-en .odd{
+  background-color: #eeefec;
+}
+#block-crea-design-crea-agenda-hp .even,
+#block-crea-design-crea-agenda-hp-en .even{
+  background-color: #f7f7f6;
+}
+
+.block-crea-design-hp-multibloc .block-title{
+  background-color: #666666;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.714em;
+}
+.block-crea-design-hp-multibloc .title{
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+
+#footer{
+  background-color: #eeeeee;
+  margin-top: 50px;
+}
+#footer > .main-container{
+  padding: 0;
+}
+#footer #block-crea-design-crea-logos-footer{
+  margin-top: 20px;
+}
+#footer #block-crea-design-crea-logos-footer .row{
+  text-align: center;
+}
+#footer #block-crea-design-crea-logos-footer .row .col,
+#footer #block-crea-design-crea-logos-footer .row .col div,
+#footer #block-crea-design-crea-logos-footer .row .col img{
+  display: inline;
+  float: none;
+  width: auto;
+}
+#footer #block-menu-menu-footer .menu{
+  display: block;
+  text-align: center;
+  margin: 20px 0 10px 0;
+}
+#footer #block-menu-menu-footer .menu li{
+  display: inline;
+}
+#footer #block-menu-menu-footer .menu li a{
+  display: inline;
+  color: black;
+  text-transform: uppercase;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.143em;
+  font-weight: bold;
+  padding-left: 0;
+  padding-right: 0;
+}
+#footer #block-menu-menu-footer .menu li a:after{
+  content: "\00a0\2013\00a0";
+  padding-left: 3px;
+  padding-right: 3px;
+}
+#footer #block-menu-menu-footer .menu li.last a:after{
+  content: none;
+}
+#footer #block-block-5{
+  text-align: center;
+  margin-bottom: 20px;
+}
+#footer .copyright{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.143em;
+}
+
+
+.page-header{
+  color: #00aed0;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  text-transform: uppercase;
+  font-size: 2.571em;
+  border: 0;
+}
+.page-header:after{
+  content: "";
+  display: block;;
+  width: 2em;
+  margin-top: 5px;
+  border-bottom: 1px solid #00aed0;
+}
+.changement_climatique .page-header{
+  margin-top: 40px;
+}
+
+article.node .container{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+article.node .container.panel-bootstrap{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.page-sejours-sciences .page-header{
+  color: #cccc33;
+}
+.page-sejours-sciences .page-header:after{
+  content: "";
+  display: block;;
+  width: 2em;
+  margin-top: 5px;
+  border-bottom: 1px solid #cccc33;
+}
+.page-sejours-sciences article h2 a{
+  color: #cccc33;
+}
+.page-sejours-sciences article h2 a:hover,
+.page-sejours-sciences article h2 a:focus{
+  text-decoration: none;
+}
+.page-sejours-sciences article h2:after{
+  content: "";
+  display: block;;
+  width: 2em;
+  margin-top: 5px;
+  border-bottom: 1px solid #cccc33;
+}
+
+.view-sejours .views-row{
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 50px;
+  margin-bottom: 20px;
+}
+.view-sejours .views-row-last{
+  border: 0;
+  padding-bottom: 0;
+}
+.view-sejours .crea-button{
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.view-sejours .description .field-name-body{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.071em;
+  width: auto;
+}
+.view-sejours .info{
+  margin-top: 15px;
+  margin-left: 0;
+  margin-right: 0;
+}
+.view-sejours .info > .col{
+  border-right: 1px solid black;
+}
+.view-sejours .info .last{
+  border-right: 0;
+}
+.view-sejours .info .col h3{
+  text-decoration: underline;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  font-size: 1.071em;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+.view-sejours .info .col .nbr-jour,
+.view-sejours .info .col .prix{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 2.143em;
+}
+.view-sejours .info .col .date{
+  background-color: white;
+  display: inline-block;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  font-size: 1.143em;
+  margin: 5px 0;
+  padding: 3px 10px;
+}
+.view-sejours .info .col .levels{
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.286em;
+  margin-top: 5px;
+}
+
+.node-type-news .page-header{
+  color: #cccc33;
+}
+.node-type-news .page-header:after{
+  border-color: #cccc33;
+}
+.node-type-news .view-sejours{
+  border-bottom: 1px solid #cccccc;
+  margin-bottom: 20px;
+  padding-bottom: 50px;
+}
+.node-type-news article .container p a{
+  color: #cccc33;
+}
+.node-type-news article .equipe .layoutmanager:after{
+  border-bottom: 1px solid #ccc;
+  content: "";
+  display: block;
+  margin: 30px 0;
+  width: 5em;
+}
+.node-type-news article .equipe h4{
+  color: #cccc33;
+  font-size: 1.429em;
+  text-transform: uppercase;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+}
+
+.node .field-collection-container,
+.node .field-collection-view{
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.node .field-name-field-module-kmz,
+.node .field-name-field-time-machine,
+.node .field-name-field-slider{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.node .field-name-field-module-kmz:after,
+.node .field-name-field-time-machine:after,
+.node .field-name-field-slider:after{
+  clear: both;
+}
+
+.captcha{
+  margin: 10px 0;
+}
+
+.help-block{
+  font-size: 0.9em;
+}
+
+
+.atlas_temperature_sondes .block-title{
+    background-color: #303336;
+    color: white;
+    font-size: 1.143em;
+    margin: 0;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    display: table;
+    border-bottom: 1px solid white;
+}
+.atlas_temperature_sondes .block-title .icon{
+    margin-right: 5px;
+}
+.atlas_temperature_sondes .block-title .title{
+    vertical-align: middle;
+    width: 100%;
+    display: table-cell;
+}
+.atlas_temperature_sondes .station_data{
+    background-color: #d7ebeb;
+    font-size: 1.429em;
+    border: 1px solid #d7ebeb;
+}
+.atlas_temperature_sondes .station_data .row{
+    margin: 0;
+    padding: 10px 0;
+}
+.atlas_temperature_sondes .station_data .date{
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.atlas_temperature_sondes .station_data strong{
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-weight: normal;
+}
+.atlas_temperature_sondes .station_data .col{
+    border-left: 1px solid black;
+    margin: 0;
+    padding: 0 0 0 8px;
+}
+.atlas_temperature_sondes .station_data .col-sm-4{
+    width: 36%;
+}
+.atlas_temperature_sondes .station_data .col.first{
+    border: 0;
+}
+.atlas_temperature_sondes .station_data .form-item-station{
+    margin-top: 5px;
+    background-color: white;
+    padding: 0;
+    text-align: right;
+    margin: 0;
+    position: relative;
+}
+.atlas_temperature_sondes .station_data .form-item-station:hover{
+    cursor: pointer;
+}
+.atlas_temperature_sondes .station_data .form-item-station:before{
+    content:'';
+}
+.atlas_temperature_sondes .station_data .form-item-station:after{
+    pointer-events:none;
+    content:"\e252";
+    font-family:"Glyphicons Halflings";
+    position:absolute;
+    right: 10px;
+    top: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    font-size: 0.6em;
+    padding: 3px 5px 1px 4px;
+    z-index: 2;
+}
+.atlas_temperature_sondes .station_data .form-item-station select{
+    cursor: pointer;
+    border: 0 none;
+    box-shadow: none;
+    border-radius: 0;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    text-align: right;
+    text-align-last:right;
+    padding: 0 40px 0 0;
+    font-size: 0.8em;
+}
+.atlas_temperature_sondes .station_data .form-item-station select option{
+    text-align: left;
+}
+.atlas_temperature_sondes .station_data .form-item-station .input-group-addon{
+    z-index: 1;
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    background-color: transparent;
+    border: 0;
+}
+
+.atlas_compteur_obs .block-title{
+    background-color: #303336;
+    color: white;
+    font-size: 1.143em;
+    margin: 0;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    display: table;
+    border-bottom: 1px solid white;
+}
+.atlas_compteur_obs .block-title .icon{
+    margin-right: 5px;
+}
+.atlas_compteur_obs .block-title .title{
+    vertical-align: middle;
+    width: 100%;
+    display: table-cell;
+}
+.atlas_compteur_obs .nbr_obs{
+    background-color: #eeeded;
+    font-size: 2.857em;
+    display: table;
+    width: 100%;
+}
+.atlas_compteur_obs .nbr_obs .nbr{
+    border-left: 1px solid #333333;
+    margin: 0 7px 0 0;
+    padding: 0;
+    font-family: "Klavika-Medium",Tahoma,sans-serif;
+    color: #303336;
+    display: table-cell;
+    text-align: center;
+    width: 14.285%;
+}
+.atlas_compteur_obs .nbr_obs .nbr:first-child{
+    border: 0;
+}
+
+h2.title-atlas-mb-live{
+    text-transform: uppercase;
+    font-family: "Klavika-Bold",Tahoma,sans-serif;
+    font-size: 2.143em;
+    margin-top: 0;
+}
+h2.title-atlas-mb-live:after{
+    border-bottom: 1px solid #cccccc;
+    content: "";
+    display: block;
+    margin-top: 5px;
+    width: 2em;
+}
+h2.titre_observations:after,
+h2.titre_actus_blog:after{
+  border-bottom: 1px solid #cccccc;
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 2em;
+}
+h2.title-atlas-mb-live .orange{
+    text-transform: capitalize;
+    color: #eab818;
+    font-size: 0.867em;
+    padding-right: 15px;
+    font-family: "Skolar-BoldItalic",Tahoma,sans-serif;
+    display: inline-block;
+    line-height: 1em;
+}
+h2.title-atlas-mb-live .grey{
+    text-transform: none;
+    color: #bababa;
+    font-size: 0.867em;
+    padding-right: 15px;
+    font-family: "Skolar-BoldItalic",Tahoma,sans-serif;
+    display: inline-block;
+    line-height: 1em;
+}
+h2.title-atlas-mb-live .date{
+    font-size: 0.733em;
+    font-family: "Klavika-Medium",Tahoma,sans-serif;
+    border-left: 1px solid black;
+    padding-left: 10px;
+}
+h2.title-atlas-mb-live .date .year{
+    font-family: "Klavika-Light",Tahoma,sans-serif;
+}
+
+.pane-custom-content .block-title{
+    background-color: #303336;
+    color: white;
+    font-size: 1.143em;
+    margin: 0;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    display: table;
+    border-bottom: 1px solid white;
+}
+.pane-custom-content .block-title .icon{
+    margin-right: 5px;
+}
+.pane-custom-content .block-title .title{
+    vertical-align: middle;
+    width: 100%;
+    display: table-cell;
+}
+
+.atlas_webcams_connected .block-title{
+  background-color: #303336;
+  color: white;
+  font-size: 1.143em;
+  margin: 0;
+  padding: 3px 10px;
+  text-transform: uppercase;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  display: table;
+  border-bottom: 1px solid white;
+}
+.atlas_webcams_connected .block-title .icon{
+  margin-right: 5px;
+}
+.atlas_webcams_connected .block-title .title{
+  vertical-align: middle;
+  width: 100%;
+  display: table-cell;
+}
+.atlas_webcams_connected .webcams_data{
+  background-color: #d7ebeb;
+  font-size: 1.429em;
+  border: 1px solid #d7ebeb;
+}
+.atlas_webcams_connected .webcams_data .row{
+  margin: 0;
+  padding: 0;
+}
+.atlas_webcams_connected .webcams_data .col{
+  border-left: 1px solid black;
+  margin: 0 3px;
+  padding: 0 0 0 8px;
+}
+.atlas_webcams_connected .webcams_data .col.first{
+  border: 0;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams{
+  margin-top: 5px;
+  background-color: white;
+  padding: 0;
+  text-align: right;
+  margin: 0;
+  position: relative;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams:hover{
+  cursor: pointer;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams:before{
+  content:'';
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams:after{
+  pointer-events:none;
+  content:"\e252";
+  font-family:"Glyphicons Halflings";
+  position:absolute;
+  right: 10px;
+  top: 7px;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  font-size: 0.6em;
+  padding: 3px 5px 1px 4px;
+  z-index: 2;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams select{
+  cursor: pointer;
+  border: 0 none;
+  box-shadow: none;
+  border-radius: 0;
+  outline:none;
+  display: inline-block;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  text-align: right;
+  text-align-last:right;
+  padding: 0 40px 0 0;
+  font-size: 0.8em;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams select option{
+  text-align: left;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams .input-group{
+  width:100%;
+}
+.atlas_webcams_connected .webcams_data .form-item-webcams .input-group-addon{
+  z-index: 1;
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  background-color: transparent;
+  border: 0;
+}
+
+.widget_question_recherche{
+    margin-top: 40px;
+    position: relative;
+}
+.widget_question_recherche .articles .item{
+    background-color: #303336;
+    color: white;
+}
+.widget_question_recherche .description{
+    padding: 7px 10px;
+    width: 80%;
+    display: inline-block;
+    color: white;
+}
+.widget_question_recherche .description:hover,
+.widget_question_recherche .description:focus{
+    color: white;
+}
+.widget_question_recherche .pager{
+    bottom: 5px;
+    margin: 0;
+    position: absolute;
+    right: 9px;
+}
+.widget_question_recherche .pager a{
+    color: white;
+    font-size: 0.8em;
+}
+.widget_question_recherche .pager a:hover,
+.widget_question_recherche .pager a:focus{
+    text-decoration: none;
+}
+.widget_question_recherche .pager .left,
+.widget_question_recherche .pager .right{
+    opacity: 1;
+    position: relative;
+}
+.widget_question_recherche .pager .glyphicon {
+    background-color: black;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.bandeau_newsletter{
+    background: rgb(36,51,52); /* Old browsers */
+    background: -moz-linear-gradient(left,  rgba(36,51,52,1) 0%, rgba(14,172,205,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  rgba(36,51,52,1) 0%,rgba(14,172,205,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  rgba(36,51,52,1) 0%,rgba(14,172,205,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#243334', endColorstr='#0eaccd',GradientType=1 ); /* IE6-9 */
+    padding: 20px 20px;
+    position: relative;
+}
+.bandeau_newsletter .crea-button{
+    padding-left: 15px;
+    padding-right: 15px;
+    -moz-box-shadow: 0px 0px 25px -7px #000000;
+    -webkit-box-shadow: 0px 0px 25px -7px #000000;
+    -o-box-shadow: 0px 0px 25px -7px #000000;
+    box-shadow: 0px 0px 25px -7px #000000;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=NaN, Strength=25);
+    position: absolute;
+    right: 40px;
+    top: calc(50% - 40px);
+}
+
+.bandeau_newsletter.bottom{
+  padding: 25px 20px;
+  background: none;
+  border: 1px solid #eee;
+}
+.bandeau_newsletter.bottom .crea-button{
+  margin: 0;
+  position: relative;
+  top: inherit;
+  right: inherit;
+}
+
+.messages.status{
+    background-color: #03C400;
+    color:white;
+    padding:15px;
+}
+.messages.warning{
+    background-color: orange;
+    color:white;
+    padding:15px;
+}
+.messages.error{
+    background-color: red;
+    color:white;
+    padding:15px;
+}
+
+@media (max-width: 600px) {
+  .push-image {
+    display: none;
+  }
+  .overlapping-image {
+    margin: 0 !important;
+  }
+  #header .right-column{
+    position: inherit;
+    margin-top: 15px;
+  }
+  #header .navbar-brand{
+    font-size: 1.1em;
+  }
+}
+@media (max-width: 750px) {
+  .atlas_webcams_connected .webcams_data .col {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .atlas_temperature_sondes .station_data .col{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 770px) {
+  .front .atlas_compteur_obs {
+    margin-bottom: 20px;
+  }
+  #header .navbar-brand{
+    font-size: 1.1em;
+  }
+  #block-crea-design-crea-actus .col.article{
+    height: auto;
+  }
+  #block-crea-design-crea-actus .col.photo{
+    height: auto;
+  }
+  #block-crea-design-crea-actus .carousel-control .fa{
+    top: 45%;
+  }
+  .block-crea-social > ul li{
+    margin: 0;
+  }
+  .block-crea-social{
+    margin-bottom: 0;
+  }
+  #block-crea-design-crea-agenda-hp {
+    padding-left: 0;
+    margin: 20px 0;
+  }
+  #block-crea-design-crea-tweet-hp{
+    padding-left: 0;
+    padding-right: 15px;
+  }
+}
+@media (max-width: 1200px) {
+  .bandeau_newsletter .crea-button {
+    position: relative !important;
+    right: 0 !important;
+    text-align: center;
+    top: 0 !important;
+    width: 100%;
+  }
+}
+.bdd_etudes .dark{
+  background-color: #faf3dd;
+}
+.bdd_etudes .light{
+  background-color: #fffbf0;
+}
+.bdd_etudes .header{
+  font-weight: bold;
+  padding: 5px 0;
+}
+.bdd_etudes .programme{
+  padding: 5px 0;
+}
+.titre_actus_blog,
+.titre_observations{
+  text-transform: uppercase;
+  font-family: "Klavika-Bold",Tahoma,sans-serif;
+  font-size: 2.143em;
+}
+.titre_actus_blog .blue-text,
+.titre_observations .blue-text{
+  text-transform: capitalize;
+  font-size: 0.867em;
+  padding-right: 15px;
+  font-family: "Skolar-BoldItalic",Tahoma,sans-serif;
+  display: inline-block;
+  line-height: 1em;
+}
+
+.titre_observations{
+  margin-top: 10px;
+}
+.hpmultiblocs .firstCol{
+  padding-left: 0;
+  padding-right: 0;
+}
