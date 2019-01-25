@@ -41,3 +41,6 @@ xmlrpc.php
 
 #ignore default sites
 /sites-default
+
+
+.DS_Store
