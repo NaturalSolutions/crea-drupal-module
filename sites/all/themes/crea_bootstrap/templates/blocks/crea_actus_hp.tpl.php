@@ -4,7 +4,7 @@
       <?php $count_article = 0; ?>
       <?php foreach ($articles AS $article): ?>
         <?php if ($count_article == 0) $item_classes = 'row item active'; else $item_classes = 'row item'; ?>
-        <div class="<?php print $item_classes; ?>">
+        <div id="<?php print $article['id']; ?>" class="<?php print $item_classes; ?>">
           <div class="col col-md-4 article">
             <h2><a href="<?php print $article['know_more']; ?>" target="_blank"><?php print $article['title']; ?></a></h2>
             <div class="date">> Date <?php print $article['date']; ?></div>
