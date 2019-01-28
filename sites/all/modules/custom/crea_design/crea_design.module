@@ -422,6 +422,8 @@ function crea_design_block_view($delta='') {
             break;
         case 'crea_actus' :
             $block['content'] = crea_actus_wordpress();
+             // call javascript file
+             drupal_add_js(drupal_get_path('module', 'crea_design') . '/resources/js/actus_wordpress.js');
             break;
         case 'crea_live_hp' :
             $block['content'] = crea_live_hp();
@@ -580,31 +582,24 @@ function crea_actus_wordpress(){
             }
             if ($feeds->code == 200){
                 $json_feed = json_decode($feeds->data, TRUE);
+                drupal_add_js(array(
+                    'crea_design' => array(
+                        'url' => $wordpress_json_url,
+                        'feed' => $json_feed
+                    )
+                  ), 'setting');
                 if (is_array($json_feed)
                     && !empty($json_feed)) {
                     foreach ($json_feed AS $feed) {
-                        $article_image = filter_xss($feed['featured_media']);
-
-                        try {
-                            if ($article_image){
-                                $feed_image = drupal_http_request($wordpress_json_url . 'media/' . $article_image);
-                                if ($feed_image->code == 200) {
-                                    $json_feed_image = json_decode($feed_image->data, TRUE);
-                                    //creaDump::debug($json_feed_image);
-                                }
-                            }
-                        } catch (Exception $e) {
-                            watchdog('wordpress_image feed', 'error with the wordpress image feed : ' . $e->getMessage(), array(), WATCHDOG_ERROR);
-                        }
-
                         $articles[] = array(
                             'title' => isset($feed['title']['rendered']) ? filter_xss($feed['title']['rendered']) : '',
                             'date' => isset($feed['date']) ? format_date(strtotime(filter_xss($feed['date'])), 'custom', 'd/m/Y') : '',
                             'content' => isset($feed['content']['rendered']) ? views_trim_text($trim_alter, filter_xss(strip_tags(trim($feed['content']['rendered'])))) : '',
                             'know_more' => isset($feed['link']) ? filter_xss($feed['link']) : '',
-                            'image_src' => isset($json_feed_image['source_url']) ? filter_xss($json_feed_image['source_url']) : '',
-                            'image_alt' => isset($json_feed_image['alt_text']) ? filter_xss($json_feed_image['alt_text']) : '',
-                            'image_title' => isset($json_feed_image['title']['rendered']) ? filter_xss($json_feed_image['title']['rendered']) : '',
+                            'id' => isset($feed['id']) ? filter_xss($feed['id']) : '',
+                            'image_src' => '',
+                            'image_alt' => '',
+                            'image_title' => '',
                         );
 
                         if (count($articles) >= $wordpress_article_count){
