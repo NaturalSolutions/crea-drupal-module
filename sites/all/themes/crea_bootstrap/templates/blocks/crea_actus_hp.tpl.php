@@ -16,6 +16,7 @@
             </div>
           </div>
           <div class="col col-md-8 photo">
+            <div id="carousel_spinner"></div>
             <a href="<?php print $article['know_more']; ?>" target="_blank"><img src="<?php print $article['image_src']; ?>" alt="<?php print $article['image_alt']; ?>" title="<?php print $article['image_title']; ?>" /></a>
             <a class="left carousel-control" href="#article-carousel" role="button" data-slide="prev">
                 <span class="fa fa-chevron-left" aria-hidden="true"></span>
@@ -25,7 +26,6 @@
                 <span class="fa fa-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
-            <div id="carousel_spinner"></div>
           </div>
         </div>
         <?php $count_article ++; ?>

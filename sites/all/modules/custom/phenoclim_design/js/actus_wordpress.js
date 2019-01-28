@@ -23,25 +23,31 @@
             });
             $.when.apply($, self.dfd).then(function() {
                 var data = self.myData;
-                this.count = 0;
                 $('#article-carousel').bind('slid.bs.carousel', function (e) {
                     var $id = $('#article-carousel .active').attr('id');
                     var current = data.find( function(x) {
                         return x.post === Number($id);
                     });
-                    if(current)
-                        self.count=+1;
                     $('#article-carousel .active img').attr('src', current.source_url);
                     $('#article-carousel .active img').attr('alt', current.alt_text);
                     $('#article-carousel .active img').attr('alt', current.title.rendered);
 
-                    if(self.count == data.length)
+                    $('#article-carousel .active #carousel_spinner').fadeOut(800);
+
+                    var done = true;
+                    $("#article-carousel img").each(function() {
+                    var element = $(this);
+                    if (element.attr('src') == "") {
+                        done = false;
+                    }
+                    });
+
+                    if(done)
                         $('#article-carousel').unbind('slid.bs.carousel');
                 });
 
             })
         }
-        //code ends
       }
     };
     })(jQuery);
