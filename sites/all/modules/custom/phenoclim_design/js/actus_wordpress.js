@@ -23,19 +23,19 @@
             });
             $.when.apply($, self.dfd).then(function() {
                 var data = self.myData;
-                $('#article-carousel', context).bind('slid.bs.carousel', function (e) {
-                    var $id = $('#article-carousel .active').attr('id');
+                $('.domain-phenoclim #article-carousel', context).bind('slid.bs.carousel', function (e) {
+                    var $id = $('.domain-phenoclim #article-carousel .active').attr('id');
                     var current = data.find( function(x) {
                         return x.post === Number($id);
                     });
-                    $('#article-carousel .active img', context).attr('src', current.source_url);
-                    $('#article-carousel .active img', context).attr('alt', current.alt_text);
-                    $('#article-carousel .active img', context).attr('alt', current.title.rendered);
+                    $('.domain-phenoclim #article-carousel .active img', context).attr('src', current.source_url);
+                    $('.domain-phenoclim #article-carousel .active img', context).attr('alt', current.alt_text);
+                    $('.domain-phenoclim #article-carousel .active img', context).attr('alt', current.title.rendered);
 
                     $('#article-carousel .active #carousel_spinner').fadeOut(800);
 
                     var done = true;
-                    $("#article-carousel img", context).each(function() {
+                    $(".domain-phenoclim #article-carousel img", context).each(function() {
                     var element = $(this);
                     if (element.attr('src') == "") {
                         done = false;
@@ -43,7 +43,7 @@
                     });
 
                     if(done)
-                        $('#article-carousel', context).unbind('slid.bs.carousel');
+                        $('.domain-phenoclim #article-carousel', context).unbind('slid.bs.carousel');
                 });
 
             })
