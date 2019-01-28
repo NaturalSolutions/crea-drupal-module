@@ -21,22 +21,24 @@
             }
  
             });
-            $.when(self.dfd).done(function() {
+            $.when.apply($, self.dfd).then(function() {
                 var data = self.myData;
-                var count = 0;
+                this.count = 0;
                 $('#article-carousel').bind('slid.bs.carousel', function (e) {
                     var $id = $('#article-carousel .active').attr('id');
                     var current = data.find( function(x) {
                         return x.post === Number($id);
                     });
                     if(current)
-                        count=+1;
+                        self.count=+1;
                     $('#article-carousel .active img').attr('src', current.source_url);
                     $('#article-carousel .active img').attr('alt', current.alt_text);
                     $('#article-carousel .active img').attr('alt', current.title.rendered);
+
+                    if(self.count == data.length)
+                        $('#article-carousel').unbind('slid.bs.carousel');
                 });
-                if(count == data.length)
-                    $('#article-carousel').unbind('slid.bs.carousel');
+
             })
         }
         //code ends
