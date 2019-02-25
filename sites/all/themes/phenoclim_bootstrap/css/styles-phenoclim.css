@@ -19,3 +19,7 @@
     padding-left: 0;
     padding-right: 0;
 }
+
+div#map {
+    height: 800px;
+}
