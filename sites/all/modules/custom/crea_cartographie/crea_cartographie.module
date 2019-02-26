@@ -263,7 +263,6 @@ function crea_cartographie_renderer($page_callback_result){
     $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/no-data-to-display.js').$cache_token.'"></script>';
     $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/exporting.js').$cache_token.'"></script>';
     $content .= '<script src="/'.(drupal_get_path('module', 'crea_charts') . '/js/export-csv.js').$cache_token.'"></script>';
-    $content .= '<body><div id="map"></div></body>';
 
     // render le crea_cartographie_standalone
     print $content;
