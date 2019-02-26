@@ -6,7 +6,12 @@ jQuery(function($) {
 
         // si modules live on ne fait pas le iframe resize
         if(!$('#modulelive iframe').length) {
-            $('iframe').iFrameResize();
+            $('iframe').iFrameResize(
+                {
+                    'checkOrigin': ['http://127.0.0.1:8000', 'https://backend.phenoclim.org'], 
+                    'heightCalculationMethod': 'documentElementOffset'
+                }
+            );
         }
 
         if($('#map_container #map').length) {
