@@ -8,7 +8,7 @@ jQuery(function($) {
         if(!$('#modulelive iframe').length) {
             $('iframe').iFrameResize(
                 {
-                    'checkOrigin': ['http://127.0.0.1:8000', 'https://backend.phenoclim.org'], 
+                    'checkOrigin': ['http://127.0.0.1:8000', 'https://backend.phenoclim.org', 'https://creamontblanc.shinyapps.io'], 
                     'heightCalculationMethod': 'documentElementOffset'
                 }
             );
