@@ -260,6 +260,186 @@ img[usemap] {
     width: 40px;
 }
 
+/* bloc map-climat faune flore */
+.contactfaune.block-title,
+.temp.block-title{
+    background-color: #303336;
+    color: white;
+    font-size: 1.143em;
+    margin: 0;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    display: table;
+    border-bottom: 1px solid white;
+}
+.contactfaune.block-title .title,
+.temp.block-title .title{
+    vertical-align: middle;
+    width: 100%;
+    display: table-cell;
+}
+#diagram .crea-button{
+    padding: 5px 20px;
+    width: 100%;
+}
+#diagram #faunefloreblock,
+#temperatures-bloc{
+    background-color: #efeeee;
+}
+#diagram #faunefloreblock .content{
+    padding: 10px;
+}
+#temperatures-bloc .content{
+    padding: 0 10px 10px 10px;
+}
+#diagram #faunefloreblock{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+
+#diagram .form-item-taxon,
+#crea-charts-form .form-item-id-station{
+    margin-top: 5px;
+    background-color: white;
+    padding: 0;
+    text-align: right;
+    margin: 0;
+    position: relative;
+}
+#diagram .form-item-taxon:after,
+#crea-charts-form .form-item-id-station:after{
+    pointer-events: none;
+    content: "\e252";
+    font-family: "Glyphicons Halflings";
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    font-size: 0.6em;
+    padding: 3px 5px 1px 4px;
+    z-index: 2;
+}
+#diagram #edit-taxon,
+#crea-charts-form #edit-id-station{
+    cursor: pointer;
+    border: 0 none;
+    box-shadow: none;
+    border-radius: 0;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /*text-align: right;
+    text-align-last: right;*/
+    padding: 0 40px 0 5px;
+    font-size: 0.8em;
+}
+#switchCharts{
+    text-align: center;
+}
+#switchCharts .crea-button{
+    font-size: 0.8em;
+    width:auto;
+    margin: 10px 0;
+    color: black !important;
+    background-color: #efeeee;
+}
+#switchCharts button.active{
+    color: white !important;
+    background-color: #ff9900;
+}
+#creaChartsForm{
+   /* float: left;*/
+    width:100%;
+    text-align: center;
+}
+
+#temperatures-bloc{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+#temperatures-bloc .form-item-id-station{
+    width:100%;
+    /*float:left;*/
+}
+#temperatures-bloc #edit-submit,
+#temperatures-bloc #edit-download{
+    /*float: left;*/
+    width: auto;
+    margin: 10px 0 20px 15px;
+    font-size: 0.8em;
+}
+#containerCharts{
+    clear: both;
+}
+.highcharts-container,
+.highcharts-container svg{
+    width:100% !important;
+}
+.highcharts-container .highcharts-button{
+    right: 0 !important;
+}
+
+
+#temperatures-bloc{
+    font-family: "Klavika-Regular",Tahoma,sans-serif;
+    font-size: 1.143em;
+}
+#temperatures-bloc .form-item-id-station{
+    width:100%;
+    /*float:left;*/
+}
+#temperatures-bloc #edit-submit,
+#temperatures-bloc #edit-download{
+    /*float: left;*/
+    width: auto;
+    margin: 10px 0 20px 15px;
+    font-size: 0.8em;
+}
+
+#diagram .content .block-title{
+    width: 100%;
+    text-align: center;
+}
+
+.highcharts-container input:checked:after{
+    background-repeat: no-repeat;
+    background-size: 1.2rem;
+    background-position: center;
+    border-radius: 20px;
+    border: 1px solid #CCC;
+}
+
+.highcharts-container input:after {
+    position: absolute;
+    content: '';
+    display: block;
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 20px;
+    z-index: 22;
+    background: #fff;
+    top: -3px;
+    left: -5px;
+}
+.highcharts-container input:nth-child(2):checked:after {
+    background: #000000;
+}
+.highcharts-container input:nth-child(3):checked:after {
+    background: #9a9a9a;
+}
+.highcharts-container input:nth-child(4):checked:after {
+    background: #ffbf00;
+}
+.highcharts-container input:nth-child(5):checked:after {
+    background: #e74a00;
+}
+
 /* HP block Tweet */
 #block-phenoclim-design-crea-tweet-hp{
     padding-left: 0;
