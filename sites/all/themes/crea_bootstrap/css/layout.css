@@ -272,7 +272,7 @@ body:not(.domain-phenoclim) #topbar #block-crea-design-crea-langue-switcher .dro
 }
 
 #block-crea-design-crea-actus{
-  margin-bottom: 15px;
+  margin-bottom: 50px;
 }
 #block-crea-design-crea-actus .row{
   margin: 0;
@@ -912,7 +912,8 @@ h2.title-atlas-mb-live:after{
     width: 2em;
 }
 h2.titre_observations:after,
-h2.titre_actus_blog:after{
+h2.titre_actus_blog:after,
+h2.titre-acces-rapide:after{
   border-bottom: 1px solid #cccccc;
   content: "";
   display: block;
@@ -1104,6 +1105,79 @@ h2.title-atlas-mb-live .date .year{
     padding: 3px;
 }
 
+/*
+PAGE ACCUEIL 2019
+*/
+.front .bandeau.container-fluid {
+  padding: 0px;
+}
+.bandeau-climat{
+  background: rgb(36,51,52); /* Old browsers */
+  background: -moz-linear-gradient(left,  rgba(36,51,52,1) 0%, rgba(14,172,205,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  rgba(36,51,52,1) 0%,rgba(14,172,205,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  rgba(36,51,52,1) 0%,rgba(14,172,205,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#243334', endColorstr='#0eaccd',GradientType=1 ); /* IE6-9 */
+  padding: 20px 20px;
+  position: relative;
+  background: url("../images/BANDEAU-HOMEPAGE-TXT.jpg") no-repeat;
+  width:100%;
+  height:480px;
+  margin-bottom: 25px;
+  background-position: center;
+  background-size: cover;
+}
+.acces-rapide {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.acces-rapide p.ar-label{
+  font-size: 1.500em;
+  line-height: 1.3em;
+}
+.acces-rapide a.btn-default{
+  background-color: #303336;
+  color: white;
+}
+
+.acces-rapide .icons{
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+
+.ar-button {
+  padding: 5px 20px;
+  border-radius: 0px;
+  text-transform: uppercase;
+  display: inline-block;
+  font-family: "Klavika-Regular",Tahoma,sans-serif;
+  font-size: 1.500em;
+}
+
+.acces-rapide .icon-seformer {
+  background: url("../images/PICTO-HOMEPAGE-SENGAGER.png") no-repeat;
+}
+
+.acces-rapide .icon-participer {
+  background: url("../images/PICTO-HOMEPAGE-PARTICIPER.png") no-repeat;
+}
+
+.acces-rapide .icon-engager {
+  background: url("../images/PICTO-HOMEPAGE-SENGAGER.png") no-repeat;
+}
+
+.acces-rapide .icon-nssuivre {
+  background: url("../images/PICTO-HOMEPAGE-SUIVRE.png") no-repeat;
+}
+
+h2.titre-acces-rapide:after, h2.titre_actus_blog:after {
+  border-bottom: 1px solid rgb(14,172,205); 
+}
+
+/*
+FIN PAGE ACCUEIL 2019
+*/
+
 .bandeau_newsletter{
     background: rgb(36,51,52); /* Old browsers */
     background: -moz-linear-gradient(left,  rgba(36,51,52,1) 0%, rgba(14,172,205,1) 100%); /* FF3.6-15 */
@@ -1185,6 +1259,9 @@ h2.title-atlas-mb-live .date .year{
 }
 
 @media (max-width: 770px) {
+  .bandeau-climat{
+    display: none;
+  }
   .front .atlas_compteur_obs {
     margin-bottom: 20px;
   }
@@ -1238,7 +1315,8 @@ h2.title-atlas-mb-live .date .year{
   padding: 5px 0;
 }
 .titre_actus_blog,
-.titre_observations{
+.titre_observations, 
+.titre-acces-rapide {
   text-transform: uppercase;
   font-family: "Klavika-Bold",Tahoma,sans-serif;
   font-size: 2.143em;
