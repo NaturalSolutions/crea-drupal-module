@@ -6,7 +6,8 @@
 .icon-flickr,
 .icon-instagram,
 .icon-level-on,
-.icon-level-off{
+.icon-level-off,
+.icon-linkedin{
     background: url(../images/sprite-crea.png) no-repeat;
     display: inline-block;
     margin: 0;
@@ -43,4 +44,7 @@
     background-position: -27px -95px;
     height: 25px;
     width: 25px;
+}
+.icon-linkedin{
+    background-position: -50px -2px;
 }
