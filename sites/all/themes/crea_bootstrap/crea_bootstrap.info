@@ -60,6 +60,6 @@ scripts[] = js/timeline/jquery.timelinr-0.9.54.js
 scripts[] = js/jquery.rwdImageMaps.min.js
 
 ; iframe resizer
-scripts[] = js//iframeresizer/iframeResizer.min.js
+scripts[] = js/iframeresizer/iframeResizer.min.js
 
 scripts[] = js/app.js
