@@ -177,11 +177,11 @@ body:not(.domain-phenoclim) #topbar #block-crea-design-crea-langue-switcher .dro
 #header.changement_climatique{
   margin-top: 20px;
 }
-#header .right-column {
+/* #header .right-column {
   bottom: 0;
   right: 0;
   position: absolute;
-}
+} */
 
 
 #navbar{
@@ -222,7 +222,6 @@ body:not(.domain-phenoclim) #topbar #block-crea-design-crea-langue-switcher .dro
   background-color: #00aed0;
   color: white;
   display: block;
-  float: right;
   margin-bottom: 10px;
   padding: 5px 10px;
   text-align: right;
@@ -1172,6 +1171,20 @@ PAGE ACCUEIL 2019
 
 h2.titre-acces-rapide:after, h2.titre_actus_blog:after {
   border-bottom: 1px solid rgb(14,172,205); 
+}
+
+#btn-news-crea{
+  background-color: #cccc33;
+  color: black;
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  text-align: right;
+  text-transform: uppercase;
+}
+.crea-btn-right-header {
+  float: right;
+  margin: 10px;
 }
 
 /*
