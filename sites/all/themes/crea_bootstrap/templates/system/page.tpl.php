@@ -132,14 +132,12 @@ if(isset($variables['node']->field_type_page['und'][0]['value'])){
 </header>
 <?php endif; ?>
 
-<?php if (!empty($page['navigation']) && !$is_front): ?>
-    <?php if($type_page == '' || $type_page == 'defaut'){?>
+<?php if (!empty($page['navigation'])): ?>
 <header id="navbar" role="banner" class="container main-container">
   <nav class="navbar">
     <?php print render($page['navigation']); ?>
   </nav>
 </header>
-    <?php } ?>
 <?php endif; ?>
 
 <div class="main-container <?php print $container_class; ?> <?php print $type_page; ?>">
