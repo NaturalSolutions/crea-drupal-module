@@ -1125,6 +1125,12 @@ PAGE ACCUEIL 2019
   background-position: center;
   background-size: cover;
 }
+
+.bandeau-climat a {
+  height: 100%;
+  display: block;
+}
+
 .acces-rapide {
   text-align: center;
   margin-bottom: 50px;
