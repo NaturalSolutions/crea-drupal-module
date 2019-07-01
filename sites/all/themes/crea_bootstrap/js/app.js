@@ -8,8 +8,20 @@ jQuery(function($) {
         if(!$('#modulelive iframe').length) {
             $('iframe').iFrameResize(
                 {
+                    //log: true,
+                    enablePublicMethods: true,
                     'checkOrigin': ['http://127.0.0.1:8000', 'https://backend.phenoclim.org', 'https://creamontblanc.shinyapps.io'], 
-                    'heightCalculationMethod': 'documentElementOffset'
+                    'heightCalculationMethod': 'documentElementOffset',
+                    messageCallback : function(messageData) {
+                        console.log('messagefrom Iframe messageCallback: ', messageData.message);
+                        console.log('messagefrom Iframe messageData.iframe.offsetTop: ', messageData.iframe.offsetTop)
+
+                        if (messageData.message && messageData.message.positionScroll) {
+                            scrollTo(0,messageData.iframe.offsetTop + messageData.message.positionScroll);
+                        } else {
+                            scrollTo(0,( messageData.iframe.offsetTop - 40) + 0);
+                        }
+                    }
                 }
             );
         }
