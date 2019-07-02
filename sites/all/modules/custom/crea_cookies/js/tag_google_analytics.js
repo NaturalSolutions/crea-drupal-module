@@ -260,8 +260,10 @@ tagAnalyticsCNIL.CookieConsent = function () {
 
         var hostname = getDomainName();
         var ua = 'UA-41452896-1';
-        if(hostname.substring(0,4) != 'crea'){
+        if(hostname.substring(0,5) == 'atlas'){
             ua = 'UA-40485867-1';
+        } else if (hostname.substring(0,5) == 'pheno') {
+            ua =  'UA-41452896-3';
         }
 
         ga('create', ua, 'auto');
