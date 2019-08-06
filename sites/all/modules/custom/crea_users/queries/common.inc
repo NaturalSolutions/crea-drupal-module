@@ -1,13 +1,13 @@
 <?php 
 
-function insertUserInExternalBDD($bdd = '', $last_name = '', $first_name = '', $name = '', $mail = '', $pass = '', $id_organisme = 99, $nom_organisme = 'Autre', $id_unite = 5){
+function insertUserInExternalBDD($bdd = '', $last_name = '', $first_name = '', $name = '', $mail = '', $pass = '', $id_organisme = 99){
 	// id du group "CREA" : 1000000
 	// id du group "observateurs" : 1000009
 	
 	$db_data = Database::getConnection($bdd,'default');
 
-	$sql = "INSERT INTO utilisateurs.t_roles (groupe, nom_role, prenom_role, identifiant, email, pass, id_organisme, organisme, id_unite)
-	            VALUES('false', :last_name, :first_name, :name, :mail, :pass, :id_organisme, :nom_organisme, :id_unite)";
+	$sql = "INSERT INTO utilisateurs.t_roles (groupe, nom_role, prenom_role, identifiant, email, pass, id_organisme)
+	            VALUES('false', :last_name, :first_name, :name, :mail, :pass, :id_organisme)";
 	$res = $db_data->query($sql, array(
 			':last_name' => filter_xss($last_name),
 			':first_name' => filter_xss($first_name),
@@ -15,8 +15,6 @@ function insertUserInExternalBDD($bdd = '', $last_name = '', $first_name = '', $
 			':mail' => filter_xss($mail),
 			':pass' => filter_xss($pass),
 			':id_organisme' => filter_xss($id_organisme),
-			':nom_organisme' => filter_xss($nom_organisme),
-			':id_unite' => filter_xss($id_unite),
 	));
 	db_set_active();
 }
@@ -61,7 +59,7 @@ function updateUserInExternalBDD($bdd = '', $old_login = '', $old_email = '', $o
       $res = $db_data->query($sql, $valuesToUpdate);
 
       if ($is_blocked){
-        $sql = "UPDATE utilisateurs.cor_role_droit_application SET id_droit = 0  WHERE id_role = :id_role";
+        $sql = "UPDATE utilisateurs.cor_role_app_profil SET id_droit = 0  WHERE id_role = :id_role";
         $res = $db_data->query($sql, array(':id_role' => $user_found->id_role));
       }
       db_set_active();
@@ -84,7 +82,7 @@ function deleteUserInExternalBDD($bdd = '', $id_role = ''){
 	$sql = "DELETE FROM utilisateurs.cor_roles WHERE id_role_utilisateur = ".$id_role.";";
 	$res = $db_data->query($sql);
 
-	$sql = "DELETE FROM utilisateurs.cor_role_droit_application WHERE id_role = ".$id_role.";";
+	$sql = "DELETE FROM utilisateurs.cor_role_app_profil WHERE id_role = ".$id_role.";";
 	$res = $db_data->query($sql);
 	db_set_active();
 }
