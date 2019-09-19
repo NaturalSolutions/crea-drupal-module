@@ -6,7 +6,8 @@
 .icon-flickr,
 .icon-instagram,
 .icon-level-on,
-.icon-level-off{
+.icon-level-off,
+.icon-linkedin{
     background: url(../images/sprite-atlas.png) no-repeat;
     display: inline-block;
     margin: 0;
@@ -15,6 +16,9 @@
 }
 .icon-scoop-it{
     background-position: 0 -2px;
+}
+.icon-linkedin {
+    background-position: -50px -2px;
 }
 .icon-facebook{
     background-position: -103px -2px;

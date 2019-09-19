@@ -74,7 +74,7 @@ function crea_backoffice_synchrotemp_form_submit($form, &$form_state) {
 
     $from = $form_state['input']['date_from']['year'].'-'.str_pad($form_state['input']['date_from']['month'], 2, "0", STR_PAD_LEFT).'-'.str_pad($form_state['input']['date_from']['day'], 2, "0", STR_PAD_LEFT).' 00:00:00';
     $to = $form_state['input']['date_to']['year'].'-'.str_pad($form_state['input']['date_to']['month'], 2, "0", STR_PAD_LEFT).'-'.str_pad($form_state['input']['date_to']['day'], 2, "0", STR_PAD_LEFT).' 00:00:00';
-    $perlExec = "/usr/bin/perl /home/crea-web/scripts/crea_sqlite_to_csv_temperatures_manual.pl '".$from."' '".$to."' > /dev/null &";
+    $perlExec = "cd /home/crea-collect/CREAstations/perl && PERL5LIB=/home/crea-collect/perl5/lib/perl5 perl /home/crea-collect/CREAstations/perl/crea_sqlite_to_csv_temperatures_manual.pl '".$from."' '".$to."' > /home/crea-collect/CREAstations/perl/logs/drup_sqlitetocsv.log 2>&1";
     exec($perlExec);
     drupal_set_message(t("Synchro has been launched : ").$perlExec);
 }
