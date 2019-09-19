@@ -1,4 +1,4 @@
-body {
+wbody {
   color: black;
   font-family: "Klavika-Light",Tahoma,sans-serif;
 }
@@ -1126,6 +1126,10 @@ PAGE ACCUEIL 2019
   background-size: cover;
 }
 
+.bandeau-climat-en {
+ background: url("../images/BANDEAU-HOMEPAGE-EN-TXT.png") no-repeat;
+}
+
 .bandeau-climat a {
   height: 100%;
   display: block;
@@ -1256,6 +1260,14 @@ FIN PAGE ACCUEIL 2019
     margin: 10px 0px 0px;
     background-size: contain !important;
   }
+  
+ .bandeau-climat-en{
+   background: url("../images/BANDEAU-HOMEPAGE-EN-TXT-xs.png") no-repeat !important;
+   max-height: 120px;
+   margin: 10px 0px 0px;
+   background-size: contain !important;
+ }
+
 }
 
 @media (max-width: 600px) {
@@ -1275,6 +1287,13 @@ FIN PAGE ACCUEIL 2019
   .bandeau-climat{
     background: url("../images/BANDEAU-HOMEPAGE-TXT-xs.jpg") no-repeat !important;
     max-height:150px;
+    margin: 10px 0px 0px;
+    background-size: contain !important;
+  }
+  
+  .bandeau-climat-en{
+    background: url("../images/BANDEAU-HOMEPAGE-EN-TXT-xs.png") no-repeat !important;
+    max-height: 150px;
     margin: 10px 0px 0px;
     background-size: contain !important;
   }

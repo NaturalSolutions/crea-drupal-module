@@ -147,9 +147,9 @@ function crea_users_user_insert(&$edit, $account, $category){
 				}
 				
 			
-				insertUserInExternalBDD($bdd, $last_name, $first_name, $name, $mail, $pass, 99, "Autres", 5);
+				insertUserInExternalBDD($bdd, $last_name, $first_name, $name, $mail, $pass, 99);
 				
-				// ajout des droits dans cor_roles et core_role_droit_application
+				// ajout des droits dans cor_roles et core_role_app_profil (core_role_droit_application=obsolète)
 				$userExists = verifyIfUserExistsInExternalBDD($bdd, $name, $mail);
 				if (is_array($userExists)
 				&& !empty($userExists)){
@@ -166,11 +166,11 @@ function crea_users_user_insert(&$edit, $account, $category){
 						':id_role_utilisateur' => $userExists->id_role,
 					));
 					
-					$sql = "INSERT INTO utilisateurs.cor_role_droit_application (id_role, id_droit, id_application)
-		            VALUES(:id_role, :id_droit, :id_application)";
+					$sql = "INSERT INTO utilisateurs.cor_role_app_profil (id_role, id_profil, id_application)
+		            VALUES(:id_role, :id_profil, :id_application)";
 					$res = $db_data->query($sql, array(
 						':id_role' => $userExists->id_role,
-						':id_droit' => 0, // aucun droit dans geonature
+						':id_profil' => 0, // aucun droit dans geonature
 						':id_application' => 14,
 					));
 					db_set_active();
