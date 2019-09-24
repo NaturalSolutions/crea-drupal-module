@@ -1321,6 +1321,13 @@ FIN PAGE ACCUEIL 2019
     background-size: cover;
     background-position: center;
   }
+  .bandeau-climat-en{
+    background: url("../images/BANDEAU-HOMEPAGE-EN-TXT-small.png") no-repeat;
+    width:100%;
+    height:240px;
+    background-size: cover;
+    background-position: center;
+  }
   .front .atlas_compteur_obs {
     margin-bottom: 20px;
   }
