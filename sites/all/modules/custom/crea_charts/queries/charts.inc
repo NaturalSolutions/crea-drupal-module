@@ -1,15 +1,18 @@
-<?php 
+<?php
 /*
  * Renvoie un tableau de données avec les températures moyennes annuelles
- * @param $id_station 
+ * @param $id_station
  * @param $year
  */
 function crea_load_annual_charts($id_station, $year){
     // on se pluggue sur la bdd crea-data
     $db_data = Database::getConnection('crea-data','default');
+    $db_data_archive = Database::getConnection('crea-data-archive','default');
 
     // init data
     $data = array();
+    $mergeData = array();
+
     // on recupère tous les jours enregistrés
 
     $sqlDays = 'SELECT to_char(value_date, \'YYYY-MM-DD\') as day,
@@ -24,10 +27,23 @@ function crea_load_annual_charts($id_station, $year){
                 ORDER BY day ASC
                 LIMIT 366;';
     $resDays = $db_data->query($sqlDays);
+    $resDaysArchive = $db_data_archive->query($sqlDays);
     $daysList = $resDays->fetchAll();
+    $daysListArchive = $resDaysArchive->fetchAll();
 
-    foreach ($daysList as $day)
-    {
+    $mergeData = array_merge_recursive($daysList, $daysListArchive);
+
+    $data = _formate_data_annual_charts($mergeData);
+
+    // on se repluggue sur la bdd par defaut (drupal)
+    db_set_active();
+
+    return $data;
+}
+
+function _formate_data_annual_charts($dayList) {
+  $data = array();
+  foreach ($daysList as $day){
         // timestamp du jour parcouru en ms
         $d = new DateTime($day->day);
         $timing = $d->getTimestamp()*1000;
@@ -36,16 +52,13 @@ function crea_load_annual_charts($id_station, $year){
         $data[1][] = array($timing, floatval($day->sum_c2));
         $data[2][] = array($timing, floatval($day->sum_c3));
         $data[3][] = array($timing, floatval($day->sum_c4));
-    }
-    // on se repluggue sur la bdd par defaut (drupal)
-    db_set_active();
-
-    return $data;
+  }
+  return $data;
 }
 
 /*
  * Renvoie un tableau de données avec les températures au 1/4h des 7 derniers jours
- * @param $id_station 
+ * @param $id_station
  */
 function crea_load_lastdays_charts($id_station){
     // on se pluggue sur la bdd crea-data
@@ -106,9 +119,12 @@ function crea_load_lastdays_charts($id_station){
 function crea_load_station_charts($id_station){
   // on se pluggue sur la bdd crea-data
   $db_data = Database::getConnection('crea-data','default');
+  $db_data_archive = Database::getConnection('crea-data-archive','default');
 
   // init data
   $data = array();
+  $mergeData = array();
+
   // on recupère tous les jours enregistrés
   $midnight = mktime(0,0,0,date("n"),date("j"),date("Y"));
   $midnight = date("Y-m-d H:i:s", $midnight);
@@ -122,8 +138,26 @@ function crea_load_station_charts($id_station){
                 AND value_date < \''.$midnight.'\'
                 GROUP BY to_char(value_date, \'YYYY-MM-DD\')
                 ORDER BY day ASC';
+  // bd de temperature courante crea-data
   $resDays = $db_data->query($sqlDays);
   $daysList = $resDays->fetchAll();
+
+  // bd de temperature archivées crea-data-archive
+  $resDaysArchive = $db_data_archive->query($sqlDays);
+  $daysListArchive = $resDaysArchive->fetchAll();
+
+  $mergeData = array_merge_recursive($daysListArchive, $daysList);
+
+  $data = _formate_data_station_charts($mergeData);
+
+  // on se repluggue sur la bdd par defaut (drupal)
+  db_set_active();
+
+  return $data;
+}
+
+function _formate_data_station_charts($daysList){
+  $data= array();
 
   foreach ($daysList as $day)
   {
@@ -152,12 +186,8 @@ function crea_load_station_charts($id_station){
       $data[3][] = array($timing, null);
     }
   }
-  // on se repluggue sur la bdd par defaut (drupal)
-  db_set_active();
-
   return $data;
 }
-
 
 /*
  * Renvoie un tableau des dernières données d une station
@@ -176,7 +206,7 @@ function crea_load_station_last_values($id_station){
                 ROUND(AVG(capteur_4)::numeric,2) as sum_c4
                 FROM "data-temperatures".temperatures
                 WHERE id_station='.$id_station.'
-                AND value_date >= CURRENT_TIMESTAMP - INTERVAL \'1 day\' 
+                AND value_date >= CURRENT_TIMESTAMP - INTERVAL \'1 day\'
                 GROUP BY value_date
                 ORDER BY value_date DESC
                 LIMIT 1';
