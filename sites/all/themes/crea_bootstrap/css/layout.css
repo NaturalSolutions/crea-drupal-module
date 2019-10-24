@@ -1128,6 +1128,8 @@ PAGE ACCUEIL 2019
 
 .bandeau-climat-en {
  background: url("../images/BANDEAU-HOMEPAGE-EN-TXT.png") no-repeat;
+ background-position: center;
+ background-size: cover;
 }
 
 .bandeau-climat a {
