@@ -10,7 +10,7 @@ jQuery(function($) {
                 {
                     //log: true,
                     enablePublicMethods: true,
-                    'checkOrigin': ['https://devback.phenoclim.org', 'http://127.0.0.1:8000', 'https://backend.phenoclim.org', 'https://creamontblanc.shinyapps.io'], 
+                    'checkOrigin': ['http://devback.phenoclim.org', 'https://devback.phenoclim.org', 'http://127.0.0.1:8000', 'https://backend.phenoclim.org', 'https://creamontblanc.shinyapps.io'], 
                     'heightCalculationMethod': 'documentElementOffset',
                     messageCallback : function(messageData) {
                         console.log('messagefrom Iframe messageCallback: ', messageData.message);
