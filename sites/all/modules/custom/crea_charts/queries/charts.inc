@@ -128,22 +128,15 @@ function crea_load_station_charts($id_station){
   // on recupère tous les jours enregistrés
   $midnight = mktime(0,0,0,date("n"),date("j"),date("Y"));
   $midnight = date("Y-m-d H:i:s", $midnight);
-  $sqlDays = 'SELECT to_char(value_date, \'YYYY-MM-DD\') as day,
-                ROUND(AVG(capteur_1)::numeric,2) as sum_c1,
-                ROUND(AVG(capteur_2)::numeric,2) as sum_c2,
-                ROUND(AVG(capteur_3)::numeric,2) as sum_c3,
-                ROUND(AVG(capteur_4)::numeric,2) as sum_c4
-                FROM "data-temperatures".temperatures
-                WHERE id_station='.$id_station.'
-                AND value_date < \''.$midnight.'\'
-                GROUP BY to_char(value_date, \'YYYY-MM-DD\')
-                ORDER BY day ASC';
-  // bd de temperature courante crea-data
-  $resDays = $db_data->query($sqlDays);
+
+  // on fait appel à la vue matrializée mt_load_station_charts
+  $sqlMT = 'SELECT * FROM "data-temperatures".mt_load_station_charts
+            WHERE id_station='.$id_station.'  ';
+  $resDays = $db_data->query($sqlMT);
   $daysList = $resDays->fetchAll();
 
   // bd de temperature archivées crea-data-archive
-  $resDaysArchive = $db_data_archive->query($sqlDays);
+  $resDaysArchive = $db_data_archive->query($sqlMT);
   $daysListArchive = $resDaysArchive->fetchAll();
 
   $mergeData = array_merge_recursive($daysListArchive, $daysList);
