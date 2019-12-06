@@ -3,53 +3,59 @@
     var crealng = Drupal.settings.CreaCartographieMap.crealng;
     var mymap = Drupal.settings.CreaCartographieMap.objetMap;
 
+    Highcharts.setOptions({
+        lang: {
+            loading: crealng.loading_charts
+        }
+    });
     /**
      * fonction appelée pour construire le graphique
      * @param {string} typeGraph type chart : week|year
      */
      function loadCharts(typeGraph){
         $("#typeGraph").attr("value",typeGraph);
-        if(!$('#loading-charts').length){
-            $('#diagram #temperatures-bloc .content').first().prepend('<div id="loading-charts">'+crealng.loading_charts+'</div>');
-        }
+
         // recuperation du JSON
         id_station = $("#creaChartsForm #edit-id-station").val();
 
-        
+        if (window.chart)
+            window.chart.showLoading()
+
         urlRebuild = '/fr/gimmechartsdata/'+ typeGraph +'/'+ id_station ;
         $.getJSON(urlRebuild, function (data) {
-            if($('#loading-charts').length){
-                $('#loading-charts').remove();
-                $('#switchCharts').show();
-                $('#creaChartsForm').show();
-                // ajout pour pin jaune
-                var selected_id_station = $("#creaChartsForm #edit-id-station").val();
-                var markerOff = L.icon({
-                    iconUrl: '/sites/all/themes/crea/images/marker-icon-off.png',
-                    iconSize:     [31, 31], // size of the icon
-                    iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
-                    popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
-                });
+            if (window.chart)
+                window.chart.hideLoading();
 
-                var markerOn = L.icon({
-                    iconUrl: '/sites/all/themes/crea/images/marker-icon.png',
-                    iconSize:     [29, 29], // size of the icon
-                    iconAnchor:   [14, 14], // point of the icon which will correspond to marker's location
-                    popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
-                });
-                mymap.eachLayer(function(marker) {
-                    if(marker instanceof L.Marker){
-                        if(selected_id_station == marker.id_station){
-                            markerDisplay = markerOn;
-                            marker.openPopup();
-                            mymap.panTo(marker.getLatLng());
-                        }else{
-                            markerDisplay = markerOff;
-                        }
-                        marker.setIcon(markerDisplay);
+            $('#switchCharts').show();
+            $('#creaChartsForm').show();
+            // ajout pour pin jaune
+            var selected_id_station = $("#creaChartsForm #edit-id-station").val();
+            var markerOff = L.icon({
+                iconUrl: '/sites/all/themes/crea/images/marker-icon-off.png',
+                iconSize:     [31, 31], // size of the icon
+                iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
+                popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
+            });
+
+            var markerOn = L.icon({
+                iconUrl: '/sites/all/themes/crea/images/marker-icon.png',
+                iconSize:     [29, 29], // size of the icon
+                iconAnchor:   [14, 14], // point of the icon which will correspond to marker's location
+                popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
+            });
+            mymap.eachLayer(function(marker) {
+                if(marker instanceof L.Marker){
+                    if(selected_id_station == marker.id_station){
+                        markerDisplay = markerOn;
+                        marker.openPopup();
+                        mymap.panTo(marker.getLatLng());
+                    }else{
+                        markerDisplay = markerOff;
                     }
-                });
-            }
+                    marker.setIcon(markerDisplay);
+                }
+            });
+
             // variables spécifiques au format de date
             if(crealng.drupal_lng == "fr"){
                 var date_inputDateFormat = '%d-%m-%Y';
@@ -261,6 +267,14 @@
                             fontSize: '15px',
                             color: '#303030'
                         }
+                    },
+                    loading: {
+                        labelStyle: {
+                            color: 'white'
+                        },
+                        style: {
+                            backgroundColor: 'gray'
+                        }
                     }
                 }, function (chart) {
                     // apply the date pickers
@@ -389,6 +403,14 @@
                             fontSize: '15px',
                             color: '#303030'
                         }
+                    },
+                    loading: {
+                        labelStyle: {
+                            color: 'white'
+                        },
+                        style: {
+                            backgroundColor: 'gray'
+                        }
                     }
                 }, function (chart) {
                     // apply the date pickers
@@ -428,7 +450,7 @@
             } else {
                 window.chart.showNoData();
             }
-            
+
             width = $("#diagram").width()-20;
 
             // cas du responsive où la map est au dessus du formulaire
@@ -442,7 +464,7 @@
 
             window.chart.setSize(width, height, doAnimation = false);
             window.parent.resizeModuleLive(iframeHeight);
-            
+
             // suppression des boutons d'export
             window.chart.options.exporting.buttons.contextButton.menuItems[0] = null; // print
             window.chart.options.exporting.buttons.contextButton.menuItems[1] = null; // spacer
@@ -474,7 +496,7 @@
             }
         }
      }
-    
+
     $(d).ready(function() {
         /**
          * action bouton submit
@@ -498,7 +520,7 @@
                 $(this).addClass('active');
                 $("#switchAverage").removeClass('active');
             }
-            
+
         });
         $("#switchAverage").click( function() {
             if($("#typeGraph").val() != "year"){
