@@ -131,7 +131,7 @@ function crea_load_station_charts($id_station){
 
   // on fait appel à la vue matrializée mt_load_station_charts
   $sqlMT = 'SELECT * FROM "data-temperatures".mt_load_station_charts
-            WHERE id_station='.$id_station.'  ';
+            WHERE id_station='.$id_station.'  ORDER BY day ASC' ;
   $resDays = $db_data->query($sqlMT);
   $daysList = $resDays->fetchAll();
 
