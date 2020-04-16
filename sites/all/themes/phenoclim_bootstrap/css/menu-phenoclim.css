@@ -15,10 +15,15 @@
     border-left-color: #75ad0a;
 }
 
-#block-crea-design-crea-main-menu li.right-align{
+/*MENU PRINCIPAL*/
+#block-menu-menu-phenoclim-main-menu > ul {
+    width: 100%;
+}
+
+#block-menu-menu-phenoclim-main-menu li.right-align{
     float: right;
 }
-#block-crea-design-crea-main-menu li.highlight{
+#block-menu-menu-phenoclim-main-menu li.highlight{
     background-color: #f8f7f3;
     -moz-box-shadow: -10px 0px 10px -5px #cccccc;
     -webkit-box-shadow: -10px 0px 10px -5px #cccccc;
@@ -26,18 +31,18 @@
     box-shadow: -10px 0px 10px -5px #cccccc;
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#cccccc, Direction=180, Strength=10);
 }
-#block-crea-design-crea-main-menu li.highlight a{
-    color: #f49a17;
+#block-menu-menu-phenoclim-main-menu li.highlight a{
+    color: #76b729;
     font-family: "Klavika-Bold",Tahoma,sans-serif;
 }
-#block-crea-design-crea-main-menu > ul > li.highlight > a{
-    border-left: 1px solid #f49a17;
+#block-menu-menu-phenoclim-main-menu > ul > li.highlight > a{
+    border-left: 1px solid #76b729;
     margin: 15px 0;
     padding: 0 15px;
 }
-#block-crea-design-crea-main-menu > ul > li.highlight:last-child > a{
+#block-menu-menu-phenoclim-main-menu > ul > li.highlight:last-child > a{
     border: 0;
 }
-#block-crea-design-crea-main-menu li.highlight.last{
+#block-menu-menu-phenoclim-main-menu li.highlight.last{
 
 }
