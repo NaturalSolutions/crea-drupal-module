@@ -474,6 +474,10 @@ img[usemap] {
     margin: 0 !important;
 }
 
+.domain-atlas a.crea-button.button-link {
+    background-color: #ff9900;
+}
+
 @media (max-width: 750px) {
     .espaceperso #map{
         height: 350px;
