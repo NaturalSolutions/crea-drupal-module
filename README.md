@@ -9,6 +9,7 @@
 
 - Mettre à jour le code
 > cd crea-drupal-module
+
 > git pull origin master
 
 - Appliquer les mises à jour de code vers la base de données (par exemple : mise à jour de module).
@@ -17,6 +18,7 @@ Vérifier que le paramètre update est à TRUE dans le fichier settings.php
 
 - Désactiver le module captcha et recaptcha avec Drush
 > cd path/mydrupal
+
 > drush dis captcha
 
 - Se connecter à l'instance atlasmontblanc. 
