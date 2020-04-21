@@ -8,3 +8,13 @@
     background:url('../images/loading_icon.gif') 50% 50% no-repeat;
     background-color:#eee;
     }
+
+.crea-button.button-link{
+   color: white;
+   background-color: #00a9ca;
+}
+.crea-button.button-link:hover,
+.crea-button.button-link:focus{
+   color: black;
+   text-decoration: none;
+}
